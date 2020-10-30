@@ -31,7 +31,16 @@ const Stack = createStackNavigator()
 
 const App = () => {
     React.useEffect(() => {
-        bridge.send('VKWebAppInit', {})
+        bridge.send('VKWebAppInit', {}).then(() => {
+            bridge
+                .send('VKWebAppGetUserInfo')
+                .then((data) => {
+                    console.log(data)
+                })
+                .catch((error) => {
+                    console.error(error)
+                })
+        })
     }, [])
 
     return (
@@ -44,17 +53,9 @@ const App = () => {
                 }}
             >
                 <Stack.Screen
-                    options={({ navigation }) => ({
-                        headerTitle: 'Мероприятия',
-                        // headerRight: () => (
-                        //     <Ionicons
-                        //         onPress={() => navigation.navigate('CreateEvent')}
-                        //         name="add-circle-outline"
-                        //         style={{ color: '#4b76a8', marginRight: 16 }}
-                        //         size={25}
-                        //     />
-                        // )
-                    })}
+                    options={{
+                        headerTitle: 'Мероприятия'
+                    }}
                     name="Events"
                     component={Events}
                 />
