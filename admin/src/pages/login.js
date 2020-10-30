@@ -1,6 +1,7 @@
 import React, {useState} from 'react'
 import styled from 'styled-components'
 import {Button, Input} from "antd"
+import {useHistory} from 'react-router-dom'
 
 const Container = styled.div`
   flex: 1;
@@ -39,6 +40,8 @@ const Login = () => {
     const [login, setLogin] = useState('')
     const [password, setPassword] = useState('')
 
+    const history = useHistory()
+
     return (
         <Container>
             <ContentContainer>
@@ -63,8 +66,13 @@ const Login = () => {
 
                 />
                 <Button
-                    style={{marginTop: 16,maxWidth:200,alignSelf:'center'}}
+                    style={{marginTop: 16, maxWidth: 200, alignSelf: 'center'}}
                     type={'primary'}
+                    onClick={
+                        () => {
+                            history.replace('/')
+                        }
+                    }
                 >
                     Войти
                 </Button>

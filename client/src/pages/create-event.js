@@ -92,7 +92,7 @@ const CreateEvent = ({ navigation }) => {
                         ))
                     }
                 </Picker>
-                <Ionicons name='chevron-down' style={{ position: 'absolute', right: 25, top: 10 }} color='#000000' size={22} />
+                <Ionicons name='chevron-down' style={{ position: 'absolute', right: 5, top: 10, alignSelf: "flex-end" }} color='#000000' size={22} />
             </View>
             {
                 selectedCategory === "other" ? (
@@ -139,7 +139,7 @@ const styles = StyleSheet.create({
     },
     pickerContainer: {
         flexDirection: 'row',
-        width: "100%",
+        width: "90%",
         justifyContent: "center"
     },
     picker: {
@@ -150,7 +150,7 @@ const styles = StyleSheet.create({
         borderWidth: 0.5,
         borderColor: "silver",
         backgroundColor: "#ffffff",
-        width: "90%",
+        width: "100%",
     },
     button: {
         width: "90%",
