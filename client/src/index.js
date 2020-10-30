@@ -53,7 +53,7 @@ const App = () => {
             authUserQuery({
                 variables: {
                     where: {
-                        id: userId
+                        id: userId.toString()
                     }
                 }
             })
