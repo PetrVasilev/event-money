@@ -10,6 +10,7 @@ import Events from './pages/events'
 import Event from './pages/event'
 import CreateEvent from './pages/create-event'
 import CreateSpending from './pages/create-spending'
+import Spending from './pages/spending'
 
 const iconFontStyles = `@font-face {
     src: url(${iconFont});
@@ -91,11 +92,34 @@ const App = () => {
                     component={CreateEvent}
                 />
                 <Stack.Screen
-                    options={{
-                        headerTitle: 'Добавить расход'
-                    }}
+                    options={({ navigation }) => ({
+                        headerTitle: 'Добавить расход',
+                        headerLeft: () => (
+                            <Ionicons
+                                onPress={() => navigation.goBack()}
+                                name="md-chevron-back-sharp"
+                                style={{ color: '#4b76a8', marginLeft: 16 }}
+                                size={25}
+                            />
+                        )
+                    })}
                     name="CreateSpending"
                     component={CreateSpending}
+                />
+                <Stack.Screen
+                    options={({ navigation }) => ({
+                        headerTitle: 'Расход',
+                        headerLeft: () => (
+                            <Ionicons
+                                onPress={() => navigation.goBack()}
+                                name="md-chevron-back-sharp"
+                                style={{ color: '#4b76a8', marginLeft: 16 }}
+                                size={25}
+                            />
+                        )
+                    })}
+                    name="Spending"
+                    component={Spending}
                 />
             </Stack.Navigator>
         </NavigationContainer>
