@@ -4,11 +4,13 @@ import { NavigationContainer } from '@react-navigation/native'
 import { createStackNavigator } from '@react-navigation/stack'
 import iconFont from 'react-native-vector-icons/Fonts/Ionicons.ttf'
 import Ionicons from 'react-native-vector-icons/dist/Ionicons'
+import bridge from '@vkontakte/vk-bridge'
 
 import Events from './pages/events'
 import Event from './pages/event'
 import CreateEvent from './pages/create-event'
 import CreateSpending from './pages/create-spending'
+import Spending from './pages/spending'
 
 const iconFontStyles = `@font-face {
     src: url(${iconFont});
@@ -29,6 +31,19 @@ document.head.appendChild(style)
 const Stack = createStackNavigator()
 
 const App = () => {
+    React.useEffect(() => {
+        bridge.send('VKWebAppInit', {}).then(() => {
+            bridge
+                .send('VKWebAppGetUserInfo')
+                .then((data) => {
+                    console.log(data)
+                })
+                .catch((error) => {
+                    console.error(error)
+                })
+        })
+    }, [])
+
     return (
         <NavigationContainer>
             <Stack.Navigator
@@ -39,17 +54,9 @@ const App = () => {
                 }}
             >
                 <Stack.Screen
-                    options={({ navigation }) => ({
-                        headerTitle: 'Мероприятия',
-                        headerRight: () => (
-                            <Ionicons
-                                onPress={() => navigation.navigate('CreateEvent')}
-                                name="add-circle-outline"
-                                style={{ color: '#9F8FFF', marginRight: 16 }}
-                                size={25}
-                            />
-                        )
-                    })}
+                    options={{
+                        headerTitle: 'Мероприятия'
+                    }}
                     name="Events"
                     component={Events}
                 />
@@ -61,7 +68,7 @@ const App = () => {
                                 <Ionicons
                                     onPress={() => navigation.goBack()}
                                     name="md-chevron-back-sharp"
-                                    style={{ color: '#9F8FFF', marginLeft: 16 }}
+                                    style={{ color: '#4b76a8', marginLeft: 16 }}
                                     size={25}
                                 />
                             )
@@ -77,7 +84,7 @@ const App = () => {
                             <Ionicons
                                 onPress={() => navigation.goBack()}
                                 name="md-chevron-back-sharp"
-                                style={{ color: '#9F8FFF', marginLeft: 16 }}
+                                style={{ color: '#4b76a8', marginLeft: 16 }}
                                 size={25}
                             />
                         )
@@ -86,11 +93,34 @@ const App = () => {
                     component={CreateEvent}
                 />
                 <Stack.Screen
-                    options={{
-                        headerTitle: 'Добавить расход'
-                    }}
+                    options={({ navigation }) => ({
+                        headerTitle: 'Добавить расход',
+                        headerLeft: () => (
+                            <Ionicons
+                                onPress={() => navigation.goBack()}
+                                name="md-chevron-back-sharp"
+                                style={{ color: '#4b76a8', marginLeft: 16 }}
+                                size={25}
+                            />
+                        )
+                    })}
                     name="CreateSpending"
                     component={CreateSpending}
+                />
+                <Stack.Screen
+                    options={({ navigation }) => ({
+                        headerTitle: 'Расход',
+                        headerLeft: () => (
+                            <Ionicons
+                                onPress={() => navigation.goBack()}
+                                name="md-chevron-back-sharp"
+                                style={{ color: '#4b76a8', marginLeft: 16 }}
+                                size={25}
+                            />
+                        )
+                    })}
+                    name="Spending"
+                    component={Spending}
                 />
             </Stack.Navigator>
         </NavigationContainer>

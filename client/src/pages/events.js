@@ -1,5 +1,6 @@
 import React from 'react'
 import { ScrollView, View, TouchableOpacity, Text, StyleSheet } from 'react-native'
+import Ionicons from 'react-native-vector-icons/dist/Ionicons'
 import moment from 'moment'
 
 const events = [
@@ -31,29 +32,45 @@ const events = [
 
 const Events = ({ navigation }) => {
     return (
-        <ScrollView style={styles.list}>
-            {events.map((item, index) => (
-                <TouchableOpacity
-                    style={[styles.item, { marginBottom: events.length - 1 === index ? 0 : 10 }]}
-                    key={item.id}
-                    onPress={() => navigation.push(`Event`, { event: item })}
-                >
-                    <Text style={styles.eventTitle}>{item.name}</Text>
-                    <View style={styles.eventBottom}>
-                        <Text style={styles.eventCategory}>{item.category}</Text>
-                        <Text style={styles.eventCreated}>
-                            {moment(item.date).format('DD.MM.YYYY')}
-                        </Text>
-                    </View>
-                </TouchableOpacity>
-            ))}
-        </ScrollView>
+        <>
+            <ScrollView style={styles.list} contentContainerStyle={{ paddingBottom: 70 }}>
+                {events.map((item, index) => (
+                    <TouchableOpacity
+                        style={[
+                            styles.item,
+                            { marginBottom: events.length - 1 === index ? 0 : 10 }
+                        ]}
+                        key={item.id}
+                        onPress={() => navigation.push(`Event`, { event: item })}
+                    >
+                        <Text style={styles.eventTitle}>{item.name}</Text>
+                        <View style={styles.eventBottom}>
+                            <Text style={styles.eventCategory}>{item.category}</Text>
+                            <Text style={styles.eventCreated}>
+                                {moment(item.date).format('DD.MM.YYYY')}
+                            </Text>
+                        </View>
+                    </TouchableOpacity>
+                ))}
+            </ScrollView>
+            <TouchableOpacity
+                activeOpacity={1}
+                style={styles.add}
+                onPress={() => navigation.navigate('CreateEvent')}
+            >
+                <Ionicons
+                    name="add-outline"
+                    style={{ color: '#ffffff', alignItems: 'center', justifyContent: 'center' }}
+                    size={30}
+                />
+            </TouchableOpacity>
+        </>
     )
 }
 
 const styles = StyleSheet.create({
     list: {
-        backgroundColor: '#edeef0',
+        backgroundColor: '#fafafa',
         paddingHorizontal: 16,
         paddingVertical: 10,
         height: window.innerHeight - 60
@@ -81,6 +98,18 @@ const styles = StyleSheet.create({
     eventCreated: {
         fontSize: 12,
         color: 'rgb(192, 192, 192)'
+    },
+    add: {
+        position: 'absolute',
+        bottom: 25,
+        right: 25,
+        backgroundColor: '#4b76a8',
+        width: 46,
+        height: 46,
+        borderRadius: 22,
+        alignItems: 'center',
+        justifyContent: 'center',
+        paddingLeft: 2
     }
 })
 

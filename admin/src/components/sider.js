@@ -1,18 +1,16 @@
-import React, { useRef } from 'react'
-import { Layout, Menu, Popconfirm } from 'antd'
-import { useApolloClient } from '@apollo/react-hooks'
-import {
-    UploadOutlined,
-    UserOutlined,
-    ShopOutlined,
-    UserDeleteOutlined,
-    CreditCardOutlined,
-    BankOutlined,
-    HomeOutlined
-} from '@ant-design/icons'
-import { useHistory } from 'react-router-dom'
+import React, {useRef} from 'react'
+import {Menu, Popconfirm} from 'antd'
+import {useApolloClient} from '@apollo/react-hooks'
+import {HomeOutlined, ShopOutlined, UserDeleteOutlined} from '@ant-design/icons'
+import {useHistory} from 'react-router-dom'
+import styled from 'styled-components'
 
-const { Sider: AntSider } = Layout
+const Container = styled.div`
+  display: flex;
+  flex: 1;
+  max-width: 300px;
+`
+
 const Sider = () => {
     const history = useHistory()
     const apollo = useApolloClient()
@@ -22,43 +20,29 @@ const Sider = () => {
         history.replace('/')
     }
     return (
-        <AntSider>
+        <Container>
             <Menu theme="dark" mode="inline" defaultSelectedKeys={[history.location.pathname]}>
                 <Menu.Item
-                    onClick={() => {
-                        history.push('/authorized/category')
-                    }}
+                    onClick={
+                        () => {
+                            history.push('/authorized/category')
+                        }
+                    }
                     key="/authorized/category"
-                    icon={<HomeOutlined />}
+                    icon={<HomeOutlined/>}
                 >
-                    Главная
+                    Категория
                 </Menu.Item>
                 <Menu.Item
-                    key="/authorized/products"
-                    onClick={() => {
-                        history.push('/authorized/products')
-                    }}
-                    icon={<ShopOutlined />}
+                    key="/authorized/addCategory"
+                    onClick={
+                        () => {
+                            history.push('/authorized/addCategory')
+                        }
+                    }
+                    icon={<ShopOutlined/>}
                 >
-                    Мои товары
-                </Menu.Item>
-                <Menu.Item
-                    key="/authorized/addProducts"
-                    icon={<BankOutlined />}
-                    onClick={() => {
-                        history.push('/authorized/addProducts')
-                    }}
-                >
-                    Добавить товары
-                </Menu.Item>
-                <Menu.Item
-                    key="/authorized/orders"
-                    icon={<CreditCardOutlined />}
-                    onClick={() => {
-                        history.push('/authorized/orders')
-                    }}
-                >
-                    Заказы
+                    Добавить категорию
                 </Menu.Item>
 
                 <Menu.Item
@@ -66,7 +50,7 @@ const Sider = () => {
                     onClick={() => {
                         exitEl.current.onClick()
                     }}
-                    icon={<UserDeleteOutlined />}
+                    icon={<UserDeleteOutlined/>}
                 >
                     <Popconfirm
                         ref={exitEl}
@@ -79,7 +63,7 @@ const Sider = () => {
                     </Popconfirm>
                 </Menu.Item>
             </Menu>
-        </AntSider>
+        </Container>
     )
 }
 
