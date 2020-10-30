@@ -11,9 +11,8 @@ model Admin {
     id        String   @id @default(cuid())
     createdAt DateTime @default(now())
     updatedAt DateTime @updatedAt
-    email     String   @unique
+    login     String   @unique
     password  String
-    token     String?
 }
 
 model User {
@@ -21,6 +20,25 @@ model User {
     createdAt DateTime @default(now())
     updatedAt DateTime @updatedAt
     name      String?
-    code      String
-    token     String?
+    events    Event[]
+}
+
+model Event {
+    id        String     @id @default(cuid())
+    createdAt DateTime   @default(now())
+    updatedAt DateTime   @updatedAt
+    name      String
+    users     User[]
+    amount    String?
+    spendings Spending[]
+}
+
+model Spending {
+    id          String   @id @default(cuid())
+    createdAt   DateTime @default(now())
+    updatedAt   DateTime @updatedAt
+    amount      String
+    description String?
+    event       Event?   @relation(fields: [eventId], references: [id])
+    eventId     String?
 }

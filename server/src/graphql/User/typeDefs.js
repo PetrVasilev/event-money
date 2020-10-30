@@ -6,8 +6,14 @@ const User = gql`
     createdAt: DateTime!
     updatedAt: DateTime!
     name: String
-    code: String!
-    token: String
+    events(
+      where: EventWhereInput
+      orderBy: EventOrderByInput
+      cursor: EventWhereUniqueInput
+      take: Int
+      skip: Int
+      distinct: EventDistinctFieldEnum
+    ): [Event!]!
   }
 
   type Query {

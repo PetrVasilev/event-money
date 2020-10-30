@@ -51,19 +51,19 @@ server.start(
         port: process.env.PORT,
         endpoint: '/graphql',
         playground: '/playground',
-        cors: {
-            credentials: true,
-            origin: ['http://localhost:5000', 'http://localhost:8000']
-        }
+        // cors: {
+        //     credentials: true,
+        //     origin: ['http://localhost:5000', 'http://localhost:8000']
+        // }
     },
     async ({ port }) => {
         console.log(`Server ready at: http://localhost:${port}`)
         const [adminsCount] = await Promise.all([prisma.admin.count()])
         if (adminsCount === 0) {
-            const password = await bcrypt.hash('lottery', 10)
+            const password = await bcrypt.hash('eventmoney', 10)
             await prisma.admin.create({
                 data: {
-                    email: 'info@itkitchen.su',
+                    login: 'admin',
                     password
                 }
             })
