@@ -1,9 +1,5 @@
 import React from 'react'
-import styled from 'styled-components'
-
-const List = styled.div``
-
-const Event = styled.div``
+import { ScrollView, TouchableOpacity, Text, StyleSheet } from 'react-native'
 
 const events = [
     {
@@ -12,20 +8,58 @@ const events = [
         category: 'Свадьба',
         date: new Date(),
         created: new Date()
+    },
+    {
+        id: 2,
+        name: 'День рождения Кыната',
+        category: 'День рождения',
+        date: new Date(),
+        created: new Date()
+    },
+    {
+        id: 3,
+        name: 'Шоу',
+        category: 'Другое',
+        date: new Date(),
+        created: new Date()
     }
 ]
 
 const Events = () => {
     return (
-        <List>
-            {events.map((item) => (
-                <Event key={item.id}>
-                    <div className="name">{item.name}</div>
-                    <div className="category">{item.category}</div>
-                </Event>
+        <ScrollView style={styles.list}>
+            {events.map((item, index) => (
+                <TouchableOpacity
+                    style={[styles.item, { marginBottom: events.length - 1 === index ? 0 : 10 }]}
+                    key={item.id}
+                >
+                    <Text style={styles.eventTitle}>{item.name}</Text>
+                    <Text style={styles.eventCategory}>{item.category}</Text>
+                </TouchableOpacity>
             ))}
-        </List>
+        </ScrollView>
     )
 }
+
+const styles = StyleSheet.create({
+    list: {
+        backgroundColor: '#edeef0',
+        flex: 1,
+        paddingHorizontal: 15,
+        paddingVertical: 10
+    },
+    item: {
+        backgroundColor: 'white',
+        padding: 10
+    },
+    eventTitle: {
+        fontSize: 14,
+        marginBottom: 3
+    },
+    eventCategory: {
+        fontSize: 12,
+        color: 'gray'
+    }
+})
 
 export default Events
