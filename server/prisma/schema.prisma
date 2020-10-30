@@ -19,7 +19,7 @@ model User {
     id        String   @id @default(cuid())
     createdAt DateTime @default(now())
     updatedAt DateTime @updatedAt
-    name      String?
+    connect   String   @unique
     events    Event[]
 }
 
@@ -51,7 +51,7 @@ model Category {
     id        String     @id @default(cuid())
     createdAt DateTime   @default(now())
     updatedAt DateTime   @updatedAt
-    name      String
+    name      String     @unique
     spendings Spending[]
     services  Service[]
 }
