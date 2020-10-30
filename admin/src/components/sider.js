@@ -31,7 +31,7 @@ const Sider = () => {
                     key="/authorized/category"
                     icon={<HomeOutlined/>}
                 >
-                    Категория
+                    Категории
                 </Menu.Item>
                 <Menu.Item
                     key="/authorized/addCategory"

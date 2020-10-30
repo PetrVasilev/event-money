@@ -3,7 +3,9 @@ import styled from 'styled-components'
 import {Title} from "../components/defaultTexts"
 import AddField from "../components/addField"
 import {useMutation} from "@apollo/react-hooks"
-import {Button} from "antd"
+import {Button, message} from "antd"
+import {CREATE_ONE_CATEGORY} from "../gqls/category/mutations"
+import LoadingBar from "../components/loadingBar"
 
 const Container = styled.div`
   display: flex;
@@ -25,7 +27,34 @@ const Fields = styled.div`
 const AddCategory = () => {
     const [name, setName] = useState('')
 
-    const [add,{loading}] =useMutation()
+    const [save, {loading}] = useMutation(CREATE_ONE_CATEGORY, {
+        onCompleted: () => {
+            message.success('Добавлено')
+        },
+        onError: (error) => {
+            message.error('Что то пошло не так')
+        }
+    })
+
+    const onSave = () => {
+        if (name === '') {
+            message.error('Введите имя')
+            return null
+        }
+        save({
+            variables: {
+                data: {
+                    name
+                }
+            }
+        })
+
+    }
+
+    if (loading)
+        return (
+            <LoadingBar/>
+        )
 
     return (
         <Container>
@@ -43,7 +72,13 @@ const AddCategory = () => {
                     }
                 />
             </Fields>
-            <Button style={{marginTop: 16, maxWidth: 200}} type={'primary'}>Добавить</Button>
+            <Button
+                style={{marginTop: 16, maxWidth: 200}}
+                type={'primary'}
+                onClick={onSave}
+            >
+                Добавить
+            </Button>
         </Container>
     )
 }
