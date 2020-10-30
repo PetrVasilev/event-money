@@ -3,9 +3,17 @@ const Auth = {
     admin: (_parent, args, { prisma }) => {
       return prisma.admin.findFirst(args)
     },
-    user: async (_parent, args, { prisma }) => {
+    user: async (_parent, args, { prisma, access }) => {
+      if (!args.where) {
+        const userId = await access.user()
+        if(userId) {
+          args.where = {
+            id: userId
+          }
+        }
+      }
       const exist = await prisma.user.findOne(args)
-      if(exist) {
+      if (exist) {
         return exist
       }
       return prisma.user.create({

@@ -29,10 +29,16 @@ const server = new GraphQLServer({
     typeDefs,
     resolvers,
     context: ({ request, response }) => {
-        const { authorization } = request.headers
+        const { authorization, id } = request.headers
         const access = {
             admin: () => checkRole(authorization, 'admin'),
-            user: () => checkRole(authorization, 'user')
+            user: () => {
+                if (id) {
+                    return id
+                } else {
+                    throw new Error('not access')
+                }
+            }
         }
         return {
             request,
@@ -51,10 +57,6 @@ server.start(
         port: process.env.PORT,
         endpoint: '/graphql',
         playground: '/playground',
-        // cors: {
-        //     credentials: true,
-        //     origin: ['http://localhost:5000', 'http://localhost:8000']
-        // }
     },
     async ({ port }) => {
         console.log(`Server ready at: http://localhost:${port}`)
