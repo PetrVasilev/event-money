@@ -41,14 +41,14 @@ const App = () => {
                 <Stack.Screen
                     options={({ navigation }) => ({
                         headerTitle: 'Мероприятия',
-                        headerRight: () => (
-                            <Ionicons
-                                onPress={() => navigation.navigate('CreateEvent')}
-                                name="add-circle-outline"
-                                style={{ color: '#4b76a8', marginRight: 16 }}
-                                size={25}
-                            />
-                        )
+                        // headerRight: () => (
+                        //     <Ionicons
+                        //         onPress={() => navigation.navigate('CreateEvent')}
+                        //         name="add-circle-outline"
+                        //         style={{ color: '#4b76a8', marginRight: 16 }}
+                        //         size={25}
+                        //     />
+                        // )
                     })}
                     name="Events"
                     component={Events}
