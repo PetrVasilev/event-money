@@ -1,8 +1,8 @@
 import React from 'react'
 import { ScrollView, View, StyleSheet, Text } from 'react-native'
 import Ionicons from 'react-native-vector-icons/dist/Ionicons'
-
-import { getRandomColor } from '../utils'
+import { PieChart } from 'react-minimal-pie-chart'
+import randomColor from 'randomcolor'
 
 const spendings = [
     {
@@ -29,46 +29,95 @@ const spendings = [
 const Event = ({ route }) => {
     const { event } = route.params
     let leavePrice = event.price
-    console.log(event)
+    let spendingPrice = 0
+
+    let coloredSpendings = spendings.map((item) => {
+        return {
+            ...item,
+            color: randomColor({
+                hue: 'orange, yellow, blue, purple, pink',
+                luminosity: 'dark'
+            })
+        }
+    })
+
+    const spendingsView = coloredSpendings.map((item, index) => {
+        const isLast = spendings.length - 1 === index
+        const additionalStyle = { marginBottom: isLast ? 0 : 10 }
+        leavePrice -= item.price
+        spendingPrice += item.price
+        return (
+            <View key={item.id} style={[styles.card, additionalStyle]}>
+                <View style={styles.spendingLeft}>
+                    <Ionicons
+                        name="disc"
+                        style={{ color: item.color, marginRight: 10 }}
+                        size={25}
+                    />
+                    <Text style={styles.spendingName}>{item.name}</Text>
+                </View>
+                <Text style={styles.spendingPrice}>{item.price} руб.</Text>
+            </View>
+        )
+    })
+
     return (
         <ScrollView style={styles.container}>
-            <Text style={styles.textInfo}>Расходы</Text>
-            {spendings.map((item, index) => {
-                const isLast = spendings.length - 1 === index
-                const additionalStyle = { marginBottom: isLast ? 0 : 10 }
-                leavePrice -= item.price
-                return (
-                    <View key={item.id} style={[styles.card, additionalStyle]}>
-                        <View style={styles.spendingLeft}>
-                            <Ionicons
-                                name="disc"
-                                style={{ color: getRandomColor(), marginRight: 10 }}
-                                size={25}
-                            />
-                            <Text style={styles.spendingName}>{item.name}</Text>
-                        </View>
-                        <Text style={styles.spendingPrice}>{item.price} руб.</Text>
-                    </View>
-                )
-            })}
-            <Text style={[styles.textInfo, { marginTop: 15 }]}>Общая информация</Text>
+            <Text style={styles.textInfo}>Общая информация</Text>
             <View style={styles.bottom}>
                 <View style={styles.bottomPrice}>
-                    <Text>Бюджет</Text>
+                    <Text style={{ color: 'green' }}>Бюджет</Text>
                     <Text>{event.price} руб.</Text>
                 </View>
+                <View style={styles.bottomSpending}>
+                    <Text style={{ color: 'red' }}>Расходы</Text>
+                    <Text>{spendingPrice} руб.</Text>
+                </View>
                 <View style={styles.bottomLeave}>
-                    <Text>Остаток</Text>
+                    <Text style={{ color: 'gray' }}>Остаток</Text>
                     <Text>{leavePrice} руб.</Text>
                 </View>
             </View>
+            <View
+                style={[
+                    styles.card,
+                    {
+                        marginTop: 15,
+                        marginBottom: 0,
+                        alignItems: 'center',
+                        justifyContent: 'center',
+                        paddingVertical: 20
+                    }
+                ]}
+            >
+                <View style={{ height: 160, width: '73%' }}>
+                    <PieChart
+                        data={[
+                            {
+                                title: 'Остаток',
+                                value: leavePrice < 0 ? 0 : leavePrice,
+                                color: '#52d726'
+                            },
+                            ...coloredSpendings.map((item) => ({
+                                title: item.name,
+                                value: item.price,
+                                color: item.color
+                            }))
+                        ]}
+                        lineWidth={20}
+                        paddingAngle={1}
+                    />
+                </View>
+            </View>
+            <Text style={[styles.textInfo, { marginTop: 15 }]}>Расходы</Text>
+            {spendingsView}
         </ScrollView>
     )
 }
 
 const styles = StyleSheet.create({
     container: {
-        backgroundColor: '#edeef0',
+        backgroundColor: '#fafafa',
         paddingHorizontal: 16,
         paddingVertical: 10,
         height: window.innerHeight - 60
@@ -119,6 +168,12 @@ const styles = StyleSheet.create({
         justifyContent: 'space-between'
     },
     bottomPrice: {
+        flexDirection: 'row',
+        alignItems: 'center',
+        justifyContent: 'space-between',
+        marginBottom: 10
+    },
+    bottomSpending: {
         flexDirection: 'row',
         alignItems: 'center',
         justifyContent: 'space-between',

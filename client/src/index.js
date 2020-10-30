@@ -4,6 +4,7 @@ import { NavigationContainer } from '@react-navigation/native'
 import { createStackNavigator } from '@react-navigation/stack'
 import iconFont from 'react-native-vector-icons/Fonts/Ionicons.ttf'
 import Ionicons from 'react-native-vector-icons/dist/Ionicons'
+import bridge from '@vkontakte/vk-bridge'
 
 import Events from './pages/events'
 import Event from './pages/event'
@@ -29,6 +30,10 @@ document.head.appendChild(style)
 const Stack = createStackNavigator()
 
 const App = () => {
+    React.useEffect(() => {
+        bridge.send('VKWebAppInit', {})
+    }, [])
+
     return (
         <NavigationContainer>
             <Stack.Navigator
@@ -41,14 +46,14 @@ const App = () => {
                 <Stack.Screen
                     options={({ navigation }) => ({
                         headerTitle: 'Мероприятия',
-                        headerRight: () => (
-                            <Ionicons
-                                onPress={() => navigation.navigate('CreateEvent')}
-                                name="add-circle-outline"
-                                style={{ color: '#9F8FFF', marginRight: 16 }}
-                                size={25}
-                            />
-                        )
+                        // headerRight: () => (
+                        //     <Ionicons
+                        //         onPress={() => navigation.navigate('CreateEvent')}
+                        //         name="add-circle-outline"
+                        //         style={{ color: '#4b76a8', marginRight: 16 }}
+                        //         size={25}
+                        //     />
+                        // )
                     })}
                     name="Events"
                     component={Events}
@@ -61,7 +66,7 @@ const App = () => {
                                 <Ionicons
                                     onPress={() => navigation.goBack()}
                                     name="md-chevron-back-sharp"
-                                    style={{ color: '#9F8FFF', marginLeft: 16 }}
+                                    style={{ color: '#4b76a8', marginLeft: 16 }}
                                     size={25}
                                 />
                             )
@@ -77,7 +82,7 @@ const App = () => {
                             <Ionicons
                                 onPress={() => navigation.goBack()}
                                 name="md-chevron-back-sharp"
-                                style={{ color: '#9F8FFF', marginLeft: 16 }}
+                                style={{ color: '#4b76a8', marginLeft: 16 }}
                                 size={25}
                             />
                         )
