@@ -1,0 +1,16 @@
+version: '2.0'
+services:
+  postgres:
+    image: postgres
+    restart: always
+    container_name: vkhackdb
+    ports:
+      - '5432:5432'
+    environment:
+      POSTGRES_DB: eventmoney
+      POSTGRES_USER: pass
+      POSTGRES_PASSWORD: pass2020
+    volumes:
+      - ./data:/var/lib/postgresql/data
+volumes:
+  postgres:
