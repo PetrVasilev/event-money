@@ -117,7 +117,7 @@ const Event = ({ route }) => {
 
 const styles = StyleSheet.create({
     container: {
-        backgroundColor: '#e8f0ff',
+        backgroundColor: '#fafafa',
         paddingHorizontal: 16,
         paddingVertical: 10,
         height: window.innerHeight - 60

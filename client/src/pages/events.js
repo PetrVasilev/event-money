@@ -53,7 +53,7 @@ const Events = ({ navigation }) => {
 
 const styles = StyleSheet.create({
     list: {
-        backgroundColor: '#e8f0ff',
+        backgroundColor: '#fafafa',
         paddingHorizontal: 16,
         paddingVertical: 10,
         height: window.innerHeight - 60
