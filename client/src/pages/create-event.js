@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useState } from 'react'
 import {
     View,
     ScrollView,
@@ -29,46 +29,75 @@ const categories = [
     {
         value: "4",
         lable: "Арнеда авто"
+    },
+    {
+        value: "other",
+        lable: "Другое"
     }
 ]
 
 const CreateEvent = ({ navigation }) => {
+
+    const [selectedCategory, setSelectedCategory] = useState()
+    const [name, setName] = useState("")
+    const [ownCategory, setOwnCategory] = useState("")
 
     const onSubmit = () => {
         navigation.goBack()
     }
 
     return (
-        <View style={{ flex: 1, backgroundColor: "red" }}>
-            <ScrollView style={styles.container} contentContainerStyle={{ alignItems: "center", paddingBottom: 15 }}>
-                <TextInput
-                    style={styles.textInput}
-                    placeholder="Назване меропрятия"
-                />
-                <View style={styles.pickerContainer}>
-                    <Picker
-                        style={styles.picker}
-                        placeholder="Выберете категорию"
-                    >
-                        {
-                            categories.map(item => (
-                                <Picker.Item
-                                    value={item.value}
-                                    label={item.lable}
-                                />
-                            ))
-                        }
-                    </Picker>
-                    <Ionicons name='chevron-down' style={{ position: 'absolute', right: 25, top: 27 }} color='#000000' size={22} />
-                </View>
-                <TouchableOpacity
-                    style={styles.button}
-                    onPress={onSubmit}
+        <ScrollView style={styles.container} contentContainerStyle={{ alignItems: "center", paddingBottom: 15 }}>
+            <Text style={styles.label}>Название меропрятия</Text>
+            <TextInput
+                value={name}
+                onChangeText={text => setName(text)}
+                style={styles.textInput}
+                placeholder="Название меропрятия"
+            />
+            <Text style={styles.label}>Категория меропрятия</Text>
+            <View style={styles.pickerContainer}>
+                <Picker
+                    style={styles.picker}
+                    placeholder="Выберете категорию"
+                    value={selectedCategory}
+                    onValueChange={item => {
+                        setSelectedCategory(item)
+                        setOwnCategory("")
+                    }}
                 >
-                    <Text style={styles.buttonText}>Создать</Text>
-                </TouchableOpacity>
-            </ScrollView>
-        </View>
+                    {
+                        categories.map((item, index) => (
+                            <Picker.Item
+                                key={index}
+                                value={item.value}
+                                label={item.lable}
+                            />
+                        ))
+                    }
+                </Picker>
+                <Ionicons name='chevron-down' style={{ position: 'absolute', right: 25, top: 10 }} color='#000000' size={22} />
+            </View>
+            {
+                selectedCategory === "other" ? (
+                    <>
+                        <Text style={styles.label}>Название меропрятия</Text>
+                        <TextInput
+                            value={ownCategory}
+                            onChangeText={text => setOwnCategory(text)}
+                            style={styles.textInput}
+                            placeholder="Введите свой вариант"
+                        />
+                    </>
+                ) : null
+            }
+            <TouchableOpacity
+                style={styles.button}
+                onPress={onSubmit}
+            >
+                <Text style={styles.buttonText}>Создать</Text>
+            </TouchableOpacity>
+        </ScrollView>
     )
 }
 
@@ -83,14 +112,13 @@ const styles = StyleSheet.create({
         width: "90%",
         borderWidth: 0.5,
         borderColor: "grey",
-        paddingHorizontal: 5,
+        paddingHorizontal: 12,
         // paddingVertical: 7,
-        height: 44,
-        marginTop: 15,
+        height: 42,
         borderRadius: 5,
         borderColor: "silver",
         color: "#000000",
-        backgroundColor: "transparent",
+        backgroundColor: "#ffffff",
         fontSize: 16
     },
     pickerContainer: {
@@ -100,18 +128,17 @@ const styles = StyleSheet.create({
     },
     picker: {
         color: "#000000",
-        paddingHorizontal: 5,
-        height: 44,
+        paddingHorizontal: 12,
+        height: 42,
         borderRadius: 5,
         borderWidth: 0.5,
         borderColor: "silver",
-        backgroundColor: "transparent",
+        backgroundColor: "#ffffff",
         width: "90%",
-        marginTop: 15,
     },
     button: {
         width: "90%",
-        height: 44,
+        height: 42,
         alignItems: "center",
         backgroundColor: "#9F8FFF",
         borderRadius: 5,
@@ -121,6 +148,14 @@ const styles = StyleSheet.create({
     buttonText: {
         color: "#ffffff",
         fontSize: 16
+    },
+    label: {
+        marginTop: 15,
+        marginBottom: 5,
+        width: "90%",
+        textAlign: "left",
+        paddingLeft: 5,
+        color: "grey"
     }
 })
 
