@@ -1,10 +1,16 @@
 import React, {useRef} from 'react'
-import {Layout, Menu, Popconfirm} from 'antd'
+import {Menu, Popconfirm} from 'antd'
 import {useApolloClient} from '@apollo/react-hooks'
 import {HomeOutlined, ShopOutlined, UserDeleteOutlined} from '@ant-design/icons'
 import {useHistory} from 'react-router-dom'
+import styled from 'styled-components'
 
-const {Sider: AntSider} = Layout
+const Container = styled.div`
+  display: flex;
+  flex: 1;
+  max-width: 300px;
+`
+
 const Sider = () => {
     const history = useHistory()
     const apollo = useApolloClient()
@@ -14,7 +20,7 @@ const Sider = () => {
         history.replace('/')
     }
     return (
-        <AntSider>
+        <Container>
             <Menu theme="dark" mode="inline" defaultSelectedKeys={[history.location.pathname]}>
                 <Menu.Item
                     onClick={
@@ -57,7 +63,7 @@ const Sider = () => {
                     </Popconfirm>
                 </Menu.Item>
             </Menu>
-        </AntSider>
+        </Container>
     )
 }
 
