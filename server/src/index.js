@@ -25,7 +25,7 @@ const middleware = async (resolve, root, args, context, info) => {
     return resolve(root, args, context, info)
 }
 
-const server = GraphQLServer({
+const server = new GraphQLServer({
     typeDefs,
     resolvers,
     context: ({ request, response }) => {
