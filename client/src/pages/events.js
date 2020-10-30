@@ -25,13 +25,14 @@ const events = [
     }
 ]
 
-const Events = () => {
+const Events = ({ navigation }) => {
     return (
         <ScrollView style={styles.list}>
             {events.map((item, index) => (
                 <TouchableOpacity
                     style={[styles.item, { marginBottom: events.length - 1 === index ? 0 : 10 }]}
                     key={item.id}
+                    onPress={() => navigation.push(`Event`, { event: item })}
                 >
                     <Text style={styles.eventTitle}>{item.name}</Text>
                     <Text style={styles.eventCategory}>{item.category}</Text>
@@ -44,9 +45,9 @@ const Events = () => {
 const styles = StyleSheet.create({
     list: {
         backgroundColor: '#edeef0',
-        flex: 1,
         paddingHorizontal: 16,
-        paddingVertical: 10
+        paddingVertical: 10,
+        height: window.innerHeight - 60
     },
     item: {
         backgroundColor: 'white',
