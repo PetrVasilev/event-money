@@ -55,9 +55,17 @@ const App = () => {
                     component={Event}
                 />
                 <Stack.Screen
-                    options={{
-                        headerTitle: 'Создать мероприятие'
-                    }}
+                    options={({ navigation }) => ({
+                        headerTitle: 'Создать мероприятие',
+                        headerLeft: () => (
+                            <Ionicons
+                                onPress={() => navigation.goBack()}
+                                name="md-chevron-back-sharp"
+                                style={{ color: '#9F8FFF', marginLeft: 16 }}
+                                size={27}
+                            />
+                        )
+                    })}
                     name="CreateEvent"
                     component={CreateEvent}
                 />
