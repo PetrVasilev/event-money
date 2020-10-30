@@ -10,7 +10,7 @@ const Auth = {
       }
       return prisma.user.create({
         data: {
-          connect: args.where.id
+          id: args.where.id
         }
       })
     },
