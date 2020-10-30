@@ -1,5 +1,5 @@
 import React from 'react'
-import { ScrollView, View, StyleSheet, Text } from 'react-native'
+import { ScrollView, View, StyleSheet, Text, TouchableOpacity } from 'react-native'
 import Ionicons from 'react-native-vector-icons/dist/Ionicons'
 import { PieChart } from 'react-minimal-pie-chart'
 import randomColor from 'randomcolor'
@@ -26,7 +26,7 @@ const spendings = [
     }
 ]
 
-const Event = ({ route }) => {
+const Event = ({ route, navigation }) => {
     const { event } = route.params
     let leavePrice = event.price
     let spendingPrice = 0
@@ -47,7 +47,12 @@ const Event = ({ route }) => {
         leavePrice -= item.price
         spendingPrice += item.price
         return (
-            <View key={item.id} style={[styles.card, additionalStyle]}>
+            <TouchableOpacity
+                onPress={() => navigation.navigate("Spending", { spending: item })}
+                activeOpacity={0.6}
+                key={item.id}
+                style={[styles.card, additionalStyle]}
+            >
                 <View style={styles.spendingLeft}>
                     <Ionicons
                         name="disc"
@@ -57,9 +62,11 @@ const Event = ({ route }) => {
                     <Text style={styles.spendingName}>{item.name}</Text>
                 </View>
                 <Text style={styles.spendingPrice}>{item.price} руб.</Text>
-            </View>
+            </TouchableOpacity>
         )
     })
+
+    const onSubmit = () => { }
 
     return (
         <ScrollView style={styles.container}>
@@ -111,6 +118,14 @@ const Event = ({ route }) => {
             </View>
             <Text style={[styles.textInfo, { marginTop: 15 }]}>Расходы</Text>
             {spendingsView}
+            <TouchableOpacity
+                activeOpacity={0.8}
+                style={styles.button}
+                onPress={onSubmit}
+                onPress={() => navigation.navigate("CreateSpending")}
+            >
+                <Text style={styles.buttonText}>Добавить расход</Text>
+            </TouchableOpacity>
         </ScrollView>
     )
 }
@@ -178,7 +193,20 @@ const styles = StyleSheet.create({
         alignItems: 'center',
         justifyContent: 'space-between',
         marginBottom: 10
-    }
+    },
+    button: {
+        width: '100%',
+        height: 42,
+        alignItems: 'center',
+        backgroundColor: '#4b76a8',
+        borderRadius: 5,
+        marginTop: 15,
+        justifyContent: 'center'
+    },
+    buttonText: {
+        color: '#ffffff',
+        fontSize: 16
+    },
 })
 
 export default Event

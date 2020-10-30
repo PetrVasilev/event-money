@@ -3,6 +3,17 @@ const Auth = {
     admin: (_parent, args, { prisma }) => {
       return prisma.admin.findFirst(args)
     },
+    user: async (_parent, args, { prisma }) => {
+      const exist = await prisma.user.findOne(args)
+      if(exist) {
+        return exist
+      }
+      return prisma.user.create({
+        data: {
+          id: args.where.id
+        }
+      })
+    },
   },
   Mutation: {
     signInAdmin: async (_parent, { data: { login, password } }, { prisma, response }) => {
