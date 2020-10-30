@@ -1857,6 +1857,11 @@
     "@typescript-eslint/types" "4.5.0"
     eslint-visitor-keys "^2.0.0"
 
+"@vkontakte/vk-bridge@^2.3.0":
+  version "2.3.0"
+  resolved "https://registry.yarnpkg.com/@vkontakte/vk-bridge/-/vk-bridge-2.3.0.tgz#d436daeab23bf51a4485a3a45493f793dab78187"
+  integrity sha512-1kICD4u5J8EO4PyGg7ZMBwOju85Wh7zb5OxVs1JYB/ghTHg5YQSmpIx9M4NZH2TnK9KelUpBEs+TwFpkB5PMyw==
+
 "@webassemblyjs/ast@1.9.0":
   version "1.9.0"
   resolved "https://registry.yarnpkg.com/@webassemblyjs/ast/-/ast-1.9.0.tgz#bd850604b4042459a5a41cd7d338cbed695ed964"
