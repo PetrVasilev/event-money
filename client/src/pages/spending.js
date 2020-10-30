@@ -7,8 +7,6 @@ const Spending = ({ route, navigation }) => {
 
     console.log(spending)
 
-    const onSubmit = () => { }
-
     return (
         <ScrollView style={styles.container}>
             <Text style={styles.textInfo}>Общая информация</Text>
@@ -23,17 +21,16 @@ const Spending = ({ route, navigation }) => {
                 </View>
                 <View style={styles.bottomSpending}>
                     <Text>Комметарий</Text>
-                    <Text>{spending.description ? spending.description : "-"}</Text>
+                    <Text>{spending.description ? spending.description : '-'}</Text>
                 </View>
                 <View style={styles.bottomSpending}>
                     <Text>Дата создания</Text>
-                    <Text>{moment(spending.createdAt).format("DD.MM.YYYY")}</Text>
+                    <Text>{moment(spending.createdAt).format('DD.MM.YYYY')}</Text>
                 </View>
             </View>
             <TouchableOpacity
                 activeOpacity={0.8}
                 style={styles.button}
-                onPress={onSubmit}
                 onPress={() => navigation.goBack()}
             >
                 <Text style={styles.buttonText}>Удалить расход</Text>
@@ -90,7 +87,7 @@ const styles = StyleSheet.create({
     buttonText: {
         color: '#ffffff',
         fontSize: 16
-    },
+    }
 })
 
 export default Spending
