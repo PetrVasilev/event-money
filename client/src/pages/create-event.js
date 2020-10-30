@@ -16,19 +16,19 @@ const { width, height } = Dimensions.get("window")
 const categories = [
     {
         value: "1",
-        lable: "Фотограф"
+        lable: "Свадьба"
     },
     {
         value: "2",
-        lable: "Ведущий"
+        lable: "День рождения"
     },
     {
         value: "3",
-        lable: "Банкетный зал"
+        lable: "Утренник"
     },
     {
         value: "4",
-        lable: "Арнеда авто"
+        lable: "Мальчишник/Девишник"
     },
     {
         value: "other",
@@ -41,6 +41,8 @@ const CreateEvent = ({ navigation }) => {
     const [selectedCategory, setSelectedCategory] = useState()
     const [name, setName] = useState("")
     const [ownCategory, setOwnCategory] = useState("")
+    const [date, setDate] = useState("")
+    const [budget, setBudget] = useState("")
 
     const onSubmit = () => {
         navigation.goBack()
@@ -48,14 +50,28 @@ const CreateEvent = ({ navigation }) => {
 
     return (
         <ScrollView style={styles.container} contentContainerStyle={{ alignItems: "center", paddingBottom: 15 }}>
-            <Text style={styles.label}>Название меропрятия</Text>
+            <Text style={styles.label}>Название мероприятия</Text>
             <TextInput
                 value={name}
                 onChangeText={text => setName(text)}
                 style={styles.textInput}
-                placeholder="Название меропрятия"
+                placeholder="Название мероприятия"
             />
-            <Text style={styles.label}>Категория меропрятия</Text>
+            <Text style={styles.label}>Дата проведения</Text>
+            <TextInput
+                value={date}
+                onChangeText={text => setDate(text)}
+                style={styles.textInput}
+                placeholder="Дата проведения"
+            />
+            <Text style={styles.label}>Бюджет мероприятия</Text>
+            <TextInput
+                value={budget}
+                onChangeText={text => setBudget(text)}
+                style={styles.textInput}
+                placeholder="Бюджет мероприятия"
+            />
+            <Text style={styles.label}>Категория мероприятия</Text>
             <View style={styles.pickerContainer}>
                 <Picker
                     style={styles.picker}
@@ -81,7 +97,7 @@ const CreateEvent = ({ navigation }) => {
             {
                 selectedCategory === "other" ? (
                     <>
-                        <Text style={styles.label}>Название меропрятия</Text>
+                        <Text style={styles.label}>Своя категория</Text>
                         <TextInput
                             value={ownCategory}
                             onChangeText={text => setOwnCategory(text)}
