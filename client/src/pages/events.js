@@ -27,78 +27,6 @@ const events = [
         date: new Date(),
         createdAt: new Date(),
         price: 6000
-    },
-    {
-        id: 1,
-        name: 'Свадьба Васильевых',
-        category: 'Свадьба',
-        date: new Date(),
-        createdAt: new Date(),
-        price: 400000
-    },
-    {
-        id: 2,
-        name: 'День рождения Кыната',
-        category: 'День рождения',
-        date: new Date(),
-        createdAt: new Date(),
-        price: 20000
-    },
-    {
-        id: 3,
-        name: 'Шоу',
-        category: 'Другое',
-        date: new Date(),
-        createdAt: new Date(),
-        price: 6000
-    },
-    {
-        id: 1,
-        name: 'Свадьба Васильевых',
-        category: 'Свадьба',
-        date: new Date(),
-        createdAt: new Date(),
-        price: 400000
-    },
-    {
-        id: 2,
-        name: 'День рождения Кыната',
-        category: 'День рождения',
-        date: new Date(),
-        createdAt: new Date(),
-        price: 20000
-    },
-    {
-        id: 3,
-        name: 'Шоу',
-        category: 'Другое',
-        date: new Date(),
-        createdAt: new Date(),
-        price: 6000
-    },
-    {
-        id: 1,
-        name: 'Свадьба Васильевых',
-        category: 'Свадьба',
-        date: new Date(),
-        createdAt: new Date(),
-        price: 400000
-    },
-    {
-        id: 2,
-        name: 'День рождения Кыната',
-        category: 'День рождения',
-        date: new Date(),
-        createdAt: new Date(),
-        price: 20000
-    },
-    {
-        id: 3,
-        name: 'Шоу',
-        category: 'Другое',
-        date: new Date(),
-        createdAt: new Date(),
-        price: 6000
     }
 ]
 
@@ -108,7 +36,10 @@ const Events = ({ navigation }) => {
             <ScrollView style={styles.list} contentContainerStyle={{ paddingBottom: 70 }}>
                 {events.map((item, index) => (
                     <TouchableOpacity
-                        style={[styles.item, { marginBottom: events.length - 1 === index ? 0 : 10 }]}
+                        style={[
+                            styles.item,
+                            { marginBottom: events.length - 1 === index ? 0 : 10 }
+                        ]}
                         key={item.id}
                         onPress={() => navigation.push(`Event`, { event: item })}
                     >
@@ -129,8 +60,8 @@ const Events = ({ navigation }) => {
             >
                 <Ionicons
                     name="add-outline"
-                    style={{ color: '#ffffff' }}
-                    size={35}
+                    style={{ color: '#ffffff', alignItems: 'center', justifyContent: 'center' }}
+                    size={30}
                 />
             </TouchableOpacity>
         </>
@@ -169,16 +100,16 @@ const styles = StyleSheet.create({
         color: 'rgb(192, 192, 192)'
     },
     add: {
-        position: "absolute",
+        position: 'absolute',
         bottom: 25,
         right: 25,
-        backgroundColor: "#4b76a8",
-        width: 45,
-        height: 45,
-        borderRadius: 27,
+        backgroundColor: '#4b76a8',
+        width: 46,
+        height: 46,
+        borderRadius: 22,
         alignItems: 'center',
-        justifyContent: "center",
-        paddingLeft: 3
+        justifyContent: 'center',
+        paddingLeft: 2
     }
 })
 
