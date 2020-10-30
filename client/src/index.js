@@ -5,6 +5,7 @@ import { createStackNavigator } from '@react-navigation/stack'
 import iconFont from 'react-native-vector-icons/Fonts/Ionicons.ttf'
 import Ionicons from 'react-native-vector-icons/dist/Ionicons'
 
+import GlobalStyles from './components/GlobalStyles'
 import Events from './pages/events'
 import Event from './pages/event'
 import CreateEvent from './pages/create-event'
