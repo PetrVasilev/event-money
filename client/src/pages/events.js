@@ -2,6 +2,9 @@ import React from 'react'
 import { ScrollView, View, TouchableOpacity, Text, StyleSheet } from 'react-native'
 import Ionicons from 'react-native-vector-icons/dist/Ionicons'
 import moment from 'moment'
+import { useLazyQuery } from '@apollo/client'
+
+import { AUTH_USER } from '../gqls/user'
 
 const events = [
     {
@@ -31,6 +34,7 @@ const events = [
 ]
 
 const Events = ({ navigation }) => {
+    const [authUser] = useLazyQuery(AUTH_USER)
     return (
         <>
             <ScrollView style={styles.list} contentContainerStyle={{ paddingBottom: 70 }}>
@@ -56,7 +60,10 @@ const Events = ({ navigation }) => {
             <TouchableOpacity
                 activeOpacity={1}
                 style={styles.add}
-                onPress={() => navigation.navigate('CreateEvent')}
+                onPress={() => {
+                    authUser()
+                    navigation.navigate('CreateEvent')
+                }}
             >
                 <Ionicons
                     name="add-outline"
