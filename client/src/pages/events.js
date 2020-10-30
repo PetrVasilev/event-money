@@ -45,7 +45,7 @@ const styles = StyleSheet.create({
     list: {
         backgroundColor: '#edeef0',
         flex: 1,
-        paddingHorizontal: 15,
+        paddingHorizontal: 16,
         paddingVertical: 10
     },
     item: {
