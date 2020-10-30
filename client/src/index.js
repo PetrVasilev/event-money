@@ -45,7 +45,7 @@ const App = () => {
                             <Ionicons
                                 onPress={() => navigation.navigate('CreateEvent')}
                                 name="add-circle-outline"
-                                style={{ color: '#9F8FFF', marginRight: 16 }}
+                                style={{ color: '#4b76a8', marginRight: 16 }}
                                 size={25}
                             />
                         )
@@ -61,7 +61,7 @@ const App = () => {
                                 <Ionicons
                                     onPress={() => navigation.goBack()}
                                     name="md-chevron-back-sharp"
-                                    style={{ color: '#9F8FFF', marginLeft: 16 }}
+                                    style={{ color: '#4b76a8', marginLeft: 16 }}
                                     size={25}
                                 />
                             )
@@ -77,7 +77,7 @@ const App = () => {
                             <Ionicons
                                 onPress={() => navigation.goBack()}
                                 name="md-chevron-back-sharp"
-                                style={{ color: '#9F8FFF', marginLeft: 16 }}
+                                style={{ color: '#4b76a8', marginLeft: 16 }}
                                 size={25}
                             />
                         )
