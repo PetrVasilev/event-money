@@ -9,6 +9,10 @@ const Spending = gql`
     description: String
     event: Event
     eventId: String
+    category: Category
+    categoryId: String
+    service: Service
+    serviceId: String
   }
 
   type Query {
