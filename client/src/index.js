@@ -31,7 +31,13 @@ const Stack = createStackNavigator()
 const App = () => {
     return (
         <NavigationContainer>
-            <Stack.Navigator>
+            <Stack.Navigator
+                screenOptions={{
+                    headerStyle: {
+                        height: 60
+                    }
+                }}
+            >
                 <Stack.Screen
                     options={({ navigation }) => ({
                         headerTitle: 'Мероприятия',
@@ -40,7 +46,7 @@ const App = () => {
                                 onPress={() => navigation.navigate('CreateEvent')}
                                 name="add-circle-outline"
                                 style={{ color: '#9F8FFF', marginRight: 16 }}
-                                size={27}
+                                size={25}
                             />
                         )
                     })}
@@ -48,8 +54,18 @@ const App = () => {
                     component={Events}
                 />
                 <Stack.Screen
-                    options={{
-                        headerTitle: 'Мероприятие'
+                    options={({ navigation, route }) => {
+                        return {
+                            headerTitle: route.params.event.name,
+                            headerLeft: () => (
+                                <Ionicons
+                                    onPress={() => navigation.goBack()}
+                                    name="md-chevron-back-sharp"
+                                    style={{ color: '#9F8FFF', marginLeft: 16 }}
+                                    size={25}
+                                />
+                            )
+                        }
                     }}
                     name="Event"
                     component={Event}
@@ -62,7 +78,7 @@ const App = () => {
                                 onPress={() => navigation.goBack()}
                                 name="md-chevron-back-sharp"
                                 style={{ color: '#9F8FFF', marginLeft: 16 }}
-                                size={27}
+                                size={25}
                             />
                         )
                     })}
