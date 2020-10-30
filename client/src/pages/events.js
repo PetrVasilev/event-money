@@ -1,5 +1,6 @@
 import React from 'react'
-import { ScrollView, TouchableOpacity, Text, StyleSheet } from 'react-native'
+import { ScrollView, View, TouchableOpacity, Text, StyleSheet } from 'react-native'
+import moment from 'moment'
 
 const events = [
     {
@@ -7,21 +8,24 @@ const events = [
         name: 'Свадьба Васильевых',
         category: 'Свадьба',
         date: new Date(),
-        created: new Date()
+        createdAt: new Date(),
+        price: 400000
     },
     {
         id: 2,
         name: 'День рождения Кыната',
         category: 'День рождения',
         date: new Date(),
-        created: new Date()
+        createdAt: new Date(),
+        price: 20000
     },
     {
         id: 3,
         name: 'Шоу',
         category: 'Другое',
         date: new Date(),
-        created: new Date()
+        createdAt: new Date(),
+        price: 6000
     }
 ]
 
@@ -35,7 +39,12 @@ const Events = ({ navigation }) => {
                     onPress={() => navigation.push(`Event`, { event: item })}
                 >
                     <Text style={styles.eventTitle}>{item.name}</Text>
-                    <Text style={styles.eventCategory}>{item.category}</Text>
+                    <View style={styles.eventBottom}>
+                        <Text style={styles.eventCategory}>{item.category}</Text>
+                        <Text style={styles.eventCreated}>
+                            {moment(item.date).format('DD.MM.YYYY')}
+                        </Text>
+                    </View>
                 </TouchableOpacity>
             ))}
         </ScrollView>
@@ -51,15 +60,27 @@ const styles = StyleSheet.create({
     },
     item: {
         backgroundColor: 'white',
-        padding: 10
+        padding: 10,
+        borderColor: 'rgb(216, 216, 216)',
+        borderWidth: 1,
+        boxShadow: 'rgb(216, 216, 216) 0px 0px 0px'
     },
     eventTitle: {
         fontSize: 14,
         marginBottom: 3
     },
+    eventBottom: {
+        flexDirection: 'row',
+        alignItems: 'center',
+        justifyContent: 'space-between'
+    },
     eventCategory: {
         fontSize: 12,
         color: 'gray'
+    },
+    eventCreated: {
+        fontSize: 12,
+        color: 'rgb(192, 192, 192)'
     }
 })
 

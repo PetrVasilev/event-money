@@ -1,8 +1,129 @@
 import React from 'react'
-import { View } from 'react-native'
+import { ScrollView, View, StyleSheet, Text } from 'react-native'
+import Ionicons from 'react-native-vector-icons/dist/Ionicons'
 
-const Event = () => {
-    return <View></View>
+import { getRandomColor } from '../utils'
+
+const spendings = [
+    {
+        id: 1,
+        name: 'Фотограф',
+        price: 10000,
+        createdAt: new Date(),
+        icon: ''
+    },
+    {
+        id: 2,
+        name: 'Видеограф',
+        price: 15000,
+        createdAt: new Date()
+    },
+    {
+        id: 3,
+        name: 'Тамада',
+        price: 10000,
+        createdAt: new Date()
+    }
+]
+
+const Event = ({ route }) => {
+    const { event } = route.params
+    let leavePrice = event.price
+    console.log(event)
+    return (
+        <ScrollView style={styles.container}>
+            <Text style={styles.textInfo}>Расходы</Text>
+            {spendings.map((item, index) => {
+                const isLast = spendings.length - 1 === index
+                const additionalStyle = { marginBottom: isLast ? 0 : 10 }
+                leavePrice -= item.price
+                return (
+                    <View key={item.id} style={[styles.card, additionalStyle]}>
+                        <View style={styles.spendingLeft}>
+                            <Ionicons
+                                name="disc"
+                                style={{ color: getRandomColor(), marginRight: 10 }}
+                                size={25}
+                            />
+                            <Text style={styles.spendingName}>{item.name}</Text>
+                        </View>
+                        <Text style={styles.spendingPrice}>{item.price} руб.</Text>
+                    </View>
+                )
+            })}
+            <Text style={[styles.textInfo, { marginTop: 15 }]}>Общая информация</Text>
+            <View style={styles.bottom}>
+                <View style={styles.bottomPrice}>
+                    <Text>Бюджет</Text>
+                    <Text>{event.price} руб.</Text>
+                </View>
+                <View style={styles.bottomLeave}>
+                    <Text>Остаток</Text>
+                    <Text>{leavePrice} руб.</Text>
+                </View>
+            </View>
+        </ScrollView>
+    )
 }
+
+const styles = StyleSheet.create({
+    container: {
+        backgroundColor: '#edeef0',
+        paddingHorizontal: 16,
+        paddingVertical: 10,
+        height: window.innerHeight - 60
+    },
+    textInfo: {
+        fontSize: 14,
+        color: 'gray',
+        marginBottom: 10
+    },
+    card: {
+        backgroundColor: 'white',
+        padding: 10,
+        borderColor: 'rgb(216, 216, 216)',
+        borderWidth: 1,
+        boxShadow: 'rgb(216, 216, 216) 0px 0px 0px',
+        marginBottom: 10,
+        flexDirection: 'row',
+        alignItems: 'center',
+        justifyContent: 'space-between'
+    },
+    spendingLeft: {
+        flexDirection: 'row',
+        alignItems: 'center',
+        justifyContent: 'center'
+    },
+    spendingName: {
+        fontSize: 14
+    },
+    spendingPrice: {
+        fontSize: 14
+    },
+    line: {
+        borderBottomWidth: 1,
+        borderColor: 'silver',
+        marginTop: 12,
+        marginBottom: 12
+    },
+    bottom: {
+        backgroundColor: 'white',
+        padding: 10,
+        borderColor: 'rgb(216, 216, 216)',
+        borderWidth: 1,
+        boxShadow: 'rgb(216, 216, 216) 0px 0px 0px'
+    },
+    bottomLeave: {
+        flexDirection: 'row',
+        alignItems: 'center',
+        justifyContent: 'space-between'
+    },
+    bottomPrice: {
+        flexDirection: 'row',
+        alignItems: 'center',
+        justifyContent: 'space-between',
+        marginBottom: 10
+    }
+})
 
 export default Event
