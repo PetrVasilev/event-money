@@ -1,10 +1,14 @@
 import React from 'react'
+import apollo from "./utils/apollo"
+import { ApolloProvider } from '@apollo/react-hooks'
 
 const App = () => {
     return (
-        <div>
-            hello
-        </div>
+        <ApolloProvider client={apollo}>
+            <div>
+                hello
+            </div>
+        </ApolloProvider>
     );
 }
 
