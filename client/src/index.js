@@ -4,6 +4,7 @@ import { NavigationContainer } from '@react-navigation/native'
 import { createStackNavigator } from '@react-navigation/stack'
 import iconFont from 'react-native-vector-icons/Fonts/Ionicons.ttf'
 import Ionicons from 'react-native-vector-icons/dist/Ionicons'
+import bridge from '@vkontakte/vk-bridge'
 
 import Events from './pages/events'
 import Event from './pages/event'
@@ -29,6 +30,10 @@ document.head.appendChild(style)
 const Stack = createStackNavigator()
 
 const App = () => {
+    React.useEffect(() => {
+        bridge.send('VKWebAppInit', {})
+    }, [])
+
     return (
         <NavigationContainer>
             <Stack.Navigator
