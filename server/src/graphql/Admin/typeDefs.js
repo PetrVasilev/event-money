@@ -5,9 +5,8 @@ const Admin = gql`
     id: String!
     createdAt: DateTime!
     updatedAt: DateTime!
-    email: String!
+    login: String!
     password: String!
-    token: String
   }
 
   type Query {
