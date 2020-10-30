@@ -12,11 +12,17 @@ const Label = styled.div`
   font-weight: bold;
 `
 
-const AddField = ({text, style, type, placeholder, className}) => {
+const AddField = ({text, style, type, placeholder, className, value, onChange}) => {
     return (
         <Container style={style} className={className}>
             <Label>{text}</Label>
-            <Input style={{marginTop: 8}} type={type} placeholder={placeholder}/>
+            <Input
+                style={{marginTop: 8}}
+                type={type}
+                placeholder={placeholder}
+                value={value}
+                onChange={onChange}
+            />
         </Container>
     )
 }
