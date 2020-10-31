@@ -10,6 +10,7 @@ export const FIND_MANY_SERVICE = gql`
             amount
             description
             category{
+                name
                 types
             }
         }

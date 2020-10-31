@@ -11,6 +11,7 @@ import AddService from "./pages/addService"
 import AddTemplate from "./pages/addTemplate"
 import {ADMIN} from "./gqls/auth/queries"
 import Category from "./pages/category"
+import Service from "./pages/service"
 
 const App = () => {
     const [loading, setLoading] = useState(true)
@@ -49,6 +50,7 @@ const App = () => {
                     <Switch>
                         <Padding>
                             <Route exact path={'/authorized/category'} component={Category}/>
+                            <Route exact path={'/authorized/service'} component={Service}/>
                             <Route exact path={'/authorized/addCategory'} component={AddCategory}/>
                             <Route exact path={'/authorized/addService'} component={AddService}/>
                             <Route exact path={'/authorized/addTemplate'} component={AddTemplate}/>

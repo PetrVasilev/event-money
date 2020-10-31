@@ -68,13 +68,12 @@ const Category = () => {
                     dataIndex={'types'}
                     key={'types'}
                     render={
-                        (categories) => {
-                            console.log(categories)
+                        (types) => {
                             return (
-                                categories.map(
-                                    (item) => {
+                                types.map(
+                                    (item, index) => {
                                         return (
-                                            <Tag color={enumColorMap[item]}>{enumMap[item]}</Tag>
+                                            <Tag key={index} color={enumColorMap[item]}>{enumMap[item]}</Tag>
                                         )
                                     }
                                 )
