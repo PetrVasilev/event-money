@@ -6,6 +6,7 @@ import {useMutation} from "@apollo/react-hooks"
 import {Button, message} from "antd"
 import {CREATE_ONE_CATEGORY} from "../gqls/category/mutations"
 import LoadingBar from "../components/loadingBar"
+import AddFieldSelect from "../components/addFieldSelect"
 
 const Container = styled.div`
   display: flex;
@@ -13,19 +14,47 @@ const Container = styled.div`
   flex-direction: column;
 `
 const Fields = styled.div`
-  margin-top:24px;
+  margin-top: 24px;
   display: flex;
-  .gap{
-    margin-right: 16px;
-    margin-bottom: 16px;
-    @media screen and (max-width: 800px){
+
+  .gap {
+    margin-right: 24px;
+    margin-bottom: 24px;
+    @media screen and (max-width: 800px) {
       margin-right: 0;
     }
   }
-  
+
+  @media screen and (max-width: 800px) {
+    flex-direction: column;
+  }
+
 `
+const typeEnum = [
+    {
+        id: 'OTHER',
+        name: 'Другие'
+    },
+    {
+        id: 'WEDDING',
+        name: 'Свадьба'
+    },
+    {
+        id: 'BIRTHDAY',
+        name: 'День рождения'
+    },
+    {
+        id: 'STAG',
+        name: 'Девичник/Мальчишник'
+    },
+    {
+        id: 'MATINEE',
+        name: 'Утренник'
+    },
+]
 const AddCategory = () => {
     const [name, setName] = useState('')
+    const [types, setTypes] = useState()
 
     const [save, {loading}] = useMutation(CREATE_ONE_CATEGORY, {
         onCompleted: () => {
@@ -46,12 +75,21 @@ const AddCategory = () => {
             message.error('Введите имя')
             return null
         }
-        save({
-            variables: {
-                data: {
-                    name
+        if (!types) {
+            message.error('Выберите тип')
+            return null
+        }
+        const variables = {
+            data: {
+                name,
+                types: {
+                    set: types
                 }
             }
+        }
+        console.log(variables)
+        save({
+            variables
         })
 
     }
@@ -75,6 +113,19 @@ const AddCategory = () => {
                             setName(e.target.value)
                         }
                     }
+                />
+                <AddFieldSelect
+                    text={'Тип мероприятия'}
+                    className={'gap'}
+                    placeholder={'Выберите мероприятие'}
+                    value={types}
+                    onChange={
+                        (value) => {
+                            setTypes(value)
+                        }
+                    }
+                    data={typeEnum}
+                    mode={'multiple'}
                 />
             </Fields>
             <Button
