@@ -31,7 +31,7 @@ const server = new GraphQLServer({
     context: ({ request, response }) => {
         const { authorization, id } = request.headers
         const access = {
-            admin: () => checkRole(authorization, 'admin', true),
+            admin: () => checkRole(authorization, 'admin'),
             user: () => {
                 if (id) {
                     return id
@@ -48,7 +48,6 @@ const server = new GraphQLServer({
                     return cheking
                 }))
                 const find = checks.find(object => object)
-
                 if (find) {
                     return find
                 } else {
