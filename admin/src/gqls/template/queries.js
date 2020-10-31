@@ -4,9 +4,21 @@ export const FIND_MANY_TEMPLATE = gql`
     query {
         findManyTemplate{
             id
-            createdAt
-            updatedAt
+            description
             name
+            amount
+            types
+            services{
+                id
+                name
+                amount
+                description
+                category{
+                    name
+                    types
+                    id
+                }
+            }
         }
     }
 `

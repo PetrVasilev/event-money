@@ -4,8 +4,7 @@ import {Button, Table, Tag} from "antd"
 import {useHistory} from "react-router-dom"
 import {Title} from "../components/defaultTexts"
 import {useQuery} from "@apollo/react-hooks"
-import {FIND_MANY_SERVICE} from "../gqls/service/queries"
-import UpdateService from "../components/updateService"
+import {FIND_MANY_TEMPLATE} from "../gqls/template/queries"
 
 const {Column} = Table
 
@@ -15,11 +14,26 @@ const Container = styled.div`
   flex-direction: column;
 `
 
+const enumMap = {
+    OTHER: 'Другие',
+    WEDDING: 'Свадьба',
+    BIRTHDAY: 'День рождения',
+    STAG: 'Девичник/Мальчишник',
+    MATINEE: 'Утренник'
+}
+const enumColorMap = {
+    OTHER: 'red',
+    WEDDING: 'blue',
+    BIRTHDAY: 'magenta',
+    STAG: 'gold',
+    MATINEE: 'lime'
+}
+
 const Template = () => {
     const [dataSource, setDataSource] = useState([])
-    const {loading} = useQuery(FIND_MANY_SERVICE, {
-        onCompleted: ({findManyService}) => {
-            setDataSource(findManyService.map(
+    const {loading} = useQuery(FIND_MANY_TEMPLATE, {
+        onCompleted: ({findManyTemplate}) => {
+            setDataSource(findManyTemplate.map(
                 (item) => {
                     item.key = item.id
                     return item
@@ -33,13 +47,14 @@ const Template = () => {
     const history = useHistory()
 
     const expandedRowRender = (data) => {
-        return (
+        /*return (
             <UpdateService
                 data={data}
                 oldDataSource={dataSource}
                 setDataSource={setDataSource}
             />
-        )
+        )*/
+        return null
     }
 
     return (
@@ -78,13 +93,37 @@ const Template = () => {
                     key={'description'}
                 />
                 <Column
-                    title={'Категория'}
-                    dataIndex={'category'}
-                    key={'category'}
+                    title={'Тип мероприятия'}
+                    dataIndex={'types'}
+                    key={'types'}
                     render={
-                        (category) => {
+                        (types) => {
                             return (
-                                <Tag>{category.name}</Tag>
+                                types.map(
+                                    (item, index) => {
+                                        return (
+                                            <Tag key={index} color={enumColorMap[item]}>{enumMap[item]}</Tag>
+                                        )
+                                    }
+                                )
+                            )
+                        }
+                    }
+                />
+                <Column
+                    title={'Услуги'}
+                    dataIndex={'services'}
+                    key={'services'}
+                    render={
+                        (services) => {
+                            return (
+                                services.map(
+                                    (item, index) => {
+                                        return (
+                                            <Tag key={index}>{item.name}</Tag>
+                                        )
+                                    }
+                                )
                             )
                         }
                     }
