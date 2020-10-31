@@ -11,29 +11,28 @@ import AddFieldNumber from "../components/addFieldNumber"
 import {useHistory} from "react-router-dom"
 
 const Container = styled.div`
-  display: flex;
-  flex: 1;
-  flex-direction: column;
+    display: flex;
+    flex: 1;
+    flex-direction: column;
 `
 const Fields = styled.div`
-  margin-top: 24px;
-  display: flex;
+    margin-top: 24px;
+    display: flex;
 
-  .gap {
-    margin-right: 24px;
-    margin-bottom: 24px;
-    @media screen and (max-width: 800px) {
-      margin-right: 0;
+    .gap {
+        margin-right: 24px;
+        margin-bottom: 24px;
+        @media screen and (max-width: 800px) {
+            margin-right: 0;
+        }
     }
-  }
-  .input{
-    min-width: 290px;
-  }
+    .input {
+        min-width: 290px;
+    }
 
-  @media screen and (max-width: 800px) {
-    flex-direction: column;
-  }
-
+    @media screen and (max-width: 800px) {
+        flex-direction: column;
+    }
 `
 
 const typeEnum = [
@@ -56,7 +55,7 @@ const typeEnum = [
     {
         id: 'MATINEE',
         name: 'Утренник'
-    },
+    }
 ]
 
 const AddTemplate = () => {
@@ -72,6 +71,7 @@ const AddTemplate = () => {
     const {loading: queryLoading} = useQuery(FIND_MANY_SERVICE, {
         errorPolicy: 'ignore',
         onCompleted: ({findManyService}) => {
+
             setServiceArray(findManyService)
         },
         variables: {
@@ -101,11 +101,9 @@ const AddTemplate = () => {
             data: {
                 name,
                 services: {
-                    connect: service.map(
-                        (item) => {
-                            return {id: item}
-                        }
-                    )
+                    connect: service.map((item) => {
+                        return {id: item}
+                    })
                 },
                 amount: amount.toString(),
                 types: {
@@ -116,33 +114,26 @@ const AddTemplate = () => {
         save({
             variables
         })
-
     }
 
-    const servicesData = serviceArray.filter(
-        (item) => {
-            for (let i = 0; i < types.length; i++) {
-                if (item.category.types.includes(types[i]))
-                    return true
-
-            }
-            return false
+    const servicesData = serviceArray.filter((item) => {
+        for (let i = 0; i < types.length; i++) {
+            if (item.category.types.includes(types[i])) return true
         }
-    )
+        return false
+    })
 
     return (
         <Container>
             <Title>Добавление шаблона</Title>
             <Switch
-                style={{maxWidth: 100,marginTop:16}}
+                style={{maxWidth: 100, marginTop: 16}}
                 checkedChildren={'Авторасчет'}
                 unCheckedChildren={'Авторасчет'}
                 value={autoCalc}
-                onChange={
-                    (value) => {
-                        setAutoCalc(value)
-                    }
-                }
+                onChange={(value) => {
+                    setAutoCalc(value)
+                }}
                 defaultChecked
             />
             <Fields>
@@ -151,11 +142,9 @@ const AddTemplate = () => {
                     className={'gap'}
                     placeholder={'Введите название'}
                     value={name}
-                    onChange={
-                        (e) => {
-                            setName(e.target.value)
-                        }
-                    }
+                    onChange={(e) => {
+                        setName(e.target.value)
+                    }}
                 />
                 <AddFieldSelect
                     text={'Тип шаблона'}
@@ -163,11 +152,9 @@ const AddTemplate = () => {
                     placeholder={'Выберите тип шаблона'}
                     mode={'multiple'}
                     value={types}
-                    onChange={
-                        (value) => {
-                            setTypes(value)
-                        }
-                    }
+                    onChange={(value) => {
+                        setTypes(value)
+                    }}
                     data={typeEnum}
                 />
                 <AddFieldSelect
@@ -176,22 +163,18 @@ const AddTemplate = () => {
                     placeholder={'Выберите услугу'}
                     mode={'multiple'}
                     value={service}
-                    onChange={
-                        (value) => {
-                            setService(value)
-                            if (autoCalc) {
-                                const array = serviceArray.filter(
-                                    (item) => {
-                                        return value.includes(item.id)
-                                    }
-                                )
-                                const sum = array.reduce((acum, item) => {
-                                    return acum + parseInt(item.amount)
-                                }, 0)
-                                setAmount(sum)
-                            }
+                    onChange={(value) => {
+                        setService(value)
+                        if (autoCalc) {
+                            const array = serviceArray.filter((item) => {
+                                return value.includes(item.id)
+                            })
+                            const sum = array.reduce((acum, item) => {
+                                return acum + parseInt(item.amount)
+                            }, 0)
+                            setAmount(sum)
                         }
-                    }
+                    }}
                     data={servicesData}
                     loading={queryLoading}
                 />
@@ -200,11 +183,9 @@ const AddTemplate = () => {
                     className={'gap'}
                     placeholder={'Введите стоимость'}
                     value={amount}
-                    onChange={
-                        (value) => {
-                            setAmount(value)
-                        }
-                    }
+                    onChange={(value) => {
+                        setAmount(value)
+                    }}
                 />
             </Fields>
 
@@ -226,6 +207,7 @@ const AddTemplate = () => {
             >
                 Назад
             </Button>
+
 
         </Container>
     )

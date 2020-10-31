@@ -1,40 +1,37 @@
-import React, {useState} from 'react'
+import React, { useState } from 'react'
 import styled from 'styled-components'
-import {Title} from "../components/defaultTexts"
-import AddField from "../components/addField"
-import {useMutation, useQuery} from "@apollo/react-hooks"
-import {Button, message} from "antd"
-import {CREATE_ONE_SERVICE} from "../gqls/service/mutations"
-import {FIND_MANY_CATEGORY} from "../gqls/category/queries"
-import AddFieldNumber from "../components/addFieldNumber"
-import AddFieldSelect from "../components/addFieldSelect"
-import {useHistory} from "react-router-dom"
+import { Title } from '../components/defaultTexts'
+import AddField from '../components/addField'
+import { useMutation, useQuery } from '@apollo/react-hooks'
+import { Button, message } from 'antd'
+import { CREATE_ONE_SERVICE } from '../gqls/service/mutations'
+import { FIND_MANY_CATEGORY } from '../gqls/category/queries'
+import AddFieldNumber from '../components/addFieldNumber'
+import AddFieldSelect from '../components/addFieldSelect'
+import { useHistory } from 'react-router-dom'
 
 const Container = styled.div`
-  display: flex;
-  flex: 1;
-  flex-direction: column;
+    display: flex;
+    flex: 1;
+    flex-direction: column;
 `
 const Fields = styled.div`
-  margin-top: 24px;
-  display: flex;
+    margin-top: 24px;
+    display: flex;
 
-  .gap {
-    margin-right: 24px;
-    margin-bottom: 24px;
-    @media screen and (max-width: 800px) {
-      margin-right: 0;
+    .gap {
+        margin-right: 24px;
+        margin-bottom: 24px;
+        @media screen and (max-width: 800px) {
+            margin-right: 0;
+        }
     }
-  }
 
-  @media screen and (max-width: 800px) {
-    flex-direction: column;
-  }
+    @media screen and (max-width: 800px) {
+        flex-direction: column;
+    }
+`
 
-`
-const BottomContainer = styled.div`
-  display: flex;
-`
 const AddService = () => {
     const [name, setName] = useState('')
     const [amount, setAmount] = useState(0)
@@ -44,14 +41,14 @@ const AddService = () => {
 
     const history = useHistory()
 
-    const {loading: queryLoading} = useQuery(FIND_MANY_CATEGORY, {
+    const { loading: queryLoading } = useQuery(FIND_MANY_CATEGORY, {
         errorPolicy: 'ignore',
-        onCompleted: ({findManyCategory}) => {
+        onCompleted: ({ findManyCategory }) => {
             setCategoryArray(findManyCategory)
         }
     })
 
-    const [save, {loading}] = useMutation(CREATE_ONE_SERVICE, {
+    const [save, { loading }] = useMutation(CREATE_ONE_SERVICE, {
         onCompleted: () => {
             message.success('Добавлено')
         },
@@ -88,7 +85,6 @@ const AddService = () => {
         save({
             variables
         })
-
     }
 
     return (
@@ -100,22 +96,18 @@ const AddService = () => {
                     className={'gap'}
                     placeholder={'Введите название'}
                     value={name}
-                    onChange={
-                        (e) => {
-                            setName(e.target.value)
-                        }
-                    }
+                    onChange={(e) => {
+                        setName(e.target.value)
+                    }}
                 />
                 <AddFieldNumber
                     text={'Стоимость'}
                     className={'gap'}
                     placeholder={'Введите стоимость'}
                     value={amount}
-                    onChange={
-                        (value) => {
-                            setAmount(value)
-                        }
-                    }
+                    onChange={(value) => {
+                        setAmount(value)
+                    }}
                     defaultValue={0}
                 />
                 <AddField
@@ -123,30 +115,25 @@ const AddService = () => {
                     className={'gap'}
                     placeholder={'Введите описание'}
                     value={description}
-                    onChange={
-                        (e) => {
-                            setDescription(e.target.value)
-                        }
-                    }
+                    onChange={(e) => {
+                        setDescription(e.target.value)
+                    }}
                 />
                 <AddFieldSelect
                     text={'Категория'}
                     className={'gap'}
                     placeholder={'Выберите категорию'}
                     value={category}
-                    onChange={
-                        (value) => {
-                            setCategory(value)
-                        }
-                    }
+                    onChange={(value) => {
+                        setCategory(value)
+                    }}
                     data={categoryArray}
                     loading={queryLoading}
-
                 />
             </Fields>
 
             <Button
-                style={{marginTop: 16, maxWidth: 200}}
+                style={{ marginTop: 16, maxWidth: 200 }}
                 type={'primary'}
                 onClick={onSave}
                 loading={loading}
@@ -154,12 +141,10 @@ const AddService = () => {
                 Добавить
             </Button>
             <Button
-                style={{marginTop: 16, maxWidth: 200}}
-                onClick={
-                    () => {
-                        history.goBack()
-                    }
-                }
+                style={{ marginTop: 16, maxWidth: 200 }}
+                onClick={() => {
+                    history.goBack()
+                }}
             >
                 Назад
             </Button>

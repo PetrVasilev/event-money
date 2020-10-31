@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import {
     View,
     ScrollView,
@@ -11,11 +11,12 @@ import {
 } from 'react-native'
 import Ionicons from 'react-native-vector-icons/dist/Ionicons'
 import IMask from 'imask'
-import { useMutation } from '@apollo/client'
+import { useMutation, useLazyQuery } from '@apollo/client'
 import moment from 'moment'
 
 import LoadingView from '../components/loadingView'
 import { CREATE_ONE_EVENT, FIND_MANY_EVENTS } from '../gqls/event'
+import { FIND_MENY_TEMPLATE } from '../gqls/template'
 import { categories } from '../utils'
 
 const { width } = Dimensions.get('window')
@@ -46,6 +47,36 @@ const CreateEvent = ({ navigation }) => {
     const [name, setName] = useState('')
     const [date, setDate] = useState('')
     const [budget, setBudget] = useState('')
+    const [template, setTemplate] = useState(null)
+
+    const [findTemplates, { data }] = useLazyQuery(FIND_MENY_TEMPLATE)
+
+    useEffect(() => {
+        if (selectedCategory !== 'empty') {
+            findTemplates({
+                variables: {
+                    where: {
+                        types: { equals: [selectedCategory] }
+                    }
+                }
+            })
+            setTemplate(null)
+        }
+        // eslint-disable-next-line
+    }, [selectedCategory])
+
+    // console.log(data)
+
+    const templates = data && data.findManyTemplate ? data.findManyTemplate : []
+
+    useEffect(() => {
+        if (template) {
+            setBudget(templates.find((item) => item.id === template).amount)
+        } else {
+            setBudget('')
+        }
+        // eslint-disable-next-line
+    }, [template])
 
     const [createEvent, { loading }] = useMutation(CREATE_ONE_EVENT, {
         onCompleted: () => {
@@ -61,7 +92,7 @@ const CreateEvent = ({ navigation }) => {
                     where: {
                         users: { some: { id: { contains: localStorage.getItem('userId') } } }
                     },
-                    orderBy: { createdAt: "desc" }
+                    orderBy: { createdAt: 'desc' }
                 }
             })
             await client.writeQuery({
@@ -70,7 +101,7 @@ const CreateEvent = ({ navigation }) => {
                     where: {
                         users: { some: { id: { contains: localStorage.getItem('userId') } } }
                     },
-                    orderBy: { createdAt: "desc" }
+                    orderBy: { createdAt: 'desc' }
                 },
                 data: {
                     findManyEvent: [data.createOneEvent, ...prev.findManyEvent]
@@ -96,6 +127,29 @@ const CreateEvent = ({ navigation }) => {
             alert('Выберите категорию')
             return false
         }
+        let spendings = undefined
+        if (template) {
+            const selectedTempate = templates.find((item) => item.id === template)
+            if (
+                selectedTempate &&
+                selectedTempate.services &&
+                selectedTempate.services.length > 0
+            ) {
+                let create = selectedTempate.services.map((item) => {
+                    return {
+                        description: item.description,
+                        amount: item.amount,
+                        category: {
+                            connect: { id: item.category.id }
+                        },
+                        service: {
+                            connect: { id: item.id }
+                        }
+                    }
+                })
+                spendings = { create }
+            }
+        }
         createEvent({
             variables: {
                 data: {
@@ -105,7 +159,8 @@ const CreateEvent = ({ navigation }) => {
                     users: {
                         connect: [{ id: userId }]
                     },
-                    type: selectedCategory
+                    type: selectedCategory,
+                    spendings: template ? spendings : undefined
                 }
             }
         })
@@ -117,6 +172,30 @@ const CreateEvent = ({ navigation }) => {
                 style={styles.container}
                 contentContainerStyle={{ alignItems: 'center', paddingBottom: 15 }}
             >
+                <Text style={styles.label}>Город</Text>
+                <View style={styles.pickerContainer}>
+                    <Picker
+                        style={styles.picker}
+                        placeholder="Выберите город"
+                        // value={selectedCategory}
+                        // onValueChange={(item) => {
+                        //     setSelectedCategory(item)
+                        // }}
+                    >
+                        <Picker.Item key={1} value={1} label={"Якутск"} />
+                    </Picker>
+                    <Ionicons
+                        name="chevron-down"
+                        style={{
+                            position: 'absolute',
+                            right: 12,
+                            top: '50%',
+                            transform: 'translateY(-50%)'
+                        }}
+                        color="silver"
+                        size={20}
+                    />
+                </View>
                 <Text style={styles.label}>Название мероприятия</Text>
                 <TextInput
                     value={name}
@@ -134,9 +213,11 @@ const CreateEvent = ({ navigation }) => {
                 <Text style={styles.label}>Бюджет мероприятия</Text>
                 <TextInput
                     value={budget}
-                    onChangeText={(text) => setBudget(text)}
+                    onChangeText={(text) => setBudget(text.replace(/\D/gm, ""))}
                     style={styles.textInput}
                     placeholder="Бюджет мероприятия"
+                    keyboardType="numeric"
+                    type="number"
                 />
                 <Text style={styles.label}>Категория мероприятия</Text>
                 <View style={styles.pickerContainer}>
@@ -164,7 +245,7 @@ const CreateEvent = ({ navigation }) => {
                         size={20}
                     />
                 </View>
-                {selectedCategory !== 'empty' ? (
+                {selectedCategory !== 'empty' && templates.length > 0 ? (
                     <>
                         <Text style={[styles.label, { marginBottom: 0 }]}>
                             Мероприятие под ключ
@@ -176,16 +257,38 @@ const CreateEvent = ({ navigation }) => {
                             horizontal={true}
                             style={styles.templates}
                         >
-                            {[1, 2, 3, 4, 5, 6, 7, 8, 9].map((object) => (
-                                <TouchableOpacity style={[styles.template, {}]}>
-                                    <Text style={styles.templateTitle}>Кейтеринг Радость</Text>
-                                    <Text style={styles.amountText}>1500 руб</Text>
+                            {templates.map((item) => (
+                                <TouchableOpacity
+                                    key={item.id}
+                                    activeOpacity={0.8}
+                                    style={[styles.template, {}]}
+                                    onPress={() =>
+                                        navigation.navigate('Template', {
+                                            template: item,
+                                            setTemplate: setTemplate,
+                                            selected: template === item.id
+                                        })
+                                    }
+                                >
+                                    <Text style={styles.templateTitle}>{item.name}</Text>
+                                    <Text style={styles.amountText}>{item.amount} руб</Text>
+                                    {item.id === template ? (
+                                        <Ionicons
+                                            name="checkmark-circle-outline"
+                                            style={{
+                                                position: 'absolute',
+                                                right: 5,
+                                                top: 5
+                                            }}
+                                            color="green"
+                                            size={20}
+                                        />
+                                    ) : null}
                                 </TouchableOpacity>
                             ))}
                         </ScrollView>
                     </>
                 ) : null}
-
                 <TouchableOpacity style={styles.button} onPress={onSubmit}>
                     <Text style={styles.buttonText}>Создать</Text>
                 </TouchableOpacity>
@@ -197,7 +300,6 @@ const CreateEvent = ({ navigation }) => {
 
 const styles = StyleSheet.create({
     container: {
-        flex: 1,
         width,
         backgroundColor: '#fafafa',
         height: window.innerHeight - 60
@@ -234,7 +336,7 @@ const styles = StyleSheet.create({
         alignItems: 'center',
         backgroundColor: '#4b76a8',
         borderRadius: 5,
-        marginTop: 10,
+        marginTop: 20,
         justifyContent: 'center'
     },
     buttonText: {

@@ -7,7 +7,7 @@ import { PieChart } from 'react-minimal-pie-chart'
 import { useQuery, useMutation } from '@apollo/client'
 
 import Loading from '../components/loadingView'
-import { UPDATE_ONE_EVENT } from '../gqls/event'
+import { UPDATE_ONE_EVENT, DELETE_ONE_EVENT, FIND_MANY_EVENTS } from '../gqls/event'
 import { FIND_MANY_SPENDING } from '../gqls/spending'
 import { ADD_ORGANIZATORS } from '../gqls/user'
 
@@ -42,6 +42,40 @@ const Event = ({ route, navigation }) => {
     const [updateOneEvent, { loading: updateEventLoading }] = useMutation(UPDATE_ONE_EVENT, {
         onCompleted: (data) => {
             setOrganizators(data.updateOneEvent.users)
+        },
+        onError: (err) => {
+            console.error(err)
+            alert('Не удалось отправить запрос')
+        }
+    })
+
+    const [deleteOneEvent, { loading: deleteEventLoading }] = useMutation(DELETE_ONE_EVENT, {
+        onCompleted: (data) => {
+            navigation.goBack()
+        },
+        update: async (client, { data }) => {
+            let prev = await client.readQuery({
+                query: FIND_MANY_EVENTS,
+                variables: {
+                    where: {
+                        users: { some: { id: { contains: localStorage.getItem('userId') } } }
+                    },
+                    orderBy: { createdAt: "desc" }
+                }
+            })
+            const newEvents = prev.findManyEvent.filter(obj => obj.id !== event.id)
+            await client.writeQuery({
+                query: FIND_MANY_EVENTS,
+                variables: {
+                    where: {
+                        users: { some: { id: { contains: localStorage.getItem('userId') } } }
+                    },
+                    orderBy: { createdAt: "desc" }
+                },
+                data: {
+                    findManyEvent: newEvents
+                }
+            })
         },
         onError: (err) => {
             console.error(err)
@@ -97,6 +131,14 @@ const Event = ({ route, navigation }) => {
                         disconnect: [{ id: organizatorId }]
                     }
                 }
+            }
+        })
+    }
+
+    const deleteEvent = () => {
+        deleteOneEvent({
+            variables: {
+                where: { id: event.id }
             }
         })
     }
@@ -223,10 +265,10 @@ const Event = ({ route, navigation }) => {
                         {spendings.length > 0 ? (
                             spendingsView
                         ) : (
-                            <View style={styles.card}>
-                                <Text style={{ color: 'grey' }}>Нет расходов</Text>
-                            </View>
-                        )}
+                                <View style={styles.card}>
+                                    <Text style={{ color: 'grey' }}>Нет расходов</Text>
+                                </View>
+                            )}
                         <TouchableOpacity
                             activeOpacity={0.8}
                             style={styles.button}
@@ -314,8 +356,21 @@ const Event = ({ route, navigation }) => {
                         </TouchableOpacity>
                     </>
                 )}
+                <TouchableOpacity
+                    activeOpacity={0.8}
+                    style={[styles.button, { backgroundColor: 'rgb(214, 69, 65)', marginTop: 10 }]}
+                    onPress={() => {
+                        const remove = window.confirm("Удалить мероприятие?");
+                        if (remove) {
+                            deleteEvent()
+                        }
+                    }}
+                >
+                    <Text style={styles.buttonText}>Удалить мероприятие</Text>
+                </TouchableOpacity>
             </ScrollView>
-            <Loading loading={addOrganizatorsLoading || updateEventLoading} />
+
+            <Loading loading={addOrganizatorsLoading || updateEventLoading || deleteEventLoading} />
         </>
     )
 }
