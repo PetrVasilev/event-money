@@ -6,6 +6,7 @@ const Event = gql`
     createdAt: DateTime!
     updatedAt: DateTime!
     name: String!
+    date: DateTime!
     users(
       where: UserWhereInput
       orderBy: UserOrderByInput
