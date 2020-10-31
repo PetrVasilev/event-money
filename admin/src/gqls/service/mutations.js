@@ -1,13 +1,13 @@
 import gql from 'graphql-tag'
 
 export const CREATE_ONE_SERVICE = gql`
-    mutation ($data:ServiceCreateInput!){
-        createOneService(data: $data){
+    mutation($data: ServiceCreateInput!) {
+        createOneService(data: $data) {
             id
             name
             amount
             description
-            category{
+            category {
                 name
                 types
                 id
@@ -16,13 +16,13 @@ export const CREATE_ONE_SERVICE = gql`
     }
 `
 export const UPDATE_ONE_SERVICE = gql`
-    mutation ($data:ServiceUpdateInput!,$where:ServiceWhereUniqueInput!){
-        updateOneService(where:$where,data:$data ){
+    mutation($data: ServiceUpdateInput!, $where: ServiceWhereUniqueInput!) {
+        updateOneService(where: $where, data: $data) {
             id
             name
             amount
             description
-            category{
+            category {
                 name
                 types
                 id
@@ -31,13 +31,13 @@ export const UPDATE_ONE_SERVICE = gql`
     }
 `
 export const DELETE_ONE_SERVICE = gql`
-    mutation ($where:ServiceWhereUniqueInput!){
-        deleteOneService(where: $where){
+    mutation($where: ServiceWhereUniqueInput!) {
+        deleteOneService(where: $where) {
             id
             name
             amount
             description
-            category{
+            category {
                 name
                 types
                 id
@@ -45,5 +45,3 @@ export const DELETE_ONE_SERVICE = gql`
         }
     }
 `
-
-

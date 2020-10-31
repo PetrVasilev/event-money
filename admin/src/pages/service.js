@@ -1,13 +1,13 @@
-import React, {useState} from 'react'
+import React from 'react'
 import styled from 'styled-components'
-import {Button, Table, Tag} from 'antd'
-import {useHistory} from 'react-router-dom'
-import {Title} from '../components/defaultTexts'
-import {useQuery} from '@apollo/react-hooks'
-import {FIND_MANY_SERVICE} from '../gqls/service/queries'
+import { Button, Table, Tag } from 'antd'
+import { useHistory } from 'react-router-dom'
+import { Title } from '../components/defaultTexts'
+import { useQuery } from '@apollo/react-hooks'
+import { FIND_MANY_SERVICE } from '../gqls/service/queries'
 import UpdateService from '../components/updateService'
 
-const {Column} = Table
+const { Column } = Table
 
 const Container = styled.div`
     display: flex;
@@ -16,35 +16,23 @@ const Container = styled.div`
 `
 
 const Service = () => {
-    const [dataSource, setDataSource] = useState([])
-    const {loading} = useQuery(FIND_MANY_SERVICE, {
-        onCompleted: ({findManyService}) => {
-            setDataSource(
-                findManyService.map((item) => {
-                    item.key = item.id
-                    return item
-                })
-            )
-        },
+    const { loading, data } = useQuery(FIND_MANY_SERVICE, {
         errorPolicy: 'ignore',
-        fetchPolicy:'network-only',
-        variables: {where: {}}
+        fetchPolicy: 'network-only'
     })
 
     const history = useHistory()
 
-    const expandedRowRender = (data) => {
-        return (
-            <UpdateService data={data} oldDataSource={dataSource} setDataSource={setDataSource}/>
-        )
-    }
+    const dataSource = data ? data.findManyService : []
+
+    const expandedRowRender = (data) => <UpdateService data={data} />
 
     return (
         <Container>
             <Title>Список услуг</Title>
             <Button
                 type={'dashed'}
-                style={{marginTop: 16, maxWidth: 200}}
+                style={{ marginTop: 16, maxWidth: 200 }}
                 onClick={() => {
                     history.push('/authorized/addService')
                 }}
@@ -52,14 +40,15 @@ const Service = () => {
                 Добавить услугу
             </Button>
             <Table
-                style={{flex: 1, marginTop: 24}}
+                style={{ flex: 1, marginTop: 24 }}
                 dataSource={dataSource}
                 loading={loading}
-                expandable={{expandedRowRender}}
+                rowKey={(obj) => obj.id}
+                expandable={{ expandedRowRender }}
             >
-                <Column title={'Название'} dataIndex={'name'} key={'name'}/>
-                <Column title={'Цена'} dataIndex={'amount'} key={'amount'}/>
-                <Column title={'Описание'} dataIndex={'description'} key={'description'}/>
+                <Column title={'Название'} dataIndex={'name'} key={'name'} />
+                <Column title={'Цена'} dataIndex={'amount'} key={'amount'} />
+                <Column title={'Описание'} dataIndex={'description'} key={'description'} />
                 <Column
                     title={'Категория'}
                     dataIndex={'category'}

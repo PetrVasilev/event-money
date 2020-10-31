@@ -1,14 +1,15 @@
-import React, {useRef, useState} from 'react'
+import React, { useState } from 'react'
 import styled from 'styled-components'
-import {Button, Form, Input, InputNumber, message, Popconfirm, Select} from "antd"
-import {useApolloClient, useMutation, useQuery} from '@apollo/react-hooks'
-import {FIND_MANY_SERVICE} from "../gqls/service/queries"
-import {DELETE_ONE_TEMPLATE, UPDATE_ONE_TEMPLATE} from "../gqls/template/mutations"
-import {FIND_MANY_TEMPLATE} from "../gqls/template/queries"
+import { Button, Form, Input, InputNumber, message, Popconfirm, Select } from 'antd'
+import { useMutation, useQuery } from '@apollo/react-hooks'
+
+import { FIND_MANY_SERVICE } from '../gqls/service/queries'
+import { DELETE_ONE_TEMPLATE, UPDATE_ONE_TEMPLATE } from '../gqls/template/mutations'
+import { FIND_MANY_TEMPLATE } from '../gqls/template/queries'
 
 const Container = styled.div`
-  display: flex;
-  flex-direction: column;
+    display: flex;
+    flex-direction: column;
 `
 
 const typeEnum = [
@@ -31,20 +32,16 @@ const typeEnum = [
     {
         id: 'MATINEE',
         name: 'Утренник'
-    },
+    }
 ]
 
-const UpdateTemplate = ({data, oldDataSource, setDataSource}) => {
+const UpdateTemplate = ({ data }) => {
     const [serviceArray, setServiceArray] = useState([])
     const [types, setTypes] = useState(data.types)
 
-    const delEl = useRef(null)
-
-    const apollo = useApolloClient()
-
-    const {loading: queryLoading} = useQuery(FIND_MANY_SERVICE, {
+    const { loading: queryLoading } = useQuery(FIND_MANY_SERVICE, {
         errorPolicy: 'ignore',
-        onCompleted: ({findManyService}) => {
+        onCompleted: ({ findManyService }) => {
             setServiceArray(findManyService)
         },
         variables: {
@@ -52,50 +49,36 @@ const UpdateTemplate = ({data, oldDataSource, setDataSource}) => {
         }
     })
 
-    const [update, {loading: updateLoading}] = useMutation(UPDATE_ONE_TEMPLATE, {
+    const [update, { loading: updateLoading }] = useMutation(UPDATE_ONE_TEMPLATE, {
         onError: () => {
             message.error('Что то пошло не так!')
         },
-        onCompleted: async ({updateOneTemplate}) => {
+        onCompleted: () => {
             message.success('Обновлено!')
-            updateOneTemplate.key = updateOneTemplate.id
-            const newDataSource = oldDataSource.map(
-                (item) => {
-                    if (item.id === updateOneTemplate.id)
-                        return updateOneTemplate
-                    return item
-                }
-            )
-            await apollo.writeQuery({
-                query: FIND_MANY_TEMPLATE,
-                data: {
-                    findManyService: newDataSource
-                }
-            })
-            setDataSource(newDataSource)
-
         }
     })
 
-    const [delItem, {loading: delLoading}] = useMutation(DELETE_ONE_TEMPLATE, {
-        onCompleted: async ({deleteOneTemplate}) => {
+    const [delItem, { loading: delLoading }] = useMutation(DELETE_ONE_TEMPLATE, {
+        onCompleted: () => {
             message.success('Удалено!')
-            deleteOneTemplate.key = deleteOneTemplate.id
-            const newDataSource = oldDataSource.filter(
-                (item) => {
-                    return (item.id !== deleteOneTemplate.id)
-                }
-            )
-            await apollo.writeQuery({
-                query: FIND_MANY_TEMPLATE,
-                data: {
-                    findManyTemplate: newDataSource
-                }
-            })
-            setDataSource(newDataSource)
         },
-        onError: () => {
-            message.error('Что то пошло не так!')
+        onError: (err) => {
+            message.error(err)
+        },
+        update: (cache, { data: _data }) => {
+            if (cache && _data.deleteOneTemplate) {
+                const { findManyTemplate: oldTemplates } = cache.readQuery({
+                    query: FIND_MANY_TEMPLATE
+                })
+                cache.writeQuery({
+                    query: FIND_MANY_TEMPLATE,
+                    data: {
+                        findManyTemplate: oldTemplates.filter(
+                            (item) => item.id !== _data.deleteOneTemplate.id
+                        )
+                    }
+                })
+            }
         },
         variables: {
             where: {
@@ -107,155 +90,102 @@ const UpdateTemplate = ({data, oldDataSource, setDataSource}) => {
     const submit = (args) => {
         const variables = {
             data: {
-                amount: {set: args.amount.toString()},
+                amount: { set: args.amount.toString() },
                 services: {
-                    set: args.services.map(
-                        (item) => {
-                            return {
-                                id: item
-                            }
+                    set: args.services.map((item) => {
+                        return {
+                            id: item
                         }
-                    )
+                    })
                 },
-                description: {set: args.description},
-                name: {set: args.name},
-                types: {set: args.types}
+                description: { set: args.description },
+                name: { set: args.name },
+                types: { set: args.types }
             },
             where: {
                 id: data.id
             }
         }
-        console.log(variables)
         update({
             variables
         })
     }
-    const servicesData = serviceArray.filter(
-        (item) => {
-            for (let i = 0; i < types.length; i++) {
-                if (item.category.types.includes(types[i]))
-                    return true
 
-            }
-            return false
-        }
+    const servicesData = serviceArray.filter((current) =>
+        types.some((item) => current.category.types.includes(item))
     )
-    console.log('servicesData', servicesData)
 
     return (
         <Container>
-            <Form
-                initialValues={{remember: true}}
-                onFinish={submit}
-                onFinishFailed={
-                    () => {
-
-                    }
-                }
-            >
-
+            <Form initialValues={{ remember: true }} onFinish={submit}>
                 <Form.Item
                     label="Название"
                     name="name"
-                    fieldContext={''}
                     initialValue={data.name}
-                    rules={[{required: true, message: 'Введите имя!'}]}
+                    rules={[{ required: true, message: 'Введите имя!' }]}
                 >
-                    <Input/>
+                    <Input />
                 </Form.Item>
                 <Form.Item
                     label="Стоимость"
                     name="amount"
-                    fieldContext={''}
                     initialValue={data.amount}
-                    rules={[{required: true, message: 'Введите стоимость!'}]}
+                    rules={[{ required: true, message: 'Введите стоимость!' }]}
                 >
-                    <InputNumber/>
+                    <InputNumber />
                 </Form.Item>
                 <Form.Item
                     label="Описание"
                     name="description"
-                    fieldContext={''}
                     initialValue={data.description}
-                    rules={[{required: true, message: 'Введите описание!'}]}
+                    rules={[{ required: true, message: 'Введите описание!' }]}
                 >
-                    <Input.TextArea/>
+                    <Input.TextArea />
                 </Form.Item>
                 <Form.Item
                     label="Тип мероприятия"
                     name="types"
-                    fieldContext={''}
                     initialValue={data.types}
-                    rules={[{required: true, message: 'Выберете мероприятие!'}]}
+                    rules={[{ required: true, message: 'Выберете мероприятие!' }]}
                 >
-                    <Select
-                        value={types}
-                        mode={'multiple'}
-                        onChange={value => setTypes(value)}
-                    >
-                        {
-                            typeEnum.map(
-                                (item) => {
-                                    return (
-                                        <Select.Option value={item.id}>{item.name}</Select.Option>
-                                    )
-                                })
-                        }
+                    <Select value={types} mode={'multiple'} onChange={(value) => setTypes(value)}>
+                        {typeEnum.map((item) => {
+                            return (
+                                <Select.Option key={item.id} value={item.id}>
+                                    {item.name}
+                                </Select.Option>
+                            )
+                        })}
                     </Select>
                 </Form.Item>
                 <Form.Item
                     label="Услуги"
                     name="services"
-                    fieldContext={''}
-                    initialValue={data.services.map(
-                        (item) => {
-                            return item.id
-                        }
-                    )}
-                    rules={[{required: true, message: 'Выберете услугу!'}]}
+                    initialValue={data.services.map((item) => {
+                        return item.id
+                    })}
+                    rules={[{ required: true, message: 'Выберете услугу!' }]}
                 >
-                    <Select
-                        loading={queryLoading}
-                        mode={'multiple'}
-                    >
-                        {
-                            servicesData.map(
-                                (item) => {
-                                    return (
-                                        <Select.Option value={item.id}>{item.name}</Select.Option>
-                                    )
-                                })
-                        }
+                    <Select loading={queryLoading} mode={'multiple'}>
+                        {servicesData.map((item) => {
+                            return (
+                                <Select.Option key={item.id} value={item.id}>
+                                    {item.name}
+                                </Select.Option>
+                            )
+                        })}
                     </Select>
                 </Form.Item>
-                <Form.Item fieldContext={''}>
-                    <Button
-                        type="primary"
-                        htmlType="submit"
-                        loading={updateLoading}
-                    >
+                <Form.Item>
+                    <Button type="primary" htmlType="submit" loading={updateLoading}>
                         Обновить
                     </Button>
                 </Form.Item>
-                <Form.Item fieldContext={''}>
-                    <Button
-                        type="danger"
-                        onClick={
-                            () => {
-                                delEl.current.onClick()
-                            }
-                        }
-                        loading={delLoading}
-                    >
-                        Удалить
-                    </Button>
-                    <Popconfirm
-                        ref={delEl}
-                        onConfirm={delItem}
-                        title="Вы уверены"
-                        okText="Да"
-                        cancelText="Нет"
-                    >
+                <Form.Item>
+                    <Popconfirm onConfirm={delItem} title="Вы уверены" okText="Да" cancelText="Нет">
+                        <Button type="danger" loading={delLoading}>
+                            Удалить
+                        </Button>
                     </Popconfirm>
                 </Form.Item>
             </Form>

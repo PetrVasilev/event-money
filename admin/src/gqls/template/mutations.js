@@ -1,20 +1,19 @@
 import gql from 'graphql-tag'
 
 export const CREATE_ONE_TEMPLATE = gql`
-    mutation ($data:TemplateCreateInput!)
-    {
-        createOneTemplate(data: $data){
+    mutation($data: TemplateCreateInput!) {
+        createOneTemplate(data: $data) {
             id
             description
             name
             amount
             types
-            services{
+            services {
                 id
                 name
                 amount
                 description
-                category{
+                category {
                     name
                     types
                     id
@@ -24,19 +23,19 @@ export const CREATE_ONE_TEMPLATE = gql`
     }
 `
 export const UPDATE_ONE_TEMPLATE = gql`
-    mutation ($data:TemplateUpdateInput!,$where:TemplateWhereUniqueInput!){
-        updateOneTemplate(where: $where, data: $data){
+    mutation($data: TemplateUpdateInput!, $where: TemplateWhereUniqueInput!) {
+        updateOneTemplate(where: $where, data: $data) {
             id
             description
             name
             amount
             types
-            services{
+            services {
                 id
                 name
                 amount
                 description
-                category{
+                category {
                     name
                     types
                     id
@@ -46,19 +45,19 @@ export const UPDATE_ONE_TEMPLATE = gql`
     }
 `
 export const DELETE_ONE_TEMPLATE = gql`
-    mutation ($where:TemplateWhereUniqueInput!){
-        deleteOneTemplate(where: $where){
+    mutation($where: TemplateWhereUniqueInput!) {
+        deleteOneTemplate(where: $where) {
             id
             description
             name
             amount
             types
-            services{
+            services {
                 id
                 name
                 amount
                 description
-                category{
+                category {
                     name
                     types
                     id

@@ -1,12 +1,12 @@
-import React, { useState } from 'react'
+import React, {useState} from 'react'
 import styled from 'styled-components'
-import { useMutation } from '@apollo/react-hooks'
-import { useHistory } from 'react-router-dom'
-import { Button, message } from 'antd'
+import {useMutation} from '@apollo/react-hooks'
+import {useHistory} from 'react-router-dom'
+import {Button, message} from 'antd'
 
-import { Title } from '../components/defaultTexts'
+import {Title} from '../components/defaultTexts'
 import AddField from '../components/addField'
-import { CREATE_ONE_CATEGORY } from '../gqls/category/mutations'
+import {CREATE_ONE_CATEGORY} from '../gqls/category/mutations'
 import AddFieldSelect from '../components/addFieldSelect'
 
 const Container = styled.div`
@@ -14,6 +14,7 @@ const Container = styled.div`
     flex: 1;
     flex-direction: column;
 `
+
 const Fields = styled.div`
     margin-top: 24px;
     display: flex;
@@ -31,6 +32,7 @@ const Fields = styled.div`
         flex-direction: column;
     }
 `
+
 const typeEnum = [
     {
         id: 'OTHER',
@@ -60,7 +62,7 @@ const AddCategory = () => {
 
     const history = useHistory()
 
-    const [save, { loading }] = useMutation(CREATE_ONE_CATEGORY, {
+    const [save, {loading}] = useMutation(CREATE_ONE_CATEGORY, {
         onCompleted: () => {
             message.success('Добавлено')
         },
@@ -122,7 +124,7 @@ const AddCategory = () => {
                 />
             </Fields>
             <Button
-                style={{ marginTop: 16, maxWidth: 200 }}
+                style={{marginTop: 16, maxWidth: 200}}
                 type={'primary'}
                 onClick={onSave}
                 loading={loading}
@@ -130,10 +132,12 @@ const AddCategory = () => {
                 Добавить
             </Button>
             <Button
-                style={{ marginTop: 16, maxWidth: 200 }}
-                onClick={() => {
-                    history.goBack()
-                }}
+                style={{marginTop: 16, maxWidth: 200}}
+                onClick={
+                    () => {
+                        history.goBack()
+                    }
+                }
             >
                 Назад
             </Button>

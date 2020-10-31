@@ -46,14 +46,14 @@ const CreateSpending = ({ navigation, route }) => {
                 query: FIND_MANY_SPENDING,
                 variables: {
                     where: { event: { id: { equals: event.id } } },
-                    orderBy: { createdAt: "desc" }
+                    orderBy: { createdAt: 'desc' }
                 }
             })
             await client.writeQuery({
                 query: FIND_MANY_SPENDING,
                 variables: {
                     where: { event: { id: { equals: event.id } } },
-                    orderBy: { createdAt: "desc" }
+                    orderBy: { createdAt: 'desc' }
                 },
                 data: {
                     findManySpending: [data.createOneSpending, ...prev.findManySpending]
@@ -62,21 +62,23 @@ const CreateSpending = ({ navigation, route }) => {
         }
     })
 
-    const services = servicesData && servicesData.findManyService ? servicesData.findManyService : []
+    const services =
+        servicesData && servicesData.findManyService ? servicesData.findManyService : []
 
     useEffect(() => {
         if (service) {
-            const selectedService = services.find(item => item.id === service)
+            const selectedService = services.find((item) => item.id === service)
             setBudget(selectedService.amount)
             setDescription(selectedService.description)
         } else {
-            setBudget("")
-            setDescription("")
+            setBudget('')
+            setDescription('')
         }
+        // eslint-disable-next-line
     }, [service])
 
     useEffect(() => {
-        if (selectedCategory && selectedCategory !== "empty") {
+        if (selectedCategory && selectedCategory !== 'empty') {
             findServices({
                 variables: {
                     where: {
@@ -86,6 +88,7 @@ const CreateSpending = ({ navigation, route }) => {
             })
             setService(null)
         }
+        // eslint-disable-next-line
     }, [selectedCategory])
 
     const categoriesArray =
@@ -129,7 +132,7 @@ const CreateSpending = ({ navigation, route }) => {
             <Text style={styles.label}>Стоимость расхода</Text>
             <TextInput
                 value={budget}
-                onChangeText={(text) => setBudget(text.replace(/\D/gm, ""))}
+                onChangeText={(text) => setBudget(text.replace(/\D/gm, ''))}
                 style={styles.textInput}
                 placeholder="Стоимость расхода"
                 keyboardType="numeric"
@@ -144,9 +147,11 @@ const CreateSpending = ({ navigation, route }) => {
                         setSelectedCategory(item)
                     }}
                 >
-                    {[{ id: 'empty', name: 'Выберите категорию' }, ...categoriesArray].map((item, index) => (
-                        <Picker.Item key={item.id} value={item.id} label={item.name} />
-                    ))}
+                    {[{ id: 'empty', name: 'Выберите категорию' }, ...categoriesArray].map(
+                        (item, index) => (
+                            <Picker.Item key={item.id} value={item.id} label={item.name} />
+                        )
+                    )}
                 </Picker>
                 <Ionicons
                     name="chevron-down"
@@ -164,9 +169,7 @@ const CreateSpending = ({ navigation, route }) => {
             />
             {selectedCategory !== 'empty' && services.length > 0 ? (
                 <>
-                    <Text style={[styles.label, { marginBottom: 0 }]}>
-                        Доступные услуги
-                    </Text>
+                    <Text style={[styles.label, { marginBottom: 0 }]}>Доступные услуги</Text>
                     <ScrollView
                         scrollEventThrottle={200}
                         pagingEnabled
@@ -174,33 +177,35 @@ const CreateSpending = ({ navigation, route }) => {
                         horizontal={true}
                         style={styles.templates}
                     >
-                        {
-                            services.map(item => (
-                                <TouchableOpacity
-                                    key={item.id}
-                                    activeOpacity={0.8}
-                                    style={[styles.template, {}]}
-                                    onPress={() => navigation.navigate("Service", { service: item, setService: setService, selected: service === item.id })}
-                                >
-                                    <Text style={styles.templateTitle}>{item.category.name}</Text>
-                                    <Text style={styles.amountText}>{item.amount} руб</Text>
-                                    {
-                                        item.id === service ? (
-                                            <Ionicons
-                                                name="checkmark-circle-outline"
-                                                style={{
-                                                    position: 'absolute',
-                                                    right: 5,
-                                                    top: 5
-                                                }}
-                                                color="green"
-                                                size={20}
-                                            />
-                                        ) : null
-                                    }
-                                </TouchableOpacity>
-                            ))
-                        }
+                        {services.map((item) => (
+                            <TouchableOpacity
+                                key={item.id}
+                                activeOpacity={0.8}
+                                style={[styles.template, {}]}
+                                onPress={() =>
+                                    navigation.navigate('Service', {
+                                        service: item,
+                                        setService: setService,
+                                        selected: service === item.id
+                                    })
+                                }
+                            >
+                                <Text style={styles.templateTitle}>{item.category.name}</Text>
+                                <Text style={styles.amountText}>{item.amount} руб</Text>
+                                {item.id === service ? (
+                                    <Ionicons
+                                        name="checkmark-circle-outline"
+                                        style={{
+                                            position: 'absolute',
+                                            right: 5,
+                                            top: 5
+                                        }}
+                                        color="green"
+                                        size={20}
+                                    />
+                                ) : null}
+                            </TouchableOpacity>
+                        ))}
                     </ScrollView>
                 </>
             ) : null}
