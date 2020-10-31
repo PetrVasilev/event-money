@@ -30,6 +30,7 @@ model Event {
     users     User[]
     amount    String?
     spendings Spending[]
+    type      TypeEnum
 }
 
 model Spending {
@@ -53,6 +54,7 @@ model Category {
     name      String     @unique
     spendings Spending[]
     services  Service[]
+    types     TypeEnum[]
 }
 
 model Service {
@@ -74,4 +76,12 @@ model Template {
     updatedAt DateTime  @updatedAt
     name      String
     services  Service[]
+}
+
+enum TypeEnum {
+    OTHER
+    WEDDING
+    BIRTHDAY
+    STAG
+    MATINEE
 }

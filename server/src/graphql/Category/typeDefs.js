@@ -6,6 +6,7 @@ const Category = gql`
     createdAt: DateTime!
     updatedAt: DateTime!
     name: String!
+    types: [TypeEnum!]!
     spendings(
       where: SpendingWhereInput
       orderBy: SpendingOrderByInput
