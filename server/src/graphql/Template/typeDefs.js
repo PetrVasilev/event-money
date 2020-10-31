@@ -6,6 +6,7 @@ const Template = gql`
     createdAt: DateTime!
     updatedAt: DateTime!
     name: String!
+    description: String
     amount: String!
     types: [TypeEnum]
     services(

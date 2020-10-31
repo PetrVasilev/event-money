@@ -78,6 +78,7 @@ model Template {
     createdAt DateTime   @default(now())
     updatedAt DateTime   @updatedAt
     name      String
+    description String?
     types     TypeEnum[]
     amount    String
     services  Service[]
