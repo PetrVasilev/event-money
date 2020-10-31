@@ -28,15 +28,6 @@ const Event = gql`
   }
 
   type Query {
-    findOneEvent(where: EventWhereUniqueInput!): Event
-    findFirstEvent(
-      where: EventWhereInput
-      orderBy: [EventOrderByInput!]
-      cursor: EventWhereUniqueInput
-      distinct: EventDistinctFieldEnum
-      skip: Int
-      take: Int
-    ): [Event!]
     findManyEvent(
       where: EventWhereInput
       orderBy: [EventOrderByInput!]
@@ -53,14 +44,6 @@ const Event = gql`
       skip: Int
       take: Int
     ): Int!
-    aggregateEvent(
-      where: EventWhereInput
-      orderBy: [EventOrderByInput!]
-      cursor: EventWhereUniqueInput
-      distinct: EventDistinctFieldEnum
-      skip: Int
-      take: Int
-    ): AggregateEvent
   }
   type Mutation {
     createOneEvent(data: EventCreateInput!): Event!

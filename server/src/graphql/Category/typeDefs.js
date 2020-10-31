@@ -26,15 +26,6 @@ const Category = gql`
   }
 
   type Query {
-    findOneCategory(where: CategoryWhereUniqueInput!): Category
-    findFirstCategory(
-      where: CategoryWhereInput
-      orderBy: [CategoryOrderByInput!]
-      cursor: CategoryWhereUniqueInput
-      distinct: CategoryDistinctFieldEnum
-      skip: Int
-      take: Int
-    ): [Category!]
     findManyCategory(
       where: CategoryWhereInput
       orderBy: [CategoryOrderByInput!]
@@ -51,14 +42,6 @@ const Category = gql`
       skip: Int
       take: Int
     ): Int!
-    aggregateCategory(
-      where: CategoryWhereInput
-      orderBy: [CategoryOrderByInput!]
-      cursor: CategoryWhereUniqueInput
-      distinct: CategoryDistinctFieldEnum
-      skip: Int
-      take: Int
-    ): AggregateCategory
   }
   type Mutation {
     createOneCategory(data: CategoryCreateInput!): Category!

@@ -53,6 +53,7 @@ const Auth = {
       }
     },
     addUsers: async (_parent, { data: { users }, where }, { prisma, access }) => {
+      await access.or('user', 'admin')
       const ids = users.map(obj => obj.id)
 
       const exists = await prisma.user.findMany({

@@ -29,15 +29,6 @@ const Service = gql`
   }
 
   type Query {
-    findOneService(where: ServiceWhereUniqueInput!): Service
-    findFirstService(
-      where: ServiceWhereInput
-      orderBy: [ServiceOrderByInput!]
-      cursor: ServiceWhereUniqueInput
-      distinct: ServiceDistinctFieldEnum
-      skip: Int
-      take: Int
-    ): [Service!]
     findManyService(
       where: ServiceWhereInput
       orderBy: [ServiceOrderByInput!]
@@ -54,14 +45,6 @@ const Service = gql`
       skip: Int
       take: Int
     ): Int!
-    aggregateService(
-      where: ServiceWhereInput
-      orderBy: [ServiceOrderByInput!]
-      cursor: ServiceWhereUniqueInput
-      distinct: ServiceDistinctFieldEnum
-      skip: Int
-      take: Int
-    ): AggregateService
   }
   type Mutation {
     createOneService(data: ServiceCreateInput!): Service!

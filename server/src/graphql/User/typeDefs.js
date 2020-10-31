@@ -16,17 +16,7 @@ const User = gql`
       distinct: EventDistinctFieldEnum
     ): [Event!]!
   }
-
   type Query {
-    findOneUser(where: UserWhereUniqueInput!): User
-    findFirstUser(
-      where: UserWhereInput
-      orderBy: [UserOrderByInput!]
-      cursor: UserWhereUniqueInput
-      distinct: UserDistinctFieldEnum
-      skip: Int
-      take: Int
-    ): [User!]
     findManyUser(
       where: UserWhereInput
       orderBy: [UserOrderByInput!]
@@ -43,14 +33,6 @@ const User = gql`
       skip: Int
       take: Int
     ): Int!
-    aggregateUser(
-      where: UserWhereInput
-      orderBy: [UserOrderByInput!]
-      cursor: UserWhereUniqueInput
-      distinct: UserDistinctFieldEnum
-      skip: Int
-      take: Int
-    ): AggregateUser
   }
   type Mutation {
     createOneUser(data: UserCreateInput!): User!

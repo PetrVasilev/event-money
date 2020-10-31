@@ -1,6 +1,10 @@
 const jwt = require('jsonwebtoken')
 
 const checkRole = async (authorization, role) => {
+    if(role === 'user') {
+        return null
+    }
+
     if (!authorization) {
         throw new Error('not access')
     }
@@ -10,10 +14,14 @@ const checkRole = async (authorization, role) => {
         process.env[`${role.toUpperCase()}_ACCESS_TOKEN_SECRET`],
         (err, decoded) => {
             if (err) {
-                if (err.message === 'jwt expired') {
-                    throw new Error('access token expired')
+                if (require) {
+                    if (err.message === 'jwt expired') {
+                        throw new Error('access token expired')
+                    } else {
+                        throw new Error('access token error')
+                    }
                 } else {
-                    throw new Error('access token error')
+                    return null
                 }
             }
             return decoded
