@@ -67,7 +67,6 @@ const dateMask = IMask.createMask({
 const CreateEvent = ({ navigation }) => {
     const [selectedCategory, setSelectedCategory] = useState(categories[0].value)
     const [name, setName] = useState('')
-    const [ownCategory, setOwnCategory] = useState('')
     const [date, setDate] = useState('')
     const [budget, setBudget] = useState('')
 
@@ -159,7 +158,6 @@ const CreateEvent = ({ navigation }) => {
                         value={selectedCategory}
                         onValueChange={(item) => {
                             setSelectedCategory(item)
-                            setOwnCategory('')
                         }}
                     >
                         {categories.map((item, index) => (
