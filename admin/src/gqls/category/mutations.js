@@ -7,6 +7,7 @@ export const CREATE_ONE_CATEGORY = gql`
             id
             updatedAt
             createdAt
+            types
         }
         
     }
