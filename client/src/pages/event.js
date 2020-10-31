@@ -126,41 +126,38 @@ const Event = ({ route, navigation }) => {
                 </View>
             </View>
             {coloredSpendings.length > 0 || event.amount ? (
-                leavePrice ? (
-                    <View
-                        style={[
-                            styles.card,
-                            {
-                                marginTop: 15,
-                                marginBottom: 0,
-                                alignItems: 'center',
-                                justifyContent: 'center',
-                                paddingVertical: 20
-                            }
-                        ]}
-                    >
-                        <View style={{ height: 160, width: '73%' }}>
-                            <PieChart
-                                data={[
-                                    {
-                                        title: 'Остаток',
-                                        value: leavePrice < 0 ? 0 : leavePrice,
-                                        color: '#52d726'
-                                    },
-                                    ...coloredSpendings.map((item) => ({
-                                        title: item.category.name,
-                                        value: parseInt(item.amount),
-                                        color: item.color
-                                    }))
-                                ]}
-                                lineWidth={20}
-                                paddingAngle={1}
-                            />
-                        </View>
+                <View
+                    style={[
+                        styles.card,
+                        {
+                            marginTop: 15,
+                            marginBottom: 0,
+                            alignItems: 'center',
+                            justifyContent: 'center',
+                            paddingVertical: 20
+                        }
+                    ]}
+                >
+                    <View style={{ height: 160, width: '73%' }}>
+                        <PieChart
+                            data={[
+                                {
+                                    title: 'Остаток',
+                                    value: leavePrice < 0 ? 0 : leavePrice,
+                                    color: '#52d726'
+                                },
+                                ...coloredSpendings.map((item) => ({
+                                    title: item.category.name,
+                                    value: parseInt(item.amount),
+                                    color: item.color
+                                }))
+                            ]}
+                            lineWidth={20}
+                            paddingAngle={1}
+                        />
                     </View>
-                ) : null
+                </View>
             ) : null}
-
             <View style={styles.tabContainer}>
                 <TouchableOpacity
                     style={[

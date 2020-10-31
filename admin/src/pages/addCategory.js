@@ -3,6 +3,7 @@ import styled from 'styled-components'
 import {Title} from "../components/defaultTexts"
 import AddField from "../components/addField"
 import {useMutation} from "@apollo/react-hooks"
+import {useHistory} from 'react-router-dom'
 import {Button, message} from "antd"
 import {CREATE_ONE_CATEGORY} from "../gqls/category/mutations"
 import AddFieldSelect from "../components/addFieldSelect"
@@ -54,6 +55,8 @@ const typeEnum = [
 const AddCategory = () => {
     const [name, setName] = useState('')
     const [types, setTypes] = useState()
+
+    const history = useHistory()
 
     const [save, {loading}] = useMutation(CREATE_ONE_CATEGORY, {
         onCompleted: () => {
@@ -129,6 +132,16 @@ const AddCategory = () => {
                 loading={loading}
             >
                 Добавить
+            </Button>
+            <Button
+                style={{marginTop: 16, maxWidth: 200}}
+                onClick={
+                    () => {
+                        history.goBack()
+                    }
+                }
+            >
+                Назад
             </Button>
         </Container>
     )

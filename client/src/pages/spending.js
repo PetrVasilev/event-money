@@ -77,7 +77,11 @@ const Spending = ({ route, navigation }) => {
                         </Text>
                     </View>
                 </View>
-                <TouchableOpacity activeOpacity={0.8} style={styles.button}>
+                <TouchableOpacity
+                    onPress={() => navigation.navigate('EditSpending', { spending, event })}
+                    activeOpacity={0.8}
+                    style={styles.button}
+                >
                     <Text style={styles.buttonText}>Изменить</Text>
                 </TouchableOpacity>
                 <TouchableOpacity

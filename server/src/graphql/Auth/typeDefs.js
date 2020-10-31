@@ -3,7 +3,7 @@ const { default: gql } = require('graphql-tag')
 const Auth = gql`
   type Query {
     admin: Admin
-    user(where: AuthUserInput): User!
+    user(where: AuthUserInput, data: AuthUserDataInput): User!
   }
   type Mutation {
     signInAdmin(data: SignInAdminInput): AdminAuthOutput!
@@ -14,6 +14,10 @@ const Auth = gql`
   }
   input AuthUserInput {
     id: String!
+  }
+  input AuthUserDataInput {
+    avatar: String,
+    name: String!
   }
   type AdminAuthOutput{
     admin:Admin!

@@ -19,6 +19,8 @@ model User {
     id        String   @id
     createdAt DateTime @default(now())
     updatedAt DateTime @updatedAt
+    name      String
+    avatar    String?
     events    Event[]
 }
 
@@ -72,9 +74,9 @@ model Service {
 }
 
 model Template {
-    id        String    @id @default(cuid())
-    createdAt DateTime  @default(now())
-    updatedAt DateTime  @updatedAt
+    id        String     @id @default(cuid())
+    createdAt DateTime   @default(now())
+    updatedAt DateTime   @updatedAt
     name      String
     types     TypeEnum[]
     amount    String
