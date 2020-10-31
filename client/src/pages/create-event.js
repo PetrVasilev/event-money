@@ -7,7 +7,7 @@ import {
     Text,
     TextInput,
     Picker,
-    TouchableOpacity,
+    TouchableOpacity
 } from 'react-native'
 import Ionicons from 'react-native-vector-icons/dist/Ionicons'
 import IMask from 'imask'
@@ -146,7 +146,7 @@ const CreateEvent = ({ navigation }) => {
                             setSelectedCategory(item)
                         }}
                     >
-                        {categories.map((item, index) => (
+                        {categories.map((item) => (
                             <Picker.Item key={item.value} value={item.value} label={item.lable} />
                         ))}
                     </Picker>
@@ -162,28 +162,27 @@ const CreateEvent = ({ navigation }) => {
                         size={20}
                     />
                 </View>
-                {
-                    selectedCategory !== 'empty' ?
-                        <>
-                            <Text style={styles.label}>Мероприятие под ключ</Text>
-                            <ScrollView
-                                scrollEventThrottle={200}
-                                pagingEnabled
-                                contentContainerStyle={{ paddingBottom: 10 }}
-                                horizontal={true}
-                                style={styles.templates}
-                            >
-                                {
-                                    [1, 2, 3, 4, 5, 6, 7, 8, 9].map(object => (
-                                        <TouchableOpacity style={[styles.template, {}]}>
-                                            <Text style={styles.templateTitle}>Кейтеринг Радость</Text>
-                                            <Text style={styles.amountText}>1500 руб</Text>
-                                        </TouchableOpacity>
-                                    ))
-                                }
-                            </ScrollView>
-                        </> : null
-                }
+                {selectedCategory !== 'empty' ? (
+                    <>
+                        <Text style={[styles.label, { marginBottom: 0 }]}>
+                            Мероприятие под ключ
+                        </Text>
+                        <ScrollView
+                            scrollEventThrottle={200}
+                            pagingEnabled
+                            contentContainerStyle={{ paddingBottom: 10 }}
+                            horizontal={true}
+                            style={styles.templates}
+                        >
+                            {[1, 2, 3, 4, 5, 6, 7, 8, 9].map((object) => (
+                                <TouchableOpacity style={[styles.template, {}]}>
+                                    <Text style={styles.templateTitle}>Кейтеринг Радость</Text>
+                                    <Text style={styles.amountText}>1500 руб</Text>
+                                </TouchableOpacity>
+                            ))}
+                        </ScrollView>
+                    </>
+                ) : null}
 
                 <TouchableOpacity style={styles.button} onPress={onSubmit}>
                     <Text style={styles.buttonText}>Создать</Text>
@@ -250,7 +249,7 @@ const styles = StyleSheet.create({
     },
     templates: {
         width: '90%',
-        marginTop: 10
+        marginTop: 8
     },
     template: {
         width: 200,
