@@ -85,3 +85,32 @@ export const UPDATE_ONE_EVENT = gql`
         }
     }
 `
+
+export const DELETE_ONE_EVENT = gql`
+    mutation($where: EventWhereUniqueInput!) {
+        deleteOneEvent(where: $where) {
+            id
+            createdAt
+            name
+            amount
+            type
+            spendings {
+                id
+                createdAt
+                amount
+                description
+                category {
+                    id
+                    name
+                    types
+                }
+            }
+            type
+            users {
+                id
+                name
+                avatar
+            }
+        }
+    }
+`
