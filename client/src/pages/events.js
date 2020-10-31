@@ -9,7 +9,10 @@ import LoadingView from '../components/loadingView'
 
 const Events = ({ navigation }) => {
     const { data, loading } = useQuery(FIND_MANY_EVENTS, {
-        fetchPolicy: 'network-only'
+        fetchPolicy: "network-only",
+        where: {
+            id: localStorage.getItem("userId")
+        }
     })
 
     const events = data && data.findManyEvent ? data.findManyEvent : []
@@ -28,8 +31,8 @@ const Events = ({ navigation }) => {
                 {events.length === 0 ? (
                     <>
                         <Ionicons name="folder-open-outline" color="#4b76a8" size={55} />
-                        <Text style={{ marginTop: 15 }}>
-                            Вы еще не создали ни одного мероприятия
+                        <Text style={{ marginTop: 15, textAlign: 'center' }}>
+                            Создайте мероприятие, чтобы начать учет расходов
                         </Text>
                     </>
                 ) : (
