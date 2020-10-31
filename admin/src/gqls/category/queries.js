@@ -7,6 +7,7 @@ export const FIND_MANY_CATEGORY = gql`
             name
             updatedAt
             createdAt
+            types
         }
     }
 `
