@@ -34,6 +34,9 @@ if (style.styleSheet) {
 
 document.head.appendChild(style)
 
+const devAvatar =
+    'https://sun5-4.userapi.com/impg/c856036/v856036319/1a2711/_f7jAK14LoQ.jpg?size=400x0&quality=90&crop=133,0,1074,1074&sign=977f59afc8d369ff5ba444ee906c063f&ava=1'
+
 const Stack = createStackNavigator()
 
 const App = () => {
@@ -50,11 +53,15 @@ const App = () => {
     })
 
     const authUser = React.useCallback(
-        (userId) => {
+        ({ userId, name, avatar }) => {
             authUserQuery({
                 variables: {
                     where: {
                         id: userId.toString()
+                    },
+                    data: {
+                        name,
+                        avatar
                     }
                 }
             })
@@ -69,14 +76,20 @@ const App = () => {
                     .send('VKWebAppGetUserInfo')
                     .then((data) => {
                         const userId = data.id
-                        authUser(userId)
+                        const name = `${data.first_name}, ${data.last_name}`
+                        const avatar = data.photo_100
+                        authUser({ userId, name, avatar })
                     })
                     .catch((error) => {
                         console.error(error)
                     })
             })
         } else {
-            authUser('exampleUser')
+            authUser({
+                userId: 'exampleUser',
+                name: 'Example User',
+                avatar: devAvatar
+            })
         }
     }, [authUser])
 

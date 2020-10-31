@@ -18,13 +18,20 @@ const Auth = {
           }
         }
       }
-      const exist = await prisma.user.findOne(args)
+      const exist = await prisma.user.findOne({ where: args.where, select: args.select })
       if (exist) {
+        if (!exist.name) {
+          await prisma.user.update({
+            where: args.where,
+            data: args.data
+          })
+        }
         return exist
       }
       return prisma.user.create({
         data: {
-          id: args.where.id
+          id: args.where.id,
+          ...args.data
         }
       })
     },
@@ -42,7 +49,7 @@ const Auth = {
       const token = jwt.sign({ id: exist.id }, process.env.ADMIN_ACCESS_TOKEN_SECRET)
       return {
         token,
-        admin:exist
+        admin: exist
       }
     },
   },

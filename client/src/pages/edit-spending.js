@@ -1,14 +1,5 @@
 import React, { useState } from 'react'
-import {
-    View,
-    ScrollView,
-    StyleSheet,
-    Dimensions,
-    Text,
-    TextInput,
-    Picker,
-    TouchableOpacity
-} from 'react-native'
+import { ScrollView, StyleSheet, Dimensions, Text, TextInput, TouchableOpacity } from 'react-native'
 import { useMutation } from '@apollo/client'
 
 import LoadingView from '../components/loadingView'
@@ -18,12 +9,12 @@ const { width } = Dimensions.get('window')
 
 const EditSpending = ({ navigation, route }) => {
     const { spending, event } = route.params
-    const [budget, setBudget] = useState(spending.amount ? spending.amount : "")
-    const [description, setDescription] = useState(spending.description ? spending.description : "")
+    const [budget, setBudget] = useState(spending.amount ? spending.amount : '')
+    const [description, setDescription] = useState(spending.description ? spending.description : '')
 
     const [updateSpending, { loading }] = useMutation(UPDATE_ONE_SPENDING, {
         onCompleted: () => {
-            navigation.navigate("Event")
+            navigation.navigate('Event')
         },
         onError: (e) => {
             console.error(e)
@@ -35,7 +26,7 @@ const EditSpending = ({ navigation, route }) => {
                     where: { event: { id: { equals: event.id } } }
                 }
             })
-            const newSpendings = prev.findManySpending.map(item => {
+            const newSpendings = prev.findManySpending.map((item) => {
                 if (item.id === spending.id) {
                     return data.updateOneSpending
                 } else {
