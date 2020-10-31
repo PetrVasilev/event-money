@@ -1,67 +1,62 @@
 import React from 'react'
-import { ScrollView, View, TouchableOpacity, Text, StyleSheet } from 'react-native'
+import { ScrollView, View, TouchableOpacity, Text, StyleSheet, RefreshControl } from 'react-native'
 import Ionicons from 'react-native-vector-icons/dist/Ionicons'
 import moment from 'moment'
-import { useLazyQuery } from '@apollo/client'
+import { useQuery } from '@apollo/client'
 
-import { AUTH_USER } from '../gqls/user'
-
-const events = [
-    {
-        id: 1,
-        name: 'Свадьба Васильевых',
-        category: 'Свадьба',
-        date: new Date(),
-        createdAt: new Date(),
-        price: 400000
-    },
-    {
-        id: 2,
-        name: 'День рождения Кыната',
-        category: 'День рождения',
-        date: new Date(),
-        createdAt: new Date(),
-        price: 20000
-    },
-    {
-        id: 3,
-        name: 'Шоу',
-        category: 'Другое',
-        date: new Date(),
-        createdAt: new Date(),
-        price: 6000
-    }
-]
+import { FIND_MANY_EVENTS } from '../gqls/event'
+import LoadingView from '../components/loadingView'
 
 const Events = ({ navigation }) => {
-    const [authUser] = useLazyQuery(AUTH_USER)
+    const { data, loading } = useQuery(FIND_MANY_EVENTS, {
+        fetchPolicy: 'network-only'
+    })
+
+    const events = data && data.findManyEvent ? data.findManyEvent : []
+
     return (
         <>
-            <ScrollView style={styles.list} contentContainerStyle={{ paddingBottom: 70 }}>
-                {events.map((item, index) => (
-                    <TouchableOpacity
-                        style={[
-                            styles.item,
-                            { marginBottom: events.length - 1 === index ? 0 : 10 }
-                        ]}
-                        key={item.id}
-                        onPress={() => navigation.push(`Event`, { event: item })}
-                    >
-                        <Text style={styles.eventTitle}>{item.name}</Text>
-                        <View style={styles.eventBottom}>
-                            <Text style={styles.eventCategory}>{item.category}</Text>
-                            <Text style={styles.eventCreated}>
-                                {moment(item.date).format('DD.MM.YYYY')}
-                            </Text>
-                        </View>
-                    </TouchableOpacity>
-                ))}
+            <ScrollView
+                style={styles.list}
+                contentContainerStyle={
+                    events.length > 0
+                        ? { paddingBottom: 70 }
+                        : { flex: 1, alignItems: 'center', justifyContent: 'center' }
+                }
+                refreshControl={<RefreshControl refreshing={loading} onRefresh={() => {}} />}
+            >
+                {events.length === 0 ? (
+                    <>
+                        <Ionicons name="folder-open-outline" color="#4b76a8" size={55} />
+                        <Text style={{ marginTop: 15 }}>
+                            Вы еще не создали ни одного мероприятия
+                        </Text>
+                    </>
+                ) : (
+                    events.map((item, index) => (
+                        <TouchableOpacity
+                            style={[
+                                styles.item,
+                                { marginBottom: events.length - 1 === index ? 0 : 10 }
+                            ]}
+                            key={item.id}
+                            onPress={() => navigation.push(`Event`, { event: item })}
+                        >
+                            <Text style={styles.eventTitle}>{item.name}</Text>
+                            <View style={styles.eventBottom}>
+                                <Text style={styles.eventCategory}>{item.category}</Text>
+                                <Text style={styles.eventCreated}>
+                                    {moment(item.date).format('DD.MM.YYYY')}
+                                </Text>
+                            </View>
+                        </TouchableOpacity>
+                    ))
+                )}
             </ScrollView>
             <TouchableOpacity
                 activeOpacity={1}
                 style={styles.add}
                 onPress={() => {
-                    authUser()
                     navigation.navigate('CreateEvent')
                 }}
             >
@@ -71,6 +66,7 @@ const Events = ({ navigation }) => {
                     size={30}
                 />
             </TouchableOpacity>
+            <LoadingView loading={loading} />
         </>
     )
 }
