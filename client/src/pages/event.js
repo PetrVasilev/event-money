@@ -32,7 +32,8 @@ const Event = ({ route, navigation }) => {
 
     const { data } = useQuery(FIND_MANY_SPENDING, {
         variables: {
-            where: { event: { id: { equals: event.id } } }
+            where: { event: { id: { equals: event.id } } },
+            orderBy: { createdAt: "desc" }
         }
     })
 
@@ -187,10 +188,10 @@ const Event = ({ route, navigation }) => {
                     {spendings.length > 0 ? (
                         spendingsView
                     ) : (
-                        <View style={styles.card}>
-                            <Text style={{ color: 'grey' }}>Нет расходов</Text>
-                        </View>
-                    )}
+                            <View style={styles.card}>
+                                <Text style={{ color: 'grey' }}>Нет расходов</Text>
+                            </View>
+                        )}
                     <TouchableOpacity
                         activeOpacity={0.8}
                         style={styles.button}
