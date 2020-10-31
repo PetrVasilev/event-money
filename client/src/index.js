@@ -16,6 +16,7 @@ import Event from './pages/event'
 import CreateEvent from './pages/create-event'
 import CreateSpending from './pages/create-spending'
 import Spending from './pages/spending'
+import EditSpending from './pages/edit-spending'
 
 const iconFontStyles = `@font-face {
     src: url(${iconFont});
@@ -159,6 +160,21 @@ const App = () => {
                     })}
                     name="Spending"
                     component={Spending}
+                />
+                <Stack.Screen
+                    options={({ navigation }) => ({
+                        headerTitle: 'Редактировать расход',
+                        headerLeft: () => (
+                            <Ionicons
+                                onPress={() => navigation.goBack()}
+                                name="md-chevron-back-sharp"
+                                style={{ color: '#4b76a8', marginLeft: 16 }}
+                                size={25}
+                            />
+                        )
+                    })}
+                    name="EditSpending"
+                    component={EditSpending}
                 />
             </Stack.Navigator>
         </NavigationContainer>
