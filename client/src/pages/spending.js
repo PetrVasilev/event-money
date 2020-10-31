@@ -10,19 +10,19 @@ const Spending = ({ route, navigation }) => {
             <View style={styles.bottom}>
                 <View style={styles.bottomPrice}>
                     <Text>Название</Text>
-                    <Text>{spending.category.name}</Text>
+                    <Text style={{ textAlign: "right" }}>{spending.category.name}</Text>
                 </View>
                 <View style={styles.bottomSpending}>
                     <Text>Стоимость</Text>
-                    <Text>{spending.amount} руб.</Text>
+                    <Text style={{ textAlign: "right" }}>{spending.amount} руб.</Text>
                 </View>
                 <View style={styles.bottomSpending}>
                     <Text>Комметарий</Text>
-                    <Text>{spending.description ? spending.description : '-'}</Text>
+                    <Text style={{ textAlign: "right" }}>{spending.description ? spending.description : '-'}</Text>
                 </View>
                 <View style={styles.bottomSpending}>
                     <Text>Дата создания</Text>
-                    <Text>{moment(spending.createdAt).format('DD.MM.YYYY')}</Text>
+                    <Text style={{ textAlign: "right" }}>{moment(spending.createdAt).format('DD.MM.YYYY')}</Text>
                 </View>
             </View>
             <TouchableOpacity
