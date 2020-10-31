@@ -17,7 +17,6 @@ import CreateEvent from './pages/create-event'
 import CreateSpending from './pages/create-spending'
 import Spending from './pages/spending'
 import EditSpending from './pages/edit-spending'
-import AddOrganizator from './pages/add-organizator'
 import Template from './pages/template'
 
 const iconFontStyles = `@font-face {
@@ -190,21 +189,6 @@ const App = () => {
                     })}
                     name="EditSpending"
                     component={EditSpending}
-                />
-                <Stack.Screen
-                    options={({ navigation }) => ({
-                        headerTitle: 'Добавить организатора',
-                        headerLeft: () => (
-                            <Ionicons
-                                onPress={() => navigation.goBack()}
-                                name="md-chevron-back-sharp"
-                                style={{ color: '#4b76a8', marginLeft: 16 }}
-                                size={25}
-                            />
-                        )
-                    })}
-                    name="AddOrganizator"
-                    component={AddOrganizator}
                 />
                 <Stack.Screen
                     options={({ navigation, route }) => ({
