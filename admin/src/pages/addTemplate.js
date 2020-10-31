@@ -2,13 +2,14 @@ import React, {useState} from 'react'
 import styled from 'styled-components'
 import {Title} from "../components/defaultTexts"
 import AddField from "../components/addField"
-import {useMutation, useQuery} from "@apollo/react-hooks"
+import {useApolloClient, useMutation, useQuery} from "@apollo/react-hooks"
 import {Button, message, Switch} from "antd"
 import AddFieldSelect from "../components/addFieldSelect"
 import {CREATE_ONE_TEMPLATE} from "../gqls/template/mutations"
 import {FIND_MANY_SERVICE} from "../gqls/service/queries"
 import AddFieldNumber from "../components/addFieldNumber"
 import {useHistory} from "react-router-dom"
+import {FIND_MANY_TEMPLATE} from "../gqls/template/queries"
 
 const Container = styled.div`
     display: flex;
@@ -66,12 +67,13 @@ const AddTemplate = () => {
     const [amount, setAmount] = useState(0)
     const [autoCalc, setAutoCalc] = useState(true)
 
+    const apollo = useApolloClient()
+
     const history = useHistory()
 
     const {loading: queryLoading} = useQuery(FIND_MANY_SERVICE, {
         errorPolicy: 'ignore',
         onCompleted: ({findManyService}) => {
-
             setServiceArray(findManyService)
         },
         variables: {
@@ -80,8 +82,19 @@ const AddTemplate = () => {
     })
 
     const [save, {loading}] = useMutation(CREATE_ONE_TEMPLATE, {
-        onCompleted: () => {
+        onCompleted: async ({createOneTemplate}) => {
+            try {
+                const {data} = await apollo.readQuery({query: FIND_MANY_TEMPLATE})
+                await apollo.writeQuery({
+                    query: FIND_MANY_TEMPLATE,
+                    data: [...data, createOneTemplate]
+                })
+            } catch (e) {
+
+            }
             message.success('Добавлено')
+            history.goBack()
+
         },
         onError: (error) => {
             message.error('Что то пошло не так')
