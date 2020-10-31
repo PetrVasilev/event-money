@@ -40,7 +40,9 @@ const App = () => {
         <ApolloProvider client={apollo}>
             <Router>
                 {!loading && !admin ? <Redirect to={'/login'} /> : null}
-                {admin && window.location.pathname === '/' && <Redirect to={'/authorized'} />}
+                {admin && window.location.pathname === '/' && (
+                    <Redirect to={'/authorized/category'} />
+                )}
                 <Route exact path={'/login'} component={Login} />
                 <Route exact path="/authorized/:path?/">
                     <Sider />
