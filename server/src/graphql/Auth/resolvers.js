@@ -77,7 +77,7 @@ const Auth = {
         })
       }
 
-      const create = users.filter(obj => !exists.find(exist => exist.id === obj))
+      const create = users.filter(obj => !exists.find(exist => exist.id === obj.id))
 
       if(create && create.length > 0) {
         await prisma.event.update({
