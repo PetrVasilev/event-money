@@ -4,9 +4,6 @@ import moment from 'moment'
 
 const Spending = ({ route, navigation }) => {
     const { spending } = route.params
-
-    console.log(spending)
-
     return (
         <ScrollView style={styles.container}>
             <Text style={styles.textInfo}>Общая информация</Text>

@@ -37,7 +37,6 @@ const categories = [
 ]
 
 const CreateSpending = ({ navigation }) => {
-
     const [selectedCategory, setSelectedCategory] = useState()
     const [ownCategory, setOwnCategory] = useState('')
     const [budget, setBudget] = useState('')
@@ -52,18 +51,18 @@ const CreateSpending = ({ navigation }) => {
             style={styles.container}
             contentContainerStyle={{ alignItems: 'center', paddingBottom: 15 }}
         >
-            <Text style={styles.label}>Стоимость расода</Text>
+            <Text style={styles.label}>Стоимость расхода</Text>
             <TextInput
                 value={budget}
                 onChangeText={(text) => setBudget(text)}
                 style={styles.textInput}
-                placeholder="Стоимость расода"
+                placeholder="Стоимость расхода"
             />
             <Text style={styles.label}>Категория расхода</Text>
             <View style={styles.pickerContainer}>
                 <Picker
                     style={styles.picker}
-                    placeholder="Выберете категорию"
+                    placeholder="Выберите категорию"
                     value={selectedCategory}
                     onValueChange={(item) => {
                         setSelectedCategory(item)

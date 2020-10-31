@@ -5,11 +5,14 @@ import moment from 'moment'
 import { useQuery } from '@apollo/client'
 
 import { FIND_MANY_EVENTS } from '../gqls/event'
+import LoadingView from '../components/loadingView'
 
 const Events = ({ navigation }) => {
-
     const { data, loading } = useQuery(FIND_MANY_EVENTS, {
-        fetchPolicy: "network-only"
+        fetchPolicy: "network-only",
+        where: {
+            id: localStorage.getItem("userId")
+        }
     })
 
     const events = data && data.findManyEvent ? data.findManyEvent : []
@@ -18,21 +21,22 @@ const Events = ({ navigation }) => {
         <>
             <ScrollView
                 style={styles.list}
-                contentContainerStyle={events.length > 0 ? { paddingBottom: 70 } : { flex: 1, alignItems: "center", justifyContent: "center" }}
-                refreshControl={
-                    <RefreshControl
-                        refreshing={loading}
-                        onRefresh={() => { }}
-                    />
+                contentContainerStyle={
+                    events.length > 0
+                        ? { paddingBottom: 70 }
+                        : { flex: 1, alignItems: 'center', justifyContent: 'center' }
                 }
+                refreshControl={<RefreshControl refreshing={loading} onRefresh={() => {}} />}
             >
-                {
-                    events.length === 0 ? (
-                        <>
-                            <Ionicons name="folder-open-outline" color="#4b76a8" size={55} />
-                            <Text style={{ marginTop: 15 }}>Вы еще не создали ни одного мероприятия</Text>
-                        </>
-                    ) : events.map((item, index) => (
+                {events.length === 0 ? (
+                    <>
+                        <Ionicons name="folder-open-outline" color="#4b76a8" size={55} />
+                        <Text style={{ marginTop: 15, textAlign: 'center' }}>
+                            Создайте мероприятие, чтобы начать учет расходов
+                        </Text>
+                    </>
+                ) : (
+                    events.map((item, index) => (
                         <TouchableOpacity
                             style={[
                                 styles.item,
@@ -49,13 +53,13 @@ const Events = ({ navigation }) => {
                                 </Text>
                             </View>
                         </TouchableOpacity>
-                    ))}
+                    ))
+                )}
             </ScrollView>
             <TouchableOpacity
                 activeOpacity={1}
                 style={styles.add}
                 onPress={() => {
-                    // authUser()
                     navigation.navigate('CreateEvent')
                 }}
             >
@@ -65,6 +69,7 @@ const Events = ({ navigation }) => {
                     size={30}
                 />
             </TouchableOpacity>
+            <LoadingView loading={loading} />
         </>
     )
 }

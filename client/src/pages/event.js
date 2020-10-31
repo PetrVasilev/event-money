@@ -28,10 +28,11 @@ const spendings = [
 
 const Event = ({ route, navigation }) => {
     const { event } = route.params
-    let leavePrice = event.price
+    console.log(event)
+    let leavePrice = event.amount
     let spendingPrice = 0
 
-    let coloredSpendings = spendings.map((item) => {
+    let coloredSpendings = event.spendings.map((item) => {
         return {
             ...item,
             color: randomColor({
@@ -72,7 +73,7 @@ const Event = ({ route, navigation }) => {
             <View style={styles.bottom}>
                 <View style={styles.bottomPrice}>
                     <Text style={{ color: 'green' }}>Бюджет</Text>
-                    <Text>{event.price} руб.</Text>
+                    <Text>{event.amount} руб.</Text>
                 </View>
                 <View style={styles.bottomSpending}>
                     <Text style={{ color: 'red' }}>Расходы</Text>
@@ -115,7 +116,16 @@ const Event = ({ route, navigation }) => {
                 </View>
             </View>
             <Text style={[styles.textInfo, { marginTop: 15 }]}>Расходы</Text>
-            {spendingsView}
+            {event.spendings.length > 0 ? spendingsView : (
+                <View style={[
+                    styles.card,
+                    {
+                        
+                    }
+                ]}>
+                    <Text>Нет расходов</Text>
+                </View>
+            )}
             <TouchableOpacity
                 activeOpacity={0.8}
                 style={styles.button}

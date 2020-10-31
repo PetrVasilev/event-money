@@ -88,7 +88,7 @@ const App = () => {
                     headerStyle: {
                         height: 60
                     },
-                    animationEnabled: true,
+                    animationEnabled: true
                 }}
             >
                 <Stack.Screen
