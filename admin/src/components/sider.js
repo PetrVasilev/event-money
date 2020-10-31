@@ -4,6 +4,7 @@ import {useApolloClient} from '@apollo/react-hooks'
 import {HomeOutlined, ShopOutlined, UserDeleteOutlined} from '@ant-design/icons'
 import {useHistory} from 'react-router-dom'
 import styled from 'styled-components'
+import {ADMIN} from "../gqls/auth/queries"
 
 const Container = styled.div`
   display: flex;
@@ -17,7 +18,7 @@ const Sider = () => {
     const exitEl = useRef(null)
     const logOut = () => {
         localStorage.setItem('token', '')
-        history.replace('/')
+        apollo.writeQuery({query: ADMIN, data: {admin: null}})
     }
     return (
         <Container>

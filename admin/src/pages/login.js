@@ -1,7 +1,11 @@
 import React, {useState} from 'react'
 import styled from 'styled-components'
-import {Button, Input} from "antd"
+import {Button, Input, message} from "antd"
 import {useHistory} from 'react-router-dom'
+import {useApolloClient, useMutation} from '@apollo/react-hooks'
+import {SIGN_IN_ADMIN} from "../gqls/auth/mutations"
+import {ADMIN} from "../gqls/auth/queries"
+import LoadingBar from "../components/loadingBar"
 
 const Container = styled.div`
   flex: 1;
@@ -28,19 +32,47 @@ const Label = styled.div`
 const ContentContainer = styled.div`
   display: flex;
   flex-direction: column;
-  min-width: 320px;
-  @media screen and (max-width: 800px)
-  {
-    align-items: center;
-    min-width: 290px;
-  }
+  max-width: 290px;
+  align-items: center;
 `
 
 const Login = () => {
     const [login, setLogin] = useState('')
     const [password, setPassword] = useState('')
 
+    const apollo = useApolloClient()
+
     const history = useHistory()
+
+    const [sign, {loading}] = useMutation(SIGN_IN_ADMIN, {
+        onError: () => {
+            message.error('что то пошло не так')
+        },
+        onCompleted: ({signInAdmin}) => {
+            apollo.writeQuery({query: ADMIN, data: {admin: signInAdmin.admin}})
+            localStorage.setItem('token', signInAdmin.token)
+            history.replace('/authorized/addCategory')
+        }
+    })
+
+    const onSign = () => {
+        if (login === '') {
+            message.error('Введите логин')
+            return null
+        }
+        if (password === '') {
+            message.error('Введите пароль')
+            return null
+        }
+        sign({
+            variables: {
+                data: {
+                    login,
+                    password
+                }
+            }
+        })
+    }
 
     return (
         <Container>
@@ -54,6 +86,7 @@ const Login = () => {
                             setLogin(e.target.value)
                         }
                     }
+                    value={login}
                 />
                 <Label style={{marginTop: 16}}>Пароль</Label>
                 <Input
@@ -63,19 +96,29 @@ const Login = () => {
                             setPassword(e.target.value)
                         }
                     }
-
-                />
-                <Button
-                    style={{marginTop: 16, maxWidth: 200, alignSelf: 'center'}}
-                    type={'primary'}
-                    onClick={
-                        () => {
-                            history.replace('/')
+                    value={password}
+                    type={'password'}
+                    onKeyDown={
+                        (e)=>{
+                            if (e.key === 'Enter') {
+                                onSign()
+                            }
                         }
                     }
-                >
-                    Войти
-                </Button>
+
+                />
+
+                {
+                    loading ?
+                        <LoadingBar/>
+                        :
+                        <Button
+                            style={{marginTop: 16, maxWidth: 200, alignSelf: 'center'}}
+                            type={'primary'}
+                            onClick={onSign}
+                        >
+                            Войти
+                        </Button>}
             </ContentContainer>
         </Container>
     )

@@ -12,7 +12,7 @@ import AddTemplate from "./pages/addTemplate"
 import {ADMIN} from "./gqls/auth/queries"
 
 const App = () => {
-    const [loading, setLoading] = useState(false)
+    const [loading, setLoading] = useState(true)
     const [admin, setAdmin] = useState()
     useEffect(
         () => {
@@ -25,6 +25,8 @@ const App = () => {
                     const {data, loading} = res
                     if (!loading)
                         setAdmin(data.admin)
+                    setLoading(loading)
+
                 }
             })
         },
