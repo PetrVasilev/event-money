@@ -17,7 +17,7 @@ const Container = styled.div`
 
 const Service = () => {
     const [dataSource, setDataSource] = useState([])
-    const {loading} = useQuery(FIND_MANY_SERVICE, {
+    const {loading,refetch} = useQuery(FIND_MANY_SERVICE, {
         onCompleted: ({findManyService}) => {
             setDataSource(findManyService.map(
                 (item) => {
@@ -33,8 +33,13 @@ const Service = () => {
     const history = useHistory()
 
     const expandedRowRender = (data) => {
-        console.log(data)
-        return <UpdateService data={data}/>
+        return (
+            <UpdateService
+                data={data}
+                oldDataSource={dataSource}
+                setDataSource={setDataSource}
+            />
+        )
     }
 
     return (
