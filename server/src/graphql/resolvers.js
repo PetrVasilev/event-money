@@ -7,6 +7,15 @@ const { User } = require('./User/resolvers')
 const { Admin } = require('./Admin/resolvers')
 const { Auth } = require('./Auth/resolvers')
 
-const resolvers = [Admin, User, Event, Spending, Category, Service, Template, Auth]
+const resolvers = [
+  Admin,
+  User,
+  Event,
+  Spending,
+  Category,
+  Service,
+  Template,
+  Auth,
+]
 
 module.exports = { resolvers }

@@ -22,14 +22,16 @@ const Spending = ({ route, navigation }) => {
                 const prev = cache.readQuery({
                     query: FIND_MANY_SPENDING,
                     variables: {
-                        where: { event: { id: { equals: event.id } } }
+                        where: { event: { id: { equals: event.id } } },
+                        orderBy: { createdAt: "desc" }
                     }
                 })
                 const lastSpendings = [...prev.findManySpending]
                 cache.writeQuery({
                     query: FIND_MANY_SPENDING,
                     variables: {
-                        where: { event: { id: { equals: event.id } } }
+                        where: { event: { id: { equals: event.id } } },
+                        orderBy: { createdAt: "desc" }
                     },
                     data: {
                         findManySpending: lastSpendings.filter((item) => item.id !== spending.id)

@@ -6,6 +6,8 @@ const Template = gql`
     createdAt: DateTime!
     updatedAt: DateTime!
     name: String!
+    amount: String!
+    types: [TypesEnum]
     services(
       where: ServiceWhereInput
       orderBy: ServiceOrderByInput

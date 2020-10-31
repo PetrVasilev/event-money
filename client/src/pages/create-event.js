@@ -60,7 +60,8 @@ const CreateEvent = ({ navigation }) => {
                 variables: {
                     where: {
                         users: { some: { id: { contains: localStorage.getItem('userId') } } }
-                    }
+                    },
+                    orderBy: { createdAt: "desc" }
                 }
             })
             await client.writeQuery({
@@ -68,7 +69,8 @@ const CreateEvent = ({ navigation }) => {
                 variables: {
                     where: {
                         users: { some: { id: { contains: localStorage.getItem('userId') } } }
-                    }
+                    },
+                    orderBy: { createdAt: "desc" }
                 },
                 data: {
                     findManyEvent: [data.createOneEvent, ...prev.findManyEvent]

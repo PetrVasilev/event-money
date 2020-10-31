@@ -1,26 +1,21 @@
 import React, { useState, useEffect, useMemo } from 'react'
 import Ionicons from 'react-native-vector-icons/dist/Ionicons'
 import randomColor from 'randomcolor'
-import { ScrollView, View, StyleSheet, Text, TouchableOpacity, Image } from 'react-native'
+import {
+    ScrollView,
+    View,
+    StyleSheet,
+    Text,
+    TouchableOpacity,
+    Image,
+    ActivityIndicator
+} from 'react-native'
+import bridge from '@vkontakte/vk-bridge'
 import { PieChart } from 'react-minimal-pie-chart'
-import { useQuery } from '@apollo/client'
+import { useQuery, useLazyQuery } from '@apollo/client'
 
 import { FIND_MANY_SPENDING } from '../gqls/spending'
-
-const organizators = [
-    {
-        id: 1,
-        name: 'Пётр Васильев',
-        avatar:
-            'https://sun5-3.userapi.com/impf/c630919/v630919438/127da/txDQNEXAQNI.jpg?size=400x0&quality=90&crop=0,350,1409,1410&sign=14fa59e47c7a3ab1d1193d92430b3ebe&ava=1'
-    },
-    {
-        id: 2,
-        name: 'Тит Эверстов',
-        avatar:
-            'https://sun5-4.userapi.com/impg/c856036/v856036319/1a2711/_f7jAK14LoQ.jpg?size=400x0&quality=90&crop=133,0,1074,1074&sign=977f59afc8d369ff5ba444ee906c063f&ava=1'
-    }
-]
+import { FIND_MANY_USER } from '../gqls/user'
 
 const Event = ({ route, navigation }) => {
     const { event } = route.params
@@ -32,9 +27,15 @@ const Event = ({ route, navigation }) => {
 
     const { data } = useQuery(FIND_MANY_SPENDING, {
         variables: {
-            where: { event: { id: { equals: event.id } } }
+            where: { event: { id: { equals: event.id } } },
+            orderBy: { createdAt: "desc" }
         }
     })
+
+    const [
+        getOrganizators,
+        { data: organizatorsData, loading: organizatorsLoading }
+    ] = useLazyQuery(FIND_MANY_USER)
 
     const spendings = useMemo(() => {
         return data && data.findManySpending ? data.findManySpending : []
@@ -65,6 +66,24 @@ const Event = ({ route, navigation }) => {
         }, [])
         setColoredSpendings(arr)
     }, [spendings])
+
+    useEffect(() => {
+        if (tab === 1) {
+            getOrganizators({
+                variables: {
+                    where: {
+                        events: {
+                            some: {
+                                id: {
+                                    equals: event.id
+                                }
+                            }
+                        }
+                    }
+                }
+            })
+        }
+    }, [tab])
 
     const spendingsView = coloredSpendings.map((item, index) => {
         const isLast = spendings.length - 1 === index
@@ -107,6 +126,8 @@ const Event = ({ route, navigation }) => {
             </TouchableOpacity>
         )
     })
+
+    const organizators = organizatorsData ? organizatorsData.findManyUser : []
 
     return (
         <ScrollView style={styles.container}>
@@ -187,10 +208,10 @@ const Event = ({ route, navigation }) => {
                     {spendings.length > 0 ? (
                         spendingsView
                     ) : (
-                        <View style={styles.card}>
-                            <Text style={{ color: 'grey' }}>Нет расходов</Text>
-                        </View>
-                    )}
+                            <View style={styles.card}>
+                                <Text style={{ color: 'grey' }}>Нет расходов</Text>
+                            </View>
+                        )}
                     <TouchableOpacity
                         activeOpacity={0.8}
                         style={styles.button}
@@ -202,28 +223,45 @@ const Event = ({ route, navigation }) => {
             )}
             {tab === 1 && (
                 <>
-                    {organizators.map((item, index) => (
+                    {organizatorsLoading ? (
                         <View
-                            style={[
-                                styles.card,
-                                {
-                                    marginBottom: organizators.length - 1 === index ? 0 : 10,
-                                    justifyContent: 'flex-start'
-                                }
-                            ]}
-                            key={item.id}
+                            style={{ alignItems: 'center', justifyContent: 'center', padding: 20 }}
                         >
-                            <Image
-                                style={{ borderRadius: '50%', width: 35, height: 35 }}
-                                source={{ uri: item.avatar }}
-                            />
-                            <Text style={{ marginLeft: 10, fontSize: 14 }}>{item.name}</Text>
+                            <ActivityIndicator animating />
                         </View>
-                    ))}
+                    ) : (
+                        organizators.map((item, index) => (
+                            <View
+                                style={[
+                                    styles.card,
+                                    {
+                                        marginBottom: organizators.length - 1 === index ? 0 : 10,
+                                        justifyContent: 'flex-start'
+                                    }
+                                ]}
+                                key={item.id}
+                            >
+                                <Image
+                                    style={{ borderRadius: '50%', width: 35, height: 35 }}
+                                    source={{ uri: item.avatar }}
+                                />
+                                <Text style={{ marginLeft: 10, fontSize: 14 }}>{item.name}</Text>
+                            </View>
+                        ))
+                    )}
                     <TouchableOpacity
                         activeOpacity={0.8}
                         style={styles.button}
-                        onPress={() => navigation.navigate('CreateOrganizator', { event })}
+                        // onPress={() => navigation.navigate('AddOrganizator', { event })}
+                        onPress={() => {
+                            bridge
+                                .send('VKWebAppGetFriends', {
+                                    multi: true
+                                })
+                                .then((data) => {
+                                    console.log(data)
+                                })
+                        }}
                     >
                         <Text style={styles.buttonText}>Добавить организаторов</Text>
                     </TouchableOpacity>
