@@ -1,19 +1,10 @@
 const Service = {
   Query: {
-    findOneService: (_parent, args, { prisma }) => {
-      return prisma.service.findOne(args)
-    },
-    findFirstService: (_parent, args, { prisma }) => {
-      return prisma.service.findFirst(args)
-    },
     findManyService: (_parent, args, { prisma }) => {
       return prisma.service.findMany(args)
     },
     findManyServiceCount: (_parent, args, { prisma }) => {
       return prisma.service.count(args)
-    },
-    aggregateService: (_parent, args, { prisma }) => {
-      return prisma.service.aggregate(args)
     },
   },
   Mutation: {

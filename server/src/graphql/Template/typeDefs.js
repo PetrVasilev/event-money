@@ -20,15 +20,6 @@ const Template = gql`
   }
 
   type Query {
-    findOneTemplate(where: TemplateWhereUniqueInput!): Template
-    findFirstTemplate(
-      where: TemplateWhereInput
-      orderBy: [TemplateOrderByInput!]
-      cursor: TemplateWhereUniqueInput
-      distinct: TemplateDistinctFieldEnum
-      skip: Int
-      take: Int
-    ): [Template!]
     findManyTemplate(
       where: TemplateWhereInput
       orderBy: [TemplateOrderByInput!]
@@ -45,14 +36,6 @@ const Template = gql`
       skip: Int
       take: Int
     ): Int!
-    aggregateTemplate(
-      where: TemplateWhereInput
-      orderBy: [TemplateOrderByInput!]
-      cursor: TemplateWhereUniqueInput
-      distinct: TemplateDistinctFieldEnum
-      skip: Int
-      take: Int
-    ): AggregateTemplate
   }
   type Mutation {
     createOneTemplate(data: TemplateCreateInput!): Template!

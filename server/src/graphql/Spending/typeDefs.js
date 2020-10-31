@@ -16,15 +16,6 @@ const Spending = gql`
   }
 
   type Query {
-    findOneSpending(where: SpendingWhereUniqueInput!): Spending
-    findFirstSpending(
-      where: SpendingWhereInput
-      orderBy: [SpendingOrderByInput!]
-      cursor: SpendingWhereUniqueInput
-      distinct: SpendingDistinctFieldEnum
-      skip: Int
-      take: Int
-    ): [Spending!]
     findManySpending(
       where: SpendingWhereInput
       orderBy: [SpendingOrderByInput!]
@@ -41,14 +32,6 @@ const Spending = gql`
       skip: Int
       take: Int
     ): Int!
-    aggregateSpending(
-      where: SpendingWhereInput
-      orderBy: [SpendingOrderByInput!]
-      cursor: SpendingWhereUniqueInput
-      distinct: SpendingDistinctFieldEnum
-      skip: Int
-      take: Int
-    ): AggregateSpending
   }
   type Mutation {
     createOneSpending(data: SpendingCreateInput!): Spending!

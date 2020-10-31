@@ -1,19 +1,10 @@
 const User = {
   Query: {
-    findOneUser: (_parent, args, { prisma }) => {
-      return prisma.user.findOne(args)
-    },
-    findFirstUser: (_parent, args, { prisma }) => {
-      return prisma.user.findFirst(args)
-    },
     findManyUser: (_parent, args, { prisma }) => {
       return prisma.user.findMany(args)
     },
     findManyUserCount: (_parent, args, { prisma }) => {
       return prisma.user.count(args)
-    },
-    aggregateUser: (_parent, args, { prisma }) => {
-      return prisma.user.aggregate(args)
     },
   },
   Mutation: {
