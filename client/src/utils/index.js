@@ -1,5 +1,9 @@
 export const categories = [
     {
+        value: 'empty',
+        lable: 'Выберите категорию'
+    },
+    {
         value: 'WEDDING',
         lable: 'Свадьба'
     },

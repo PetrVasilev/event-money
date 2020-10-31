@@ -81,7 +81,7 @@ const CreateEvent = ({ navigation }) => {
             alert('Введите корректную дату')
             return false
         }
-        if (!selectedCategory) {
+        if (selectedCategory === 'empty') {
             alert('Выберите категорию')
             return false
         }
