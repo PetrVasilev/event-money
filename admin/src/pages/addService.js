@@ -71,21 +71,20 @@ const AddService = () => {
             message.error('Выберите категорию')
             return null
         }
-        console.log(category)
-        save({
-            variables: {
-                data: {
-                    name,
-                    description,
-                    amount: amount + '',
-                    category: {
-                        connect: {
-                            id: category.value
-                        }
+        const variables = {
+            data: {
+                name,
+                description,
+                amount: amount + '',
+                category: {
+                    connect: {
+                        id: category
                     }
-
                 }
             }
+        }
+        save({
+            variables
         })
 
     }
