@@ -16,6 +16,7 @@ export const FIND_MANY_EVENTS = gql`
                 category {
                     id
                     name
+                    types
                 }
             }
             type
@@ -38,6 +39,7 @@ export const CREATE_ONE_EVENT = gql`
                 category {
                     id
                     name
+                    types
                 }
             }
             type
