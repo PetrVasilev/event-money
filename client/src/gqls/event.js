@@ -15,6 +15,7 @@ export const FIND_MANY_EVENTS = gql`
                     name
                 }
             }
+            type
         }
     }
 `
@@ -33,6 +34,7 @@ export const CREATE_ONE_EVENT = gql`
                     name
                 }
             }
+            type
         }
     }
 `
