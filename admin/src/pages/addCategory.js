@@ -1,9 +1,8 @@
-import React, {useState} from 'react'
+import React from 'react'
 import styled from 'styled-components'
 import {useMutation} from '@apollo/react-hooks'
 import {useHistory} from 'react-router-dom'
 import {Button, Form, Input, message, Select} from 'antd'
-
 import {Title} from '../components/defaultTexts'
 import {CREATE_ONE_CATEGORY} from '../gqls/category/mutations'
 
@@ -12,24 +11,6 @@ const Container = styled.div`
     flex: 1;
     flex-direction: column;
     max-width: 500px;
-`
-
-const Fields = styled.div`
-    margin-top: 24px;
-    display: flex;
-
-    .gap {
-        margin-right: 24px;
-        margin-bottom: 24px;
-
-        @media screen and (max-width: 800px) {
-            margin-right: 0;
-        }
-    }
-
-    @media screen and (max-width: 800px) {
-        flex-direction: column;
-    }
 `
 const ButtonsContainer = styled.div`
   display: flex;
@@ -78,7 +59,7 @@ const AddCategory = () => {
         }
     })
 
-    const onSave = ({name,types}) => {
+    const onSave = ({name, types}) => {
         const variables = {
             data: {
                 name,
@@ -116,7 +97,7 @@ const AddCategory = () => {
                     label={'Тип мероприятия'}
                     rules={[{required: true, message: 'Введите имя'}]}
                 >
-                    <Select  mode={'multiple'}>
+                    <Select mode={'multiple'}>
                         {typeEnum.map((item) => {
                             return (
                                 <Select.Option key={item.id} value={item.id}>
