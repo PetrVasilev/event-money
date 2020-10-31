@@ -1,12 +1,13 @@
-import React, { useState } from 'react'
+import React, {useState} from 'react'
 import styled from 'styled-components'
-import { Title } from '../components/defaultTexts'
-import { Button, Table, Tag } from 'antd'
-import { useQuery } from '@apollo/react-hooks'
-import { FIND_MANY_CATEGORY } from '../gqls/category/queries'
-import { useHistory } from 'react-router-dom'
+import {Title} from '../components/defaultTexts'
+import {Button, Table, Tag} from 'antd'
+import {useQuery} from '@apollo/react-hooks'
+import {FIND_MANY_CATEGORY} from '../gqls/category/queries'
+import {useHistory} from 'react-router-dom'
+import UpdateTemplate from "../components/updateTemplate"
 
-const { Column } = Table
+const {Column} = Table
 
 const Container = styled.div`
     display: flex;
@@ -30,8 +31,8 @@ const enumColorMap = {
 }
 const Category = () => {
     const [dataSource, setDataSource] = useState([])
-    const { loading } = useQuery(FIND_MANY_CATEGORY, {
-        onCompleted: ({ findManyCategory }) => {
+    const {loading} = useQuery(FIND_MANY_CATEGORY, {
+        onCompleted: ({findManyCategory}) => {
             setDataSource(findManyCategory)
         },
         errorPolicy: 'ignore'
@@ -39,20 +40,37 @@ const Category = () => {
 
     const history = useHistory()
 
+    const expandedRowRender = (data) => {
+        return (
+            <UpdateTemplate
+                data={data}
+                oldDataSource={dataSource}
+                setDataSource={setDataSource}
+            />
+        )
+    }
+
     return (
         <Container>
             <Title>Список категории</Title>
             <Button
                 type={'dashed'}
-                style={{ marginTop: 16, maxWidth: 200 }}
+                style={{marginTop: 16, maxWidth: 200}}
                 onClick={() => {
                     history.push('/authorized/addCategory')
                 }}
             >
                 Добавить категорию
             </Button>
-            <Table style={{ flex: 1, marginTop: 24 }} dataSource={dataSource} loading={loading}>
-                <Column title={'Название'} dataIndex={'name'} key={'name'} />
+            <Table
+                rowKey={(obj) => obj.id}
+                style={{flex: 1, marginTop: 24}}
+                dataSource={dataSource}
+                loading={loading}
+                expandable={{expandedRowRender}}
+
+            >
+                <Column title={'Название'} dataIndex={'name'} key={'name'}/>
                 <Column
                     title={'Вид категории'}
                     dataIndex={'types'}
