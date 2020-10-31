@@ -116,15 +116,10 @@ const AddCategory = () => {
                         Добавить
                     </Button>
                     <Button
-                        onClick={
-                            () => {
-                                history.goBack()
-                            }
-                        }
+                        onClick={history.goBack}
                     >
                         Назад
                     </Button>
-
                 </ButtonsContainer>
             </Form>
         </Container>
