@@ -5,6 +5,7 @@ import {useHistory} from "react-router-dom"
 import {Title} from "../components/defaultTexts"
 import {useQuery} from "@apollo/react-hooks"
 import {FIND_MANY_TEMPLATE} from "../gqls/template/queries"
+import UpdateTemplate from "../components/updateTemplate"
 
 const {Column} = Table
 
@@ -47,14 +48,13 @@ const Template = () => {
     const history = useHistory()
 
     const expandedRowRender = (data) => {
-        /*return (
-            <UpdateService
+        return (
+            <UpdateTemplate
                 data={data}
                 oldDataSource={dataSource}
                 setDataSource={setDataSource}
             />
-        )*/
-        return null
+        )
     }
 
     return (

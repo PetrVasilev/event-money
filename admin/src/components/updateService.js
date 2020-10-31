@@ -60,7 +60,7 @@ const UpdateService = ({data, oldDataSource, setDataSource}) => {
         update({
             variables: {
                 data: {
-                    amount: {set: args.amount},
+                    amount: {set: args.amount.toString()},
                     category: {
                         connect: {
                             id: args.category
