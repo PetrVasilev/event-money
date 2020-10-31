@@ -8,6 +8,7 @@ const Container = styled.div`
     justify-content: center;
     align-items: center;
 `
+
 const LoadingBar = () => {
     return (
         <Container>
@@ -15,4 +16,5 @@ const LoadingBar = () => {
         </Container>
     )
 }
+
 export default LoadingBar

@@ -14,6 +14,7 @@ const Container = styled.div`
     flex: 1;
     flex-direction: column;
 `
+
 const Fields = styled.div`
     margin-top: 24px;
     display: flex;
@@ -31,6 +32,7 @@ const Fields = styled.div`
         flex-direction: column;
     }
 `
+
 const typeEnum = [
     {
         id: 'OTHER',

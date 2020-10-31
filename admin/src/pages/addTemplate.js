@@ -1,15 +1,15 @@
-import React, {useState} from 'react'
+import React, { useState } from 'react'
 import styled from 'styled-components'
-import {Title} from "../components/defaultTexts"
-import AddField from "../components/addField"
-import {useApolloClient, useMutation, useQuery} from "@apollo/react-hooks"
-import {Button, message, Switch} from "antd"
-import AddFieldSelect from "../components/addFieldSelect"
-import {CREATE_ONE_TEMPLATE} from "../gqls/template/mutations"
-import {FIND_MANY_SERVICE} from "../gqls/service/queries"
-import AddFieldNumber from "../components/addFieldNumber"
-import {useHistory} from "react-router-dom"
-import {FIND_MANY_TEMPLATE} from "../gqls/template/queries"
+import { Title } from '../components/defaultTexts'
+import AddField from '../components/addField'
+import { useApolloClient, useMutation, useQuery } from '@apollo/react-hooks'
+import { Button, message, Switch } from 'antd'
+import AddFieldSelect from '../components/addFieldSelect'
+import { CREATE_ONE_TEMPLATE } from '../gqls/template/mutations'
+import { FIND_MANY_SERVICE } from '../gqls/service/queries'
+import AddFieldNumber from '../components/addFieldNumber'
+import { useHistory } from 'react-router-dom'
+import { FIND_MANY_TEMPLATE } from '../gqls/template/queries'
 
 const Container = styled.div`
     display: flex;
@@ -71,9 +71,9 @@ const AddTemplate = () => {
 
     const history = useHistory()
 
-    const {loading: queryLoading} = useQuery(FIND_MANY_SERVICE, {
+    const { loading: queryLoading } = useQuery(FIND_MANY_SERVICE, {
         errorPolicy: 'ignore',
-        onCompleted: ({findManyService}) => {
+        onCompleted: ({ findManyService }) => {
             setServiceArray(findManyService)
         },
         variables: {
@@ -81,20 +81,17 @@ const AddTemplate = () => {
         }
     })
 
-    const [save, {loading}] = useMutation(CREATE_ONE_TEMPLATE, {
-        onCompleted: async ({createOneTemplate}) => {
+    const [save, { loading }] = useMutation(CREATE_ONE_TEMPLATE, {
+        onCompleted: async ({ createOneTemplate }) => {
             try {
-                const {data} = await apollo.readQuery({query: FIND_MANY_TEMPLATE})
+                const { data } = await apollo.readQuery({ query: FIND_MANY_TEMPLATE })
                 await apollo.writeQuery({
                     query: FIND_MANY_TEMPLATE,
                     data: [...data, createOneTemplate]
                 })
-            } catch (e) {
-
-            }
+            } catch (e) {}
             message.success('Добавлено')
             history.goBack()
-
         },
         onError: (error) => {
             message.error('Что то пошло не так')
@@ -115,7 +112,7 @@ const AddTemplate = () => {
                 name,
                 services: {
                     connect: service.map((item) => {
-                        return {id: item}
+                        return { id: item }
                     })
                 },
                 amount: amount.toString(),
@@ -140,7 +137,7 @@ const AddTemplate = () => {
         <Container>
             <Title>Добавление шаблона</Title>
             <Switch
-                style={{maxWidth: 100, marginTop: 16}}
+                style={{ maxWidth: 100, marginTop: 16 }}
                 checkedChildren={'Авторасчет'}
                 unCheckedChildren={'Авторасчет'}
                 value={autoCalc}
@@ -203,7 +200,7 @@ const AddTemplate = () => {
             </Fields>
 
             <Button
-                style={{marginTop: 16, maxWidth: 200}}
+                style={{ marginTop: 16, maxWidth: 200 }}
                 type={'primary'}
                 onClick={onSave}
                 loading={loading}
@@ -211,17 +208,13 @@ const AddTemplate = () => {
                 Добавить
             </Button>
             <Button
-                style={{marginTop: 16, maxWidth: 200}}
-                onClick={
-                    () => {
-                        history.goBack()
-                    }
-                }
+                style={{ marginTop: 16, maxWidth: 200 }}
+                onClick={() => {
+                    history.goBack()
+                }}
             >
                 Назад
             </Button>
-
-
         </Container>
     )
 }

@@ -1,4 +1,5 @@
 import 'antd/dist/antd.css'
+
 import React, { useEffect, useState } from 'react'
 import { BrowserRouter as Router, Redirect, Route, Switch } from 'react-router-dom'
 import { ApolloProvider } from '@apollo/react-hooks'
@@ -18,6 +19,7 @@ import Template from './pages/template'
 const App = () => {
     const [loading, setLoading] = useState(true)
     const [admin, setAdmin] = useState()
+
     useEffect(() => {
         apollo
             .watchQuery({
@@ -38,6 +40,7 @@ const App = () => {
         <ApolloProvider client={apollo}>
             <Router>
                 {!loading && !admin ? <Redirect to={'/login'} /> : null}
+                {admin && window.location.pathname === '/' && <Redirect to={'/authorized'} />}
                 <Route exact path={'/login'} component={Login} />
                 <Route exact path="/authorized/:path?/">
                     <Sider />

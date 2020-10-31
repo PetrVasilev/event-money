@@ -34,6 +34,7 @@ const Category = () => {
         onCompleted: ({ findManyCategory }) => {
             setDataSource(findManyCategory)
         },
+        fetchPolicy: 'network-only',
         errorPolicy: 'ignore'
     })
 
@@ -51,7 +52,12 @@ const Category = () => {
             >
                 Добавить категорию
             </Button>
-            <Table style={{ flex: 1, marginTop: 24 }} dataSource={dataSource} loading={loading}>
+            <Table
+                rowKey={(obj) => obj.id}
+                style={{ flex: 1, marginTop: 24 }}
+                dataSource={dataSource}
+                loading={loading}
+            >
                 <Column title={'Название'} dataIndex={'name'} key={'name'} />
                 <Column
                     title={'Вид категории'}

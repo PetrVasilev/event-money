@@ -1,18 +1,19 @@
-import React, {useState} from 'react'
+import React from 'react'
 import styled from 'styled-components'
-import {Button, Table, Tag} from "antd"
-import {useHistory} from "react-router-dom"
-import {Title} from "../components/defaultTexts"
-import {useQuery} from "@apollo/react-hooks"
-import {FIND_MANY_TEMPLATE} from "../gqls/template/queries"
-import UpdateTemplate from "../components/updateTemplate"
+import { Button, Table, Tag } from 'antd'
+import { useHistory } from 'react-router-dom'
+import { useQuery } from '@apollo/react-hooks'
 
-const {Column} = Table
+import { Title } from '../components/defaultTexts'
+import { FIND_MANY_TEMPLATE } from '../gqls/template/queries'
+import UpdateTemplate from '../components/updateTemplate'
+
+const { Column } = Table
 
 const Container = styled.div`
-  display: flex;
-  flex: 1;
-  flex-direction: column;
+    display: flex;
+    flex: 1;
+    flex-direction: column;
 `
 
 const enumMap = {
@@ -31,103 +32,62 @@ const enumColorMap = {
 }
 
 const Template = () => {
-    const [dataSource, setDataSource] = useState([])
-    const {loading} = useQuery(FIND_MANY_TEMPLATE, {
-        onCompleted: ({findManyTemplate}) => {
-            setDataSource(findManyTemplate.map(
-                (item) => {
-                    item.key = item.id
-                    return item
-                }
-            ))
-        },
-        errorPolicy: "ignore",
-        fetchPolicy:'network-only',
-        variables: {where: {}}
+    const { loading, data } = useQuery(FIND_MANY_TEMPLATE, {
+        errorPolicy: 'ignore',
+        fetchPolicy: 'network-only'
     })
 
     const history = useHistory()
 
-    const expandedRowRender = (data) => {
-        return (
-            <UpdateTemplate
-                data={data}
-                oldDataSource={dataSource}
-                setDataSource={setDataSource}
-            />
-        )
-    }
+    const dataSource = data ? data.findManyTemplate : []
+
+    const expandedRowRender = (data) => <UpdateTemplate data={data} />
 
     return (
         <Container>
             <Title>Список шаблонов</Title>
             <Button
                 type={'dashed'}
-                style={{marginTop: 16, maxWidth: 200}}
-                onClick={
-                    () => {
-                        history.push('/authorized/addTemplate')
-                    }
-                }
+                style={{ marginTop: 16, maxWidth: 200 }}
+                onClick={() => {
+                    history.push('/authorized/addTemplate')
+                }}
             >
                 Добавить услугу
             </Button>
             <Table
-                style={{flex: 1, marginTop: 24}}
+                style={{ flex: 1, marginTop: 24 }}
                 dataSource={dataSource}
                 loading={loading}
-                expandable={{expandedRowRender}}
+                expandable={{ expandedRowRender }}
+                rowKey={(obj) => obj.id}
             >
-                <Column
-                    title={'Название'}
-                    dataIndex={'name'}
-                    key={'name'}
-                />
-                <Column
-                    title={'Цена'}
-                    dataIndex={'amount'}
-                    key={'amount'}
-                />
-                <Column
-                    title={'Описание'}
-                    dataIndex={'description'}
-                    key={'description'}
-                />
+                <Column title={'Название'} dataIndex={'name'} key={'name'} />
+                <Column title={'Цена'} dataIndex={'amount'} key={'amount'} />
+                <Column title={'Описание'} dataIndex={'description'} key={'description'} />
                 <Column
                     title={'Тип мероприятия'}
                     dataIndex={'types'}
                     key={'types'}
-                    render={
-                        (types) => {
+                    render={(types) => {
+                        return types.map((item, index) => {
                             return (
-                                types.map(
-                                    (item, index) => {
-                                        return (
-                                            <Tag key={index} color={enumColorMap[item]}>{enumMap[item]}</Tag>
-                                        )
-                                    }
-                                )
+                                <Tag key={index} color={enumColorMap[item]}>
+                                    {enumMap[item]}
+                                </Tag>
                             )
-                        }
-                    }
+                        })
+                    }}
                 />
                 <Column
                     title={'Услуги'}
                     dataIndex={'services'}
                     key={'services'}
-                    render={
-                        (services) => {
-                            return (
-                                services.map(
-                                    (item, index) => {
-                                        return (
-                                            <Tag key={index}>{item.name}</Tag>
-                                        )
-                                    }
-                                )
-                            )
-                        }
-                    }
+                    render={(services) => {
+                        return services.map((item, index) => {
+                            return <Tag key={index}>{item.name}</Tag>
+                        })
+                    }}
                 />
             </Table>
         </Container>

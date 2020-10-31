@@ -2,18 +2,18 @@ import gql from 'graphql-tag'
 
 export const FIND_MANY_TEMPLATE = gql`
     query {
-        findManyTemplate{
+        findManyTemplate {
             id
             description
             name
             amount
             types
-            services{
+            services {
                 id
                 name
                 amount
                 description
-                category{
+                category {
                     name
                     types
                     id

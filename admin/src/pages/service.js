@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React from 'react'
 import styled from 'styled-components'
 import { Button, Table, Tag } from 'antd'
 import { useHistory } from 'react-router-dom'
@@ -16,27 +16,16 @@ const Container = styled.div`
 `
 
 const Service = () => {
-    const [dataSource, setDataSource] = useState([])
-    const { loading } = useQuery(FIND_MANY_SERVICE, {
-        onCompleted: ({ findManyService }) => {
-            setDataSource(
-                findManyService.map((item) => {
-                    item.key = item.id
-                    return item
-                })
-            )
-        },
+    const { loading, data } = useQuery(FIND_MANY_SERVICE, {
         errorPolicy: 'ignore',
-        variables: { where: {} }
+        fetchPolicy: 'network-only'
     })
 
     const history = useHistory()
 
-    const expandedRowRender = (data) => {
-        return (
-            <UpdateService data={data} oldDataSource={dataSource} setDataSource={setDataSource} />
-        )
-    }
+    const dataSource = data ? data.findManyService : []
+
+    const expandedRowRender = (data) => <UpdateService data={data} />
 
     return (
         <Container>
@@ -54,6 +43,7 @@ const Service = () => {
                 style={{ flex: 1, marginTop: 24 }}
                 dataSource={dataSource}
                 loading={loading}
+                rowKey={(obj) => obj.id}
                 expandable={{ expandedRowRender }}
             >
                 <Column title={'Название'} dataIndex={'name'} key={'name'} />
