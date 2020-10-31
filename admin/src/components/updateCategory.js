@@ -137,7 +137,6 @@ const UpdateCategory = ({data}) => {
                         </Button>
                     </Popconfirm>
                 </ButtonsContainer>
-
             </Form>
         </Container>
     )
