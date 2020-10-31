@@ -257,15 +257,18 @@ const Event = ({ route, navigation }) => {
                                         {item.name}
                                     </Text>
                                 </View>
-                                {item.id.toString() !== localStorage.getItem('userId') && (
-                                    <TouchableOpacity onPress={() => deleteOrganizator(item.id)}>
-                                        <Ionicons
-                                            name="trash-outline"
-                                            style={{ color: 'red' }}
-                                            size={20}
-                                        />
-                                    </TouchableOpacity>
-                                )}
+                                {index !== 0 &&
+                                    item.id.toString() !== localStorage.getItem('userId') && (
+                                        <TouchableOpacity
+                                            onPress={() => deleteOrganizator(item.id)}
+                                        >
+                                            <Ionicons
+                                                name="trash-outline"
+                                                style={{ color: 'red' }}
+                                                size={20}
+                                            />
+                                        </TouchableOpacity>
+                                    )}
                             </View>
                         ))}
                         <TouchableOpacity
