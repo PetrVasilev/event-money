@@ -6,6 +6,7 @@ const Event = gql`
     createdAt: DateTime!
     updatedAt: DateTime!
     name: String!
+    type: TypeEnum!
     users(
       where: UserWhereInput
       orderBy: UserOrderByInput
@@ -67,6 +68,13 @@ const Event = gql`
       data: EventUpdateInput!
     ): Event!
     deleteOneEvent(where: EventWhereUniqueInput!): Event
+  }
+  enum TypeEnum {
+      OTHER
+      WEDDING
+      BIRTHDAY
+      STAG
+      MATINEE
   }
 `
 
