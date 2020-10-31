@@ -135,26 +135,15 @@ const CreateEvent = ({ navigation }) => {
                         amount: item.amount,
                         category: {
                             connect: { id: item.category.id }
+                        },
+                        service: {
+                            connect: { id: item.id }
                         }
                     }
                 })
                 spendings = { create }
             }
         }
-        // console.log({
-        //     variables: {
-        //         data: {
-        //             name,
-        //             date: moment(date, 'DD.MM.YYYY'),
-        //             amount: budget,
-        //             users: {
-        //                 connect: [{ id: userId }]
-        //             },
-        //             type: selectedCategory,
-        //             spendings: template ? spendings : undefined
-        //         }
-        //     }
-        // })
         createEvent({
             variables: {
                 data: {
