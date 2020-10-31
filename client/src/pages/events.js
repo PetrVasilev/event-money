@@ -6,6 +6,7 @@ import { useQuery } from '@apollo/client'
 
 import { FIND_MANY_EVENTS } from '../gqls/event'
 import LoadingView from '../components/loadingView'
+import { categories } from '../utils'
 
 const Events = ({ navigation }) => {
     const { data, loading } = useQuery(FIND_MANY_EVENTS, {
@@ -47,7 +48,9 @@ const Events = ({ navigation }) => {
                         >
                             <Text style={styles.eventTitle}>{item.name}</Text>
                             <View style={styles.eventBottom}>
-                                <Text style={styles.eventCategory}>{item.category}</Text>
+                                <Text style={styles.eventCategory}>
+                                    {categories.find((i) => i.value === item.type).lable}
+                                </Text>
                                 <Text style={styles.eventCreated}>
                                     {moment(item.date).format('DD.MM.YYYY')}
                                 </Text>
