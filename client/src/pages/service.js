@@ -1,14 +1,5 @@
 import React from 'react'
-import {
-    ScrollView,
-    StyleSheet,
-    Dimensions,
-    View,
-    Text,
-    TouchableOpacity
-} from 'react-native'
-
-const { width, height } = Dimensions.get("screen")
+import { ScrollView, StyleSheet, View, Text, TouchableOpacity } from 'react-native'
 
 const Service = ({ navigation, route }) => {
     const { service, selected, setService } = route.params
@@ -22,10 +13,8 @@ const Service = ({ navigation, route }) => {
         navigation.goBack()
     }
 
-    console.log(service)
-
     return (
-        <ScrollView style={styles.container} contentContainerStyle={{ alignItems: "center" }}>
+        <ScrollView style={styles.container} contentContainerStyle={{ alignItems: 'center' }}>
             <Text style={styles.textInfo}>Общая информация</Text>
             <View style={styles.bottom}>
                 <View style={styles.bottomSpending}>
@@ -45,10 +34,17 @@ const Service = ({ navigation, route }) => {
             </View>
             <TouchableOpacity
                 activeOpacity={0.8}
-                style={[styles.button, selected ? { backgroundColor: "transparent", borderColor: '#4b76a8', borderWidth: 1 } : null]}
+                style={[
+                    styles.button,
+                    selected
+                        ? { backgroundColor: 'transparent', borderColor: '#4b76a8', borderWidth: 1 }
+                        : null
+                ]}
                 onPress={onSubmit}
             >
-                <Text style={[styles.buttonText, selected ? { color: "#4b76a8" } : null]}>{selected ? "Отказаться от услуги" : "Выбрать услугу"}</Text>
+                <Text style={[styles.buttonText, selected ? { color: '#4b76a8' } : null]}>
+                    {selected ? 'Отказаться от услуги' : 'Выбрать услугу'}
+                </Text>
             </TouchableOpacity>
         </ScrollView>
     )
@@ -56,18 +52,17 @@ const Service = ({ navigation, route }) => {
 
 const styles = StyleSheet.create({
     container: {
-        width,
-        height: height - 60,
-        backgroundColor: '#fafafa',
+        height: window.innerHeight - 60,
+        backgroundColor: '#fafafa'
     },
     textInfo: {
         fontSize: 14,
         color: 'gray',
         marginVertical: 10,
-        width: "90%"
+        width: '90%'
     },
     bottom: {
-        width: "90%",
+        width: '90%',
         backgroundColor: 'white',
         padding: 10,
         borderColor: 'rgb(216, 216, 216)',
