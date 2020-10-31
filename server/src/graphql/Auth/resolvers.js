@@ -1,3 +1,5 @@
+const bcrypt = require('bcryptjs')
+const jwt = require('jsonwebtoken')
 const Auth = {
   Query: {
     admin: async (_parent, args, { prisma, access }) => {
@@ -38,7 +40,10 @@ const Auth = {
       const compare = bcrypt.compareSync(password, exist.password)
       if (!compare) throw new Error('password incorrect')
       const token = jwt.sign({ id: exist.id }, process.env.ADMIN_ACCESS_TOKEN_SECRET)
-      return token
+      return {
+        token,
+        admin:exist
+      }
     },
   },
 }
