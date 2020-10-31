@@ -1,6 +1,6 @@
 import React, { useState } from 'react'
 import styled from 'styled-components'
-import { Button, Form, Input, InputNumber, message, Popconfirm, Select } from 'antd'
+import { Button, Form, Input, message, Popconfirm, Select } from 'antd'
 import { useMutation } from '@apollo/react-hooks'
 import { DELETE_ONE_CATEGORY, UPDATE_ONE_CATEGORY } from '../gqls/category/mutations'
 import { FIND_MANY_CATEGORY } from '../gqls/category/queries'
