@@ -1,8 +1,8 @@
 import React from 'react'
-import { ScrollView, View, StyleSheet, Text, TouchableOpacity } from 'react-native'
 import Ionicons from 'react-native-vector-icons/dist/Ionicons'
-import { PieChart } from 'react-minimal-pie-chart'
 import randomColor from 'randomcolor'
+import { ScrollView, View, StyleSheet, Text, TouchableOpacity } from 'react-native'
+import { PieChart } from 'react-minimal-pie-chart'
 import { useQuery } from '@apollo/client'
 
 import { FIND_MANY_SPENDING } from '../gqls/spending'
@@ -20,15 +20,28 @@ const Event = ({ route, navigation }) => {
 
     const spendings = data && data.findManySpending ? data.findManySpending : []
 
-    let coloredSpendings = spendings.map((item) => {
-        return {
-            ...item,
-            color: randomColor({
-                hue: 'orange, yellow, blue, purple, pink',
-                luminosity: 'dark'
-            })
+    let coloredSpendings = spendings.reduce((acc, current) => {
+        const exist = acc.find((item) => item.category.id === current.category.id)
+        if (!exist) {
+            return [
+                ...acc,
+                {
+                    ...current,
+                    color: randomColor({
+                        hue: 'orange, yellow, blue, purple, pink',
+                        luminosity: 'dark'
+                    })
+                }
+            ]
         }
-    })
+        return [
+            ...acc,
+            {
+                ...current,
+                color: exist.color
+            }
+        ]
+    }, [])
 
     const spendingsView = coloredSpendings.map((item, index) => {
         const isLast = spendings.length - 1 === index
@@ -46,11 +59,28 @@ const Event = ({ route, navigation }) => {
                     <Ionicons
                         name="disc"
                         style={{ color: item.color, marginRight: 10 }}
-                        size={25}
+                        size={20}
                     />
-                    <Text style={styles.spendingName}>{item.category.name}</Text>
+                    <View>
+                        <Text style={styles.spendingName}>{item.category.name}</Text>
+                        {item.description && (
+                            <Text
+                                numberOfLines={1}
+                                style={{
+                                    fontSize: 11,
+                                    color: 'gray',
+                                    marginTop: 3,
+                                    width: window.innerWidth * 0.45
+                                }}
+                            >
+                                {item.description}
+                            </Text>
+                        )}
+                    </View>
                 </View>
-                <Text style={styles.spendingPrice}>{item.amount} руб.</Text>
+                <Text numberOfLines={2} style={styles.spendingPrice}>
+                    {item.amount} руб.
+                </Text>
             </TouchableOpacity>
         )
     })
@@ -158,7 +188,8 @@ const styles = StyleSheet.create({
         fontSize: 14
     },
     spendingPrice: {
-        fontSize: 14
+        fontSize: 14,
+        textAlign: 'right'
     },
     line: {
         borderBottomWidth: 1,
