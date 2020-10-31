@@ -9,7 +9,10 @@ import { FIND_MANY_EVENTS } from '../gqls/event'
 const Events = ({ navigation }) => {
 
     const { data, loading } = useQuery(FIND_MANY_EVENTS, {
-        fetchPolicy: "network-only"
+        fetchPolicy: "network-only",
+        where: {
+            id: localStorage.getItem("userId")
+        }
     })
 
     const events = data && data.findManyEvent ? data.findManyEvent : []

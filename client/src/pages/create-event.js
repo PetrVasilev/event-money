@@ -11,35 +11,34 @@ import {
 } from 'react-native'
 import Ionicons from 'react-native-vector-icons/dist/Ionicons'
 import IMask from 'imask'
-import { useMutation, useQuery } from '@apollo/client'
+import { useMutation } from '@apollo/client'
 import moment from 'moment'
 
 import LoadingView from '../components/loadingView'
 import { CREATE_ONE_EVENT, FIND_MANY_EVENTS } from '../gqls/event'
-import { FIND_MANY_CATEGORY } from '../gqls/category'
 import { } from '../utils'
 
 const { width } = Dimensions.get('window')
 
 const categories = [
     {
-        value: '1',
+        value: 'WEDDING',
         lable: 'Свадьба'
     },
     {
-        value: '2',
+        value: 'BIRTHDAY',
         lable: 'День рождения'
     },
     {
-        value: '3',
+        value: 'MATINEE',
         lable: 'Утренник'
     },
     {
-        value: '4',
+        value: 'STAG',
         lable: 'Мальчишник/Девишник'
     },
     {
-        value: 'other',
+        value: 'OTHER',
         lable: 'Другое'
     }
 ]
@@ -66,23 +65,11 @@ const dateMask = IMask.createMask({
 })
 
 const CreateEvent = ({ navigation }) => {
-    const [selectedCategory, setSelectedCategory] = useState("")
+    const [selectedCategory, setSelectedCategory] = useState(categories[0].value)
     const [name, setName] = useState('')
     const [ownCategory, setOwnCategory] = useState('')
     const [date, setDate] = useState('')
     const [budget, setBudget] = useState('')
-
-    const { data } = useQuery(FIND_MANY_CATEGORY, {
-        fetchPolicy: "network-only",
-        onCompleted: ({ findManyCategory }) => {
-            console.log(findManyCategory)
-            if (findManyCategory.length > 0) {
-                setSelectedCategory(findManyCategory[0].id)
-            }
-        }
-    })
-
-    const categories = data && data.findManyCategory ? data.findManyCategory : []
 
     const [createEvent, { loading }] = useMutation(CREATE_ONE_EVENT, {
         onCompleted: () => {
@@ -91,12 +78,15 @@ const CreateEvent = ({ navigation }) => {
         onError: e => {
             console.error(e)
         },
-        update: async (client, { createOneCategory }) => {
+        update: async (client, { data }) => {
             let prev = await client.readQuery({ query: FIND_MANY_EVENTS })
             await client.writeQuery({
                 query: FIND_MANY_EVENTS,
+                where: {
+                    id: localStorage.getItem("userId")
+                },
                 data: {
-                    findManyCategory: [createOneCategory, ...prev.findManyCategory]
+                    findManyEvent: [data.createOneEvent, ...prev.findManyEvent]
                 }
             })
         }
@@ -118,9 +108,6 @@ const CreateEvent = ({ navigation }) => {
         if (!selectedCategory) {
             alert("Выберете категорию")
             return false
-        } else if (selectedCategory === "other" && !ownCategory) {
-            alert("Введит свой вариант")
-            return false
         }
         createEvent({
             variables: {
@@ -130,7 +117,8 @@ const CreateEvent = ({ navigation }) => {
                     amount: budget,
                     users: {
                         connect: [{ id: userId }]
-                    }
+                    },
+                    type: selectedCategory
                 }
             }
         })
@@ -175,7 +163,7 @@ const CreateEvent = ({ navigation }) => {
                         }}
                     >
                         {categories.map((item, index) => (
-                            <Picker.Item key={item.id} value={item.id} label={item.name} />
+                            <Picker.Item key={item.value} value={item.value} label={item.lable} />
                         ))}
                     </Picker>
                     <Ionicons
@@ -185,17 +173,6 @@ const CreateEvent = ({ navigation }) => {
                         size={22}
                     />
                 </View>
-                {selectedCategory === 'other' ? (
-                    <>
-                        <Text style={styles.label}>Своя категория</Text>
-                        <TextInput
-                            value={ownCategory}
-                            onChangeText={(text) => setOwnCategory(text)}
-                            style={styles.textInput}
-                            placeholder="Введите свой вариант"
-                        />
-                    </>
-                ) : null}
                 <TouchableOpacity style={styles.button} onPress={onSubmit}>
                     <Text style={styles.buttonText}>Создать</Text>
                 </TouchableOpacity>
