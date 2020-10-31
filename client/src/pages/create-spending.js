@@ -36,7 +36,9 @@ const CreateSpending = ({ navigation, route }) => {
                           )
                         : data.findManyCategory
                     : []
-            setSelectedCategory(categoriesArray[0].id)
+            if (categoriesArray.length > 0) {
+                setSelectedCategory(categoriesArray[0].id)
+            }
         }
     })
 

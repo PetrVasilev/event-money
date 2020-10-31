@@ -20,6 +20,11 @@ export const FIND_MANY_EVENTS = gql`
                 }
             }
             type
+            users {
+                id
+                name
+                avatar
+            }
         }
     }
 `
@@ -43,6 +48,40 @@ export const CREATE_ONE_EVENT = gql`
                 }
             }
             type
+            users {
+                id
+                name
+                avatar
+            }
+        }
+    }
+`
+
+export const UPDATE_ONE_EVENT = gql`
+    mutation($where: EventWhereUniqueInput!, $data: EventUpdateInput!) {
+        updateOneEvent(where: $where, data: $data) {
+            id
+            createdAt
+            name
+            amount
+            type
+            spendings {
+                id
+                createdAt
+                amount
+                description
+                category {
+                    id
+                    name
+                    types
+                }
+            }
+            type
+            users {
+                id
+                name
+                avatar
+            }
         }
     }
 `
