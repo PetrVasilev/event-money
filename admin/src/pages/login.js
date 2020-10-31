@@ -5,7 +5,6 @@ import {useHistory} from 'react-router-dom'
 import {useApolloClient, useMutation} from '@apollo/react-hooks'
 import {SIGN_IN_ADMIN} from "../gqls/auth/mutations"
 import {ADMIN} from "../gqls/auth/queries"
-import LoadingBar from "../components/loadingBar"
 
 const Container = styled.div`
   flex: 1;
@@ -99,7 +98,7 @@ const Login = () => {
                     value={password}
                     type={'password'}
                     onKeyDown={
-                        (e)=>{
+                        (e) => {
                             if (e.key === 'Enter') {
                                 onSign()
                             }
@@ -108,17 +107,14 @@ const Login = () => {
 
                 />
 
-                {
-                    loading ?
-                        <LoadingBar/>
-                        :
-                        <Button
-                            style={{marginTop: 16, maxWidth: 200, alignSelf: 'center'}}
-                            type={'primary'}
-                            onClick={onSign}
-                        >
-                            Войти
-                        </Button>}
+                <Button
+                    style={{marginTop: 16, maxWidth: 200, alignSelf: 'center'}}
+                    type={'primary'}
+                    onClick={onSign}
+                    loading={loading}
+                >
+                    Войти
+                </Button>
             </ContentContainer>
         </Container>
     )
