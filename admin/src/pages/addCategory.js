@@ -5,7 +5,6 @@ import AddField from "../components/addField"
 import {useMutation} from "@apollo/react-hooks"
 import {Button, message} from "antd"
 import {CREATE_ONE_CATEGORY} from "../gqls/category/mutations"
-import LoadingBar from "../components/loadingBar"
 import AddFieldSelect from "../components/addFieldSelect"
 
 const Container = styled.div`
@@ -94,11 +93,6 @@ const AddCategory = () => {
 
     }
 
-    if (loading)
-        return (
-            <LoadingBar/>
-        )
-
     return (
         <Container>
             <Title>Добавление категории</Title>
@@ -132,6 +126,7 @@ const AddCategory = () => {
                 style={{marginTop: 16, maxWidth: 200}}
                 type={'primary'}
                 onClick={onSave}
+                loading={loading}
             >
                 Добавить
             </Button>

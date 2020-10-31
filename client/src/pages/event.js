@@ -3,35 +3,24 @@ import { ScrollView, View, StyleSheet, Text, TouchableOpacity } from 'react-nati
 import Ionicons from 'react-native-vector-icons/dist/Ionicons'
 import { PieChart } from 'react-minimal-pie-chart'
 import randomColor from 'randomcolor'
+import { useQuery } from '@apollo/client'
 
-const spendings = [
-    {
-        id: 1,
-        name: 'Фотограф',
-        price: 10000,
-        createdAt: new Date(),
-        icon: ''
-    },
-    {
-        id: 2,
-        name: 'Видеограф',
-        price: 15000,
-        createdAt: new Date()
-    },
-    {
-        id: 3,
-        name: 'Тамада',
-        price: 10000,
-        createdAt: new Date()
-    }
-]
+import { FIND_MANY_SPENDING } from '../gqls/spending'
 
 const Event = ({ route, navigation }) => {
     const { event } = route.params
     let leavePrice = event.amount
     let spendingPrice = 0
 
-    let coloredSpendings = event.spendings.map((item) => {
+    const { data } = useQuery(FIND_MANY_SPENDING, {
+        variables: {
+            where: { event: { id: { equals: event.id } } }
+        }
+    })
+
+    const spendings = data && data.findManySpending ? data.findManySpending : []
+
+    let coloredSpendings = spendings.map((item) => {
         return {
             ...item,
             color: randomColor({
@@ -44,11 +33,11 @@ const Event = ({ route, navigation }) => {
     const spendingsView = coloredSpendings.map((item, index) => {
         const isLast = spendings.length - 1 === index
         const additionalStyle = { marginBottom: isLast ? 0 : 10 }
-        leavePrice -= item.price
-        spendingPrice += item.price
+        leavePrice -= parseInt(item.amount)
+        spendingPrice += parseInt(item.amount)
         return (
             <TouchableOpacity
-                onPress={() => navigation.navigate('Spending', { spending: item })}
+                onPress={() => navigation.navigate('Spending', { spending: item, event })}
                 activeOpacity={0.6}
                 key={item.id}
                 style={[styles.card, additionalStyle]}
@@ -59,9 +48,9 @@ const Event = ({ route, navigation }) => {
                         style={{ color: item.color, marginRight: 10 }}
                         size={25}
                     />
-                    <Text style={styles.spendingName}>{item.name}</Text>
+                    <Text style={styles.spendingName}>{item.category.name}</Text>
                 </View>
-                <Text style={styles.spendingPrice}>{item.price} руб.</Text>
+                <Text style={styles.spendingPrice}>{item.amount} руб.</Text>
             </TouchableOpacity>
         )
     })
@@ -72,7 +61,7 @@ const Event = ({ route, navigation }) => {
             <View style={styles.bottom}>
                 <View style={styles.bottomPrice}>
                     <Text style={{ color: 'green' }}>Бюджет</Text>
-                    <Text>{event.amount} руб.</Text>
+                    <Text>{event.amount ? event.amount : spendingPrice} руб.</Text>
                 </View>
                 <View style={styles.bottomSpending}>
                     <Text style={{ color: 'red' }}>Расходы</Text>
@@ -80,44 +69,50 @@ const Event = ({ route, navigation }) => {
                 </View>
                 <View style={styles.bottomLeave}>
                     <Text style={{ color: 'gray' }}>Остаток</Text>
-                    <Text>{leavePrice} руб.</Text>
+                    <Text>{leavePrice ? leavePrice : 0} руб.</Text>
                 </View>
             </View>
-            <View
-                style={[
-                    styles.card,
-                    {
-                        marginTop: 15,
-                        marginBottom: 0,
-                        alignItems: 'center',
-                        justifyContent: 'center',
-                        paddingVertical: 20
-                    }
-                ]}
-            >
-                <View style={{ height: 160, width: '73%' }}>
-                    <PieChart
-                        data={[
+            {coloredSpendings.length > 0 || event.amount ? (
+                leavePrice ? (
+                    <View
+                        style={[
+                            styles.card,
                             {
-                                title: 'Остаток',
-                                value: leavePrice < 0 ? 0 : leavePrice,
-                                color: '#52d726'
-                            },
-                            ...coloredSpendings.map((item) => ({
-                                title: item.name,
-                                value: item.price,
-                                color: item.color
-                            }))
+                                marginTop: 15,
+                                marginBottom: 0,
+                                alignItems: 'center',
+                                justifyContent: 'center',
+                                paddingVertical: 20
+                            }
                         ]}
-                        lineWidth={20}
-                        paddingAngle={1}
-                    />
-                </View>
-            </View>
+                    >
+                        <View style={{ height: 160, width: '73%' }}>
+                            <PieChart
+                                data={[
+                                    {
+                                        title: 'Остаток',
+                                        value: leavePrice < 0 ? 0 : leavePrice,
+                                        color: '#52d726'
+                                    },
+                                    ...coloredSpendings.map((item) => ({
+                                        title: item.category.name,
+                                        value: parseInt(item.amount),
+                                        color: item.color
+                                    }))
+                                ]}
+                                lineWidth={20}
+                                paddingAngle={1}
+                            />
+                        </View>
+                    </View>
+                ) : null
+            ) : null}
             <Text style={[styles.textInfo, { marginTop: 15 }]}>Расходы</Text>
-            {event.spendings.length > 0 ? spendingsView : (
+            {spendings.length > 0 ? (
+                spendingsView
+            ) : (
                 <View style={styles.card}>
-                    <Text style={{ color: "grey" }}>Нет расходов</Text>
+                    <Text style={{ color: 'grey' }}>Нет расходов</Text>
                 </View>
             )}
             <TouchableOpacity

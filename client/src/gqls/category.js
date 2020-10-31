@@ -5,6 +5,7 @@ export const FIND_MANY_CATEGORY = gql`
         findManyCategory(where: $where) {
             id
             name
+            types
         }
     }
 `

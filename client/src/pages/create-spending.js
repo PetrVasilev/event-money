@@ -12,34 +12,11 @@ import {
 import Ionicons from 'react-native-vector-icons/dist/Ionicons'
 import { useQuery, useMutation } from '@apollo/client'
 
+import LoadingView from '../components/loadingView'
 import { FIND_MANY_CATEGORY } from '../gqls/category'
-
-import { CREATE_ONE_SPENDING } from '../gqls/spending'
+import { CREATE_ONE_SPENDING, FIND_MANY_SPENDING } from '../gqls/spending'
 
 const { width } = Dimensions.get('window')
-
-const categories = [
-    {
-        value: '1',
-        lable: 'Фотограф'
-    },
-    {
-        value: '2',
-        lable: 'Кейтеринг'
-    },
-    {
-        value: '3',
-        lable: 'Ведущий'
-    },
-    {
-        value: '4',
-        lable: 'Банкетный зал'
-    },
-    {
-        value: 'other',
-        lable: 'Другое'
-    }
-]
 
 const CreateSpending = ({ navigation, route }) => {
     const { event } = route.params
@@ -48,19 +25,77 @@ const CreateSpending = ({ navigation, route }) => {
     const [budget, setBudget] = useState('')
     const [description, setDescription] = useState('')
 
-    const { data, loading } = useQuery(FIND_MANY_CATEGORY, {
-        fetchPolicy: "network-only",
-        variables: {
-            where: {
-                types: { equals: [event.type] }
-            }
+    const { data } = useQuery(FIND_MANY_CATEGORY, {
+        fetchPolicy: 'network-only',
+        onCompleted: (data) => {
+            const categoriesArray =
+                data && data.findManyCategory
+                    ? event.type !== 'OTHER'
+                        ? data.findManyCategory.filter(
+                              (item) => item.types.indexOf(event.type) !== -1
+                          )
+                        : data.findManyCategory
+                    : []
+            setSelectedCategory(categoriesArray[0].id)
         }
     })
 
-    console.log(data)
+    const [createSpending, { loading }] = useMutation(CREATE_ONE_SPENDING, {
+        onCompleted: () => {
+            navigation.goBack()
+        },
+        onError: (e) => {
+            console.error(e)
+        },
+        update: async (client, { data }) => {
+            let prev = await client.readQuery({
+                query: FIND_MANY_SPENDING,
+                variables: {
+                    where: { event: { id: { equals: event.id } } }
+                }
+            })
+            await client.writeQuery({
+                query: FIND_MANY_SPENDING,
+                variables: {
+                    where: { event: { id: { equals: event.id } } }
+                },
+                data: {
+                    findManySpending: [...prev.findManySpending, data.createOneSpending]
+                }
+            })
+        }
+    })
+
+    const categoriesArray =
+        data && data.findManyCategory
+            ? event.type !== 'OTHER'
+                ? data.findManyCategory.filter((item) => item.types.indexOf(event.type) !== -1)
+                : data.findManyCategory
+            : []
 
     const onSubmit = () => {
-        navigation.goBack()
+        if (!budget) {
+            alert('Введите стоимость расхода')
+            return false
+        }
+        if (!selectedCategory) {
+            alert('Выберите категорию')
+            return false
+        }
+        createSpending({
+            variables: {
+                data: {
+                    description,
+                    amount: budget,
+                    category: {
+                        connect: { id: selectedCategory }
+                    },
+                    event: {
+                        connect: { id: event.id }
+                    }
+                }
+            }
+        })
     }
 
     return (
@@ -86,8 +121,8 @@ const CreateSpending = ({ navigation, route }) => {
                         setOwnCategory('')
                     }}
                 >
-                    {categories.map((item, index) => (
-                        <Picker.Item key={index} value={item.value} label={item.lable} />
+                    {categoriesArray.map((item, index) => (
+                        <Picker.Item key={item.id} value={item.id} label={item.name} />
                     ))}
                 </Picker>
                 <Ionicons
@@ -118,6 +153,7 @@ const CreateSpending = ({ navigation, route }) => {
             <TouchableOpacity style={styles.button} onPress={onSubmit}>
                 <Text style={styles.buttonText}>Добавить</Text>
             </TouchableOpacity>
+            <LoadingView loading={loading} />
         </ScrollView>
     )
 }

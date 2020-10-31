@@ -12,6 +12,7 @@ export const FIND_MANY_EVENTS = gql`
                 id
                 createdAt
                 amount
+                description
                 category {
                     id
                     name
@@ -33,6 +34,7 @@ export const CREATE_ONE_EVENT = gql`
                 id
                 createdAt
                 amount
+                description
                 category {
                     id
                     name

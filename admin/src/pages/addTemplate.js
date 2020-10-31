@@ -3,11 +3,11 @@ import styled from 'styled-components'
 import {Title} from "../components/defaultTexts"
 import AddField from "../components/addField"
 import {useMutation, useQuery} from "@apollo/react-hooks"
-import {Button, message} from "antd"
-import LoadingBar from "../components/loadingBar"
+import {Button, message, Switch} from "antd"
 import AddFieldSelect from "../components/addFieldSelect"
 import {CREATE_ONE_TEMPLATE} from "../gqls/template/mutations"
 import {FIND_MANY_SERVICE} from "../gqls/service/queries"
+import AddFieldNumber from "../components/addFieldNumber"
 
 const Container = styled.div`
   display: flex;
@@ -34,18 +34,47 @@ const Fields = styled.div`
   }
 
 `
-const BottomContainer = styled.div`
-  display: flex;
-`
+
+const typeEnum = [
+    {
+        id: 'OTHER',
+        name: 'Другие'
+    },
+    {
+        id: 'WEDDING',
+        name: 'Свадьба'
+    },
+    {
+        id: 'BIRTHDAY',
+        name: 'День рождения'
+    },
+    {
+        id: 'STAG',
+        name: 'Девичник/Мальчишник'
+    },
+    {
+        id: 'MATINEE',
+        name: 'Утренник'
+    },
+]
+
 const AddTemplate = () => {
     const [name, setName] = useState('')
     const [service, setService] = useState()
-    const [serviceArray, setServiceArray] = useState()
+    const [serviceArray, setServiceArray] = useState([])
+    const [types, setTypes] = useState([])
+    const [amount, setAmount] = useState(0)
+    const [autoCalc, setAutoCalc] = useState(true)
 
     const {loading: queryLoading} = useQuery(FIND_MANY_SERVICE, {
         errorPolicy: 'ignore',
         onCompleted: ({findManyService}) => {
+            console.log('before', findManyService)
+
             setServiceArray(findManyService)
+        },
+        variables: {
+            where: {}
         }
     })
 
@@ -76,19 +105,45 @@ const AddTemplate = () => {
                             return {id: item}
                         }
                     )
+                },
+                amount: amount.toString(),
+                types: {
+                    set: types
                 }
             }
         }
-        console.log(variables)
         save({
             variables
         })
 
     }
 
+    const servicesData = serviceArray.filter(
+        (item) => {
+            for (let i = 0; i < types.length; i++) {
+                if (item.category.types.includes(types[i]))
+                    return true
+
+            }
+            return false
+        }
+    )
+
     return (
         <Container>
             <Title>Добавление шаблона</Title>
+            <Switch
+                style={{maxWidth: 100}}
+                checkedChildren={'Авторасчет'}
+                unCheckedChildren={'Авторасчет'}
+                value={autoCalc}
+                onChange={
+                    (value) => {
+                        setAutoCalc(value)
+                    }
+                }
+                defaultChecked
+            />
             <Fields>
                 <AddField
                     text={'Название'}
@@ -102,6 +157,19 @@ const AddTemplate = () => {
                     }
                 />
                 <AddFieldSelect
+                    text={'Тип шаблона'}
+                    className={'gap input'}
+                    placeholder={'Выберите тип шаблона'}
+                    mode={'multiple'}
+                    value={types}
+                    onChange={
+                        (value) => {
+                            setTypes(value)
+                        }
+                    }
+                    data={typeEnum}
+                />
+                <AddFieldSelect
                     text={'Услуга'}
                     className={'gap input'}
                     placeholder={'Выберите услугу'}
@@ -110,26 +178,43 @@ const AddTemplate = () => {
                     onChange={
                         (value) => {
                             setService(value)
+                            if (autoCalc) {
+                                const array = serviceArray.filter(
+                                    (item) => {
+                                        return value.includes(item.id)
+                                    }
+                                )
+                                const sum = array.reduce((acum, item) => {
+                                    return acum + parseInt(item.amount)
+                                }, 0)
+                                setAmount(sum)
+                            }
                         }
                     }
-                    data={serviceArray}
+                    data={servicesData}
                     loading={queryLoading}
-
+                />
+                <AddFieldNumber
+                    text={'Стоимость'}
+                    className={'gap'}
+                    placeholder={'Введите стоимость'}
+                    value={amount}
+                    onChange={
+                        (value) => {
+                            setAmount(value)
+                        }
+                    }
                 />
             </Fields>
-            <BottomContainer>
-                {
-                    loading ?
-                        <LoadingBar/>
-                        :
-                        <Button
-                            style={{marginTop: 16, maxWidth: 200}}
-                            type={'primary'}
-                            onClick={onSave}
-                        >
-                            Добавить
-                        </Button>}
-            </BottomContainer>
+
+            <Button
+                style={{marginTop: 16, maxWidth: 200}}
+                type={'primary'}
+                onClick={onSave}
+                loading={loading}
+            >
+                Добавить
+            </Button>
 
         </Container>
     )

@@ -11,8 +11,10 @@ import { categories } from '../utils'
 const Events = ({ navigation }) => {
     const { data, loading } = useQuery(FIND_MANY_EVENTS, {
         fetchPolicy: 'network-only',
-        where: {
-            id: localStorage.getItem('userId')
+        variables: {
+            where: {
+                users: { some: { id: { contains: localStorage.getItem('userId') } } }
+            }
         }
     })
 
@@ -27,7 +29,7 @@ const Events = ({ navigation }) => {
                         ? { paddingBottom: 70 }
                         : { flex: 1, alignItems: 'center', justifyContent: 'center' }
                 }
-                refreshControl={<RefreshControl refreshing={loading} onRefresh={() => {}} />}
+                refreshControl={<RefreshControl refreshing={loading} onRefresh={() => { }} />}
             >
                 {events.length === 0 ? (
                     <>
@@ -37,27 +39,27 @@ const Events = ({ navigation }) => {
                         </Text>
                     </>
                 ) : (
-                    events.map((item, index) => (
-                        <TouchableOpacity
-                            style={[
-                                styles.item,
-                                { marginBottom: events.length - 1 === index ? 0 : 10 }
-                            ]}
-                            key={item.id}
-                            onPress={() => navigation.push(`Event`, { event: item })}
-                        >
-                            <Text style={styles.eventTitle}>{item.name}</Text>
-                            <View style={styles.eventBottom}>
-                                <Text style={styles.eventCategory}>
-                                    {categories.find((i) => i.value === item.type).lable}
-                                </Text>
-                                <Text style={styles.eventCreated}>
-                                    {moment(item.date).format('DD.MM.YYYY')}
-                                </Text>
-                            </View>
-                        </TouchableOpacity>
-                    ))
-                )}
+                        events.map((item, index) => (
+                            <TouchableOpacity
+                                style={[
+                                    styles.item,
+                                    { marginBottom: events.length - 1 === index ? 0 : 10 }
+                                ]}
+                                key={item.id}
+                                onPress={() => navigation.push(`Event`, { event: item })}
+                            >
+                                <Text style={styles.eventTitle}>{item.name}</Text>
+                                <View style={styles.eventBottom}>
+                                    <Text style={styles.eventCategory}>
+                                        {categories.find((i) => i.value === item.type).lable}
+                                    </Text>
+                                    <Text style={styles.eventCreated}>
+                                        {moment(item.date).format('DD.MM.YYYY')}
+                                    </Text>
+                                </View>
+                            </TouchableOpacity>
+                        ))
+                    )}
             </ScrollView>
             <TouchableOpacity
                 activeOpacity={1}
