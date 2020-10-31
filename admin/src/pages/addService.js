@@ -4,7 +4,6 @@ import {Title} from "../components/defaultTexts"
 import AddField from "../components/addField"
 import {useMutation, useQuery} from "@apollo/react-hooks"
 import {Button, message} from "antd"
-import LoadingBar from "../components/loadingBar"
 import {CREATE_ONE_SERVICE} from "../gqls/service/mutations"
 import {FIND_MANY_CATEGORY} from "../gqls/category/queries"
 import AddFieldNumber from "../components/addFieldNumber"
@@ -142,20 +141,15 @@ const AddService = () => {
 
                 />
             </Fields>
-            <BottomContainer>
-                {
-                    loading ?
-                        <LoadingBar/>
-                        :
-                        <Button
-                            style={{marginTop: 16, maxWidth: 200}}
-                            type={'primary'}
-                            onClick={onSave}
-                        >
-                            Добавить
-                        </Button>}
-            </BottomContainer>
 
+            <Button
+                style={{marginTop: 16, maxWidth: 200}}
+                type={'primary'}
+                onClick={onSave}
+                loading={loading}
+            >
+                Добавить
+            </Button>
         </Container>
     )
 }

@@ -21,9 +21,14 @@ const Category = () => {
             <Title>Список категории</Title>
             <Button
                 type={'dashed'}
-                style={{marginTop: 16,maxWidth:200}}
+                style={{marginTop: 16, maxWidth: 200}}
+                onClick={
+                    () => {
+
+                    }
+                }
             >
-                Добавить категории
+                Добавить категорию
             </Button>
             <TableContainer>
                 <Table
