@@ -5,6 +5,7 @@ import {useHistory} from "react-router-dom"
 import {Title} from "../components/defaultTexts"
 import {useQuery} from "@apollo/react-hooks"
 import {FIND_MANY_SERVICE} from "../gqls/service/queries"
+import UpdateService from "../components/updateService"
 
 const {Column} = Table
 
@@ -16,15 +17,30 @@ const Container = styled.div`
 
 const Service = () => {
     const [dataSource, setDataSource] = useState([])
-    const {loading} = useQuery(FIND_MANY_SERVICE, {
+    const {loading,refetch} = useQuery(FIND_MANY_SERVICE, {
         onCompleted: ({findManyService}) => {
-            setDataSource(findManyService)
+            setDataSource(findManyService.map(
+                (item) => {
+                    item.key = item.id
+                    return item
+                }
+            ))
         },
         errorPolicy: "ignore",
         variables: {where: {}}
     })
 
     const history = useHistory()
+
+    const expandedRowRender = (data) => {
+        return (
+            <UpdateService
+                data={data}
+                oldDataSource={dataSource}
+                setDataSource={setDataSource}
+            />
+        )
+    }
 
     return (
         <Container>
@@ -44,6 +60,7 @@ const Service = () => {
                 style={{flex: 1, marginTop: 24}}
                 dataSource={dataSource}
                 loading={loading}
+                expandable={{expandedRowRender}}
             >
                 <Column
                     title={'Название'}

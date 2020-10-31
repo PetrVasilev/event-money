@@ -1,21 +1,15 @@
 import React, { useState, useEffect, useMemo } from 'react'
 import Ionicons from 'react-native-vector-icons/dist/Ionicons'
 import randomColor from 'randomcolor'
-import {
-    ScrollView,
-    View,
-    StyleSheet,
-    Text,
-    TouchableOpacity,
-    Image,
-    ActivityIndicator
-} from 'react-native'
 import bridge from '@vkontakte/vk-bridge'
+import { ScrollView, View, StyleSheet, Text, TouchableOpacity, Image } from 'react-native'
 import { PieChart } from 'react-minimal-pie-chart'
-import { useQuery, useLazyQuery } from '@apollo/client'
+import { useQuery, useMutation } from '@apollo/client'
 
+import Loading from '../components/loadingView'
+import { UPDATE_ONE_EVENT } from '../gqls/event'
 import { FIND_MANY_SPENDING } from '../gqls/spending'
-import { FIND_MANY_USER } from '../gqls/user'
+import { ADD_ORGANIZATORS } from '../gqls/user'
 
 const Event = ({ route, navigation }) => {
     const { event } = route.params
@@ -24,18 +18,36 @@ const Event = ({ route, navigation }) => {
 
     const [tab, setTab] = useState(0)
     const [coloredSpendings, setColoredSpendings] = useState([])
+    const [organizators, setOrganizators] = useState(event.users)
 
     const { data } = useQuery(FIND_MANY_SPENDING, {
         variables: {
             where: { event: { id: { equals: event.id } } },
-            orderBy: { createdAt: "desc" }
+            orderBy: { createdAt: 'desc' }
         }
     })
 
-    const [
-        getOrganizators,
-        { data: organizatorsData, loading: organizatorsLoading }
-    ] = useLazyQuery(FIND_MANY_USER)
+    const [addOrganizatorsMutation, { loading: addOrganizatorsLoading }] = useMutation(
+        ADD_ORGANIZATORS,
+        {
+            onCompleted: (data) => {
+                setOrganizators(data.addUsers)
+            },
+            onError: (err) => {
+                console.error(err)
+            }
+        }
+    )
+
+    const [updateOneEvent, { loading: updateEventLoading }] = useMutation(UPDATE_ONE_EVENT, {
+        onCompleted: (data) => {
+            setOrganizators(data.updateOneEvent.users)
+        },
+        onError: (err) => {
+            console.error(err)
+            alert('Не удалось отправить запрос')
+        }
+    })
 
     const spendings = useMemo(() => {
         return data && data.findManySpending ? data.findManySpending : []
@@ -67,23 +79,27 @@ const Event = ({ route, navigation }) => {
         setColoredSpendings(arr)
     }, [spendings])
 
-    useEffect(() => {
-        if (tab === 1) {
-            getOrganizators({
-                variables: {
-                    where: {
-                        events: {
-                            some: {
-                                id: {
-                                    equals: event.id
-                                }
-                            }
-                        }
+    const addOrganizators = (users) => {
+        addOrganizatorsMutation({
+            variables: {
+                where: { id: event.id },
+                data: { users }
+            }
+        })
+    }
+
+    const deleteOrganizator = (organizatorId) => {
+        updateOneEvent({
+            variables: {
+                where: { id: event.id },
+                data: {
+                    users: {
+                        disconnect: [{ id: organizatorId }]
                     }
                 }
-            })
-        }
-    }, [tab])
+            }
+        })
+    }
 
     const spendingsView = coloredSpendings.map((item, index) => {
         const isLast = spendings.length - 1 === index
@@ -127,147 +143,180 @@ const Event = ({ route, navigation }) => {
         )
     })
 
-    const organizators = organizatorsData ? organizatorsData.findManyUser : []
-
     return (
-        <ScrollView style={styles.container}>
-            <Text style={styles.textInfo}>Общая информация</Text>
-            <View style={styles.bottom}>
-                <View style={styles.bottomPrice}>
-                    <Text style={{ color: 'green' }}>Бюджет</Text>
-                    <Text>{event.amount ? event.amount : spendingPrice} руб.</Text>
-                </View>
-                <View style={styles.bottomSpending}>
-                    <Text style={{ color: 'red' }}>Расходы</Text>
-                    <Text>{spendingPrice} руб.</Text>
-                </View>
-                <View style={styles.bottomLeave}>
-                    <Text style={{ color: 'gray' }}>Остаток</Text>
-                    <Text>{leavePrice ? leavePrice : 0} руб.</Text>
-                </View>
-            </View>
-            {coloredSpendings.length > 0 || event.amount ? (
-                <View
-                    style={[
-                        styles.card,
-                        {
-                            marginTop: 15,
-                            marginBottom: 0,
-                            alignItems: 'center',
-                            justifyContent: 'center',
-                            paddingVertical: 20
-                        }
-                    ]}
-                >
-                    <View style={{ height: 160, width: '73%' }}>
-                        <PieChart
-                            data={[
-                                {
-                                    title: 'Остаток',
-                                    value: leavePrice < 0 ? 0 : leavePrice,
-                                    color: '#52d726'
-                                },
-                                ...coloredSpendings.map((item) => ({
-                                    title: item.category.name,
-                                    value: parseInt(item.amount),
-                                    color: item.color
-                                }))
-                            ]}
-                            lineWidth={20}
-                            paddingAngle={1}
-                        />
+        <>
+            <ScrollView style={styles.container}>
+                <Text style={styles.textInfo}>Общая информация</Text>
+                <View style={styles.bottom}>
+                    <View style={styles.bottomPrice}>
+                        <Text style={{ color: 'green' }}>Бюджет</Text>
+                        <Text>{event.amount ? event.amount : spendingPrice} руб.</Text>
+                    </View>
+                    <View style={styles.bottomSpending}>
+                        <Text style={{ color: 'red' }}>Расходы</Text>
+                        <Text>{spendingPrice} руб.</Text>
+                    </View>
+                    <View style={styles.bottomLeave}>
+                        <Text style={{ color: 'gray' }}>Остаток</Text>
+                        <Text>{leavePrice ? leavePrice : 0} руб.</Text>
                     </View>
                 </View>
-            ) : null}
-            <View style={styles.tabContainer}>
-                <TouchableOpacity
-                    style={[
-                        styles.tabItem,
-                        {
-                            borderBottomColor: tab === 0 ? '#4b76a8' : 'transparent'
-                        }
-                    ]}
-                    onPress={() => setTab(0)}
-                >
-                    <Text>Расходы</Text>
-                </TouchableOpacity>
-                <TouchableOpacity
-                    style={[
-                        styles.tabItem,
-                        {
-                            borderBottomColor: tab === 1 ? '#4b76a8' : 'transparent'
-                        }
-                    ]}
-                    onPress={() => setTab(1)}
-                >
-                    <Text>Организаторы</Text>
-                </TouchableOpacity>
-            </View>
-            {tab === 0 && (
-                <>
-                    {spendings.length > 0 ? (
-                        spendingsView
-                    ) : (
+                {coloredSpendings.length > 0 || event.amount ? (
+                    <View
+                        style={[
+                            styles.card,
+                            {
+                                marginTop: 15,
+                                marginBottom: 0,
+                                alignItems: 'center',
+                                justifyContent: 'center',
+                                paddingVertical: 20
+                            }
+                        ]}
+                    >
+                        <View style={{ height: 160, width: '73%' }}>
+                            <PieChart
+                                data={[
+                                    {
+                                        title: 'Остаток',
+                                        value: leavePrice < 0 ? 0 : leavePrice,
+                                        color: '#52d726'
+                                    },
+                                    ...coloredSpendings.map((item) => ({
+                                        title: item.category.name,
+                                        value: parseInt(item.amount),
+                                        color: item.color
+                                    }))
+                                ]}
+                                lineWidth={20}
+                                paddingAngle={1}
+                            />
+                        </View>
+                    </View>
+                ) : null}
+                <View style={styles.tabContainer}>
+                    <TouchableOpacity
+                        style={[
+                            styles.tabItem,
+                            {
+                                borderBottomColor: tab === 0 ? '#4b76a8' : 'transparent'
+                            }
+                        ]}
+                        onPress={() => setTab(0)}
+                    >
+                        <Text>Расходы</Text>
+                    </TouchableOpacity>
+                    <TouchableOpacity
+                        style={[
+                            styles.tabItem,
+                            {
+                                borderBottomColor: tab === 1 ? '#4b76a8' : 'transparent'
+                            }
+                        ]}
+                        onPress={() => setTab(1)}
+                    >
+                        <Text>Организаторы</Text>
+                    </TouchableOpacity>
+                </View>
+                {tab === 0 && (
+                    <>
+                        {spendings.length > 0 ? (
+                            spendingsView
+                        ) : (
                             <View style={styles.card}>
                                 <Text style={{ color: 'grey' }}>Нет расходов</Text>
                             </View>
                         )}
-                    <TouchableOpacity
-                        activeOpacity={0.8}
-                        style={styles.button}
-                        onPress={() => navigation.navigate('CreateSpending', { event })}
-                    >
-                        <Text style={styles.buttonText}>Добавить расход</Text>
-                    </TouchableOpacity>
-                </>
-            )}
-            {tab === 1 && (
-                <>
-                    {organizatorsLoading ? (
-                        <View
-                            style={{ alignItems: 'center', justifyContent: 'center', padding: 20 }}
+                        <TouchableOpacity
+                            activeOpacity={0.8}
+                            style={styles.button}
+                            onPress={() => navigation.navigate('CreateSpending', { event })}
                         >
-                            <ActivityIndicator animating />
-                        </View>
-                    ) : (
-                        organizators.map((item, index) => (
+                            <Text style={styles.buttonText}>Добавить расход</Text>
+                        </TouchableOpacity>
+                    </>
+                )}
+                {tab === 1 && (
+                    <>
+                        {organizators.map((item, index) => (
                             <View
                                 style={[
                                     styles.card,
                                     {
-                                        marginBottom: organizators.length - 1 === index ? 0 : 10,
-                                        justifyContent: 'flex-start'
+                                        marginBottom: organizators.length - 1 === index ? 0 : 10
                                     }
                                 ]}
                                 key={item.id}
                             >
-                                <Image
-                                    style={{ borderRadius: '50%', width: 35, height: 35 }}
-                                    source={{ uri: item.avatar }}
-                                />
-                                <Text style={{ marginLeft: 10, fontSize: 14 }}>{item.name}</Text>
+                                <View style={{ flexDirection: 'row', alignItems: 'center' }}>
+                                    <Image
+                                        style={{ borderRadius: '50%', width: 35, height: 35 }}
+                                        source={{ uri: item.avatar }}
+                                    />
+                                    <Text style={{ marginLeft: 10, fontSize: 14 }}>
+                                        {item.name}
+                                    </Text>
+                                </View>
+                                {index !== 0 &&
+                                    item.id.toString() !== localStorage.getItem('userId') && (
+                                        <TouchableOpacity
+                                            onPress={() => deleteOrganizator(item.id)}
+                                        >
+                                            <Ionicons
+                                                name="trash-outline"
+                                                style={{ color: 'red' }}
+                                                size={20}
+                                            />
+                                        </TouchableOpacity>
+                                    )}
                             </View>
-                        ))
-                    )}
-                    <TouchableOpacity
-                        activeOpacity={0.8}
-                        style={styles.button}
-                        // onPress={() => navigation.navigate('AddOrganizator', { event })}
-                        onPress={() => {
-                            bridge
-                                .send('VKWebAppGetFriends', {
-                                    multi: true
-                                })
-                                .then((data) => {
-                                    console.log(data)
-                                })
-                        }}
-                    >
-                        <Text style={styles.buttonText}>Добавить организаторов</Text>
-                    </TouchableOpacity>
-                </>
-            )}
-        </ScrollView>
+                        ))}
+                        <TouchableOpacity
+                            activeOpacity={0.8}
+                            style={styles.button}
+                            onPress={() => {
+                                if (process.env.NODE_ENV === 'production') {
+                                    bridge
+                                        .send('VKWebAppGetFriends', {
+                                            multi: true
+                                        })
+                                        .then((data) => {
+                                            const users = data.users.map((item) => ({
+                                                id: item.id.toString(),
+                                                avatar: item.photo_200,
+                                                name: `${item.first_name} ${item.last_name}`
+                                            }))
+                                            if (users.length > 0) {
+                                                addOrganizators(users)
+                                            }
+                                        })
+                                        .catch((err) => console.error(err))
+                                } else {
+                                    const users = [
+                                        {
+                                            id: '23232333',
+                                            avatar:
+                                                'https://sun5-4.userapi.com/impg/c856036/v856036319/1a2711/_f7jAK14LoQ.jpg?size=200x0&quality=88&crop=133,16,860,860&sign=81b5b7ab6403de554c849f8258920513&ava=1',
+                                            name: 'Тит Эверстов'
+                                        },
+                                        {
+                                            id: '43443343',
+                                            avatar:
+                                                'https://sun5-4.userapi.com/impg/c856036/v856036319/1a2711/_f7jAK14LoQ.jpg?size=200x0&quality=88&crop=133,16,860,860&sign=81b5b7ab6403de554c849f8258920513&ava=1',
+                                            name: 'Кынат Бай'
+                                        }
+                                    ]
+                                    addOrganizators(users)
+                                }
+                            }}
+                        >
+                            <Text style={styles.buttonText}>Добавить организаторов</Text>
+                        </TouchableOpacity>
+                    </>
+                )}
+            </ScrollView>
+            <Loading loading={addOrganizatorsLoading || updateEventLoading} />
+        </>
     )
 }
 

@@ -41,8 +41,8 @@ export const DELETE_ONE_SPENDING = gql`
 `
 
 export const UPDATE_ONE_SPENDING = gql`
-    mutation($where: SpendingWhereUniqueInput! $data: SpendingUpdateInput!) {
-        updateOneSpending(where: $where data: $data) {
+    mutation($where: SpendingWhereUniqueInput!, $data: SpendingUpdateInput!) {
+        updateOneSpending(where: $where, data: $data) {
             id
             createdAt
             amount

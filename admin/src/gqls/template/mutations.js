@@ -5,8 +5,6 @@ export const CREATE_ONE_TEMPLATE=gql`
     {
         createOneTemplate(data: $data){
             id
-            createdAt
-            updatedAt
             name
         }
     }

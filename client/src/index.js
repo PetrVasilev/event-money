@@ -78,7 +78,7 @@ const App = () => {
                     .send('VKWebAppGetUserInfo')
                     .then((data) => {
                         const userId = data.id
-                        const name = `${data.first_name}, ${data.last_name}`
+                        const name = `${data.first_name} ${data.last_name}`
                         const avatar = data.photo_100
                         authUser({ userId, name, avatar })
                     })
