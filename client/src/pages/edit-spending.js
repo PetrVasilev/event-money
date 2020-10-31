@@ -73,7 +73,7 @@ const EditSpending = ({ navigation, route }) => {
             <Text style={styles.label}>Стоимость расхода</Text>
             <TextInput
                 value={budget}
-                onChangeText={(text) => setBudget(text)}
+                onChangeText={(text) => setBudget(text.replace(/\D/gm, ""))}
                 style={styles.textInput}
                 placeholder="Стоимость расхода"
             />

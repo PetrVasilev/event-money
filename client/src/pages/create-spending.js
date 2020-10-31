@@ -73,7 +73,7 @@ const CreateSpending = ({ navigation, route }) => {
             setBudget("")
             setDescription("")
         }
-    })
+    }, [service])
 
     useEffect(() => {
         if (selectedCategory && selectedCategory !== "empty") {
@@ -129,9 +129,10 @@ const CreateSpending = ({ navigation, route }) => {
             <Text style={styles.label}>Стоимость расхода</Text>
             <TextInput
                 value={budget}
-                onChangeText={(text) => setBudget(text)}
+                onChangeText={(text) => setBudget(text.replace(/\D/gm, ""))}
                 style={styles.textInput}
                 placeholder="Стоимость расхода"
+                keyboardType="numeric"
             />
             <Text style={styles.label}>Категория расхода</Text>
             <View style={styles.pickerContainer}>

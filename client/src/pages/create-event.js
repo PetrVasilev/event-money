@@ -213,9 +213,11 @@ const CreateEvent = ({ navigation }) => {
                 <Text style={styles.label}>Бюджет мероприятия</Text>
                 <TextInput
                     value={budget}
-                    onChangeText={(text) => setBudget(text)}
+                    onChangeText={(text) => setBudget(text.replace(/\D/gm, ""))}
                     style={styles.textInput}
                     placeholder="Бюджет мероприятия"
+                    keyboardType="numeric"
+                    type="number"
                 />
                 <Text style={styles.label}>Категория мероприятия</Text>
                 <View style={styles.pickerContainer}>
