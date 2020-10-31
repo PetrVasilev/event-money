@@ -72,9 +72,9 @@ const Category = () => {
                             console.log(categories)
                             return (
                                 categories.map(
-                                    (item) => {
+                                    (item,index) => {
                                         return (
-                                            <Tag color={enumColorMap[item]}>{enumMap[item]}</Tag>
+                                            <Tag key={index} color={enumColorMap[item]}>{enumMap[item]}</Tag>
                                         )
                                     }
                                 )

@@ -35,15 +35,15 @@ const Sider = () => {
                     Категории
                 </Menu.Item>
                 <Menu.Item
-                    key="/authorized/addService"
+                    key="/authorized/service"
                     onClick={
                         () => {
-                            history.push('/authorized/addService')
+                            history.push('/authorized/service')
                         }
                     }
                     icon={<ShopOutlined/>}
                 >
-                    Добавить Услугу
+                    Услуги
                 </Menu.Item>
                 <Menu.Item
                     key="/authorized/addTemplate"
