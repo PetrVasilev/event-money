@@ -1,9 +1,8 @@
-import { fromPromise } from "@apollo/client";
 import { gql } from '@apollo/client'
 
 export const FIND_MENY_TEMPLATE = gql`
-    query($where: TemplateWhereInput){
-        findManyTemplate(where: $where){
+    query($where: TemplateWhereInput) {
+        findManyTemplate(where: $where) {
             id
             name
             amount
@@ -11,7 +10,7 @@ export const FIND_MENY_TEMPLATE = gql`
                 id
                 amount
                 description
-                category{
+                category {
                     id
                     name
                 }
