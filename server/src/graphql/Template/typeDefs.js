@@ -7,7 +7,7 @@ const Template = gql`
     updatedAt: DateTime!
     name: String!
     amount: String!
-    types: [TypesEnum]
+    types: [TypeEnum]
     services(
       where: ServiceWhereInput
       orderBy: ServiceOrderByInput
