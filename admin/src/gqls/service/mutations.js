@@ -30,5 +30,20 @@ export const UPDATE_ONE_SERVICE = gql`
         }
     }
 `
+export const DELETE_ONE_SERVICE = gql`
+    mutation ($where:ServiceWhereUniqueInput!){
+        deleteOneService(where: $where){
+            id
+            name
+            amount
+            description
+            category{
+                name
+                types
+                id
+            }
+        }
+    }
+`
 
 

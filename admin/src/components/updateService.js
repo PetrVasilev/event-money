@@ -1,10 +1,11 @@
-import React, {useState} from 'react'
+import React, {useRef, useState} from 'react'
 import styled from 'styled-components'
-import {Button, Form, Input, InputNumber, message, Select} from "antd"
+import {Button, Form, Input, InputNumber, message, Popconfirm, Select} from "antd"
 import {useApolloClient, useMutation, useQuery} from '@apollo/react-hooks'
 import {FIND_MANY_CATEGORY} from "../gqls/category/queries"
-import {UPDATE_ONE_SERVICE} from "../gqls/service/mutations"
+import {DELETE_ONE_SERVICE, UPDATE_ONE_SERVICE} from "../gqls/service/mutations"
 import {FIND_MANY_SERVICE} from "../gqls/service/queries"
+import {FIND_MANY_TEMPLATE} from "../gqls/template/queries"
 
 const Container = styled.div`
   display: flex;
@@ -20,6 +21,7 @@ const ButtonsContainer = styled.div`
 
 const UpdateService = ({data, oldDataSource, setDataSource}) => {
     const [categories, setCategories] = useState([])
+    const delEl = useRef(null)
 
     const apollo = useApolloClient()
 
@@ -53,6 +55,32 @@ const UpdateService = ({data, oldDataSource, setDataSource}) => {
             })
             setDataSource(newDataSource)
 
+        }
+    })
+    const [delItem, {loading: delLoading}] = useMutation(DELETE_ONE_SERVICE, {
+        onCompleted: async ({deleteOneService}) => {
+            message.success('Удалено!')
+            deleteOneService.key = deleteOneService.id
+            const newDataSource = oldDataSource.filter(
+                (item) => {
+                    return (item.id !== deleteOneService.id)
+                }
+            )
+            await apollo.writeQuery({
+                query: DELETE_ONE_SERVICE,
+                data: {
+                    findManyService: newDataSource
+                }
+            })
+            setDataSource(newDataSource)
+        },
+        onError: () => {
+            message.error('Что то пошло не так!')
+        },
+        variables: {
+            where: {
+                id: data.id
+            }
         }
     })
 
@@ -144,6 +172,27 @@ const UpdateService = ({data, oldDataSource, setDataSource}) => {
                     >
                         Обновить
                     </Button>
+                </Form.Item>
+                <Form.Item fieldContext={''}>
+                    <Button
+                        type="danger"
+                        onClick={
+                            () => {
+                                delEl.current.onClick()
+                            }
+                        }
+                        loading={delLoading}
+                    >
+                        Удалить
+                    </Button>
+                    <Popconfirm
+                        ref={delEl}
+                        onConfirm={delItem}
+                        title="Вы уверены"
+                        okText="Да"
+                        cancelText="Нет"
+                    >
+                    </Popconfirm>
                 </Form.Item>
             </Form>
         </Container>
