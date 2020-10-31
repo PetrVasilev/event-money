@@ -49,7 +49,7 @@ const CreateEvent = ({ navigation }) => {
     const [budget, setBudget] = useState('')
     const [template, setTemplate] = useState(null)
 
-    const [findTemplates, { data, loading: templatesLoading }] = useLazyQuery(FIND_MENY_TEMPLATE)
+    const [findTemplates, { data }] = useLazyQuery(FIND_MENY_TEMPLATE)
 
     useEffect(() => {
         if (selectedCategory !== 'empty') {
@@ -62,6 +62,7 @@ const CreateEvent = ({ navigation }) => {
             })
             setTemplate(null)
         }
+        // eslint-disable-next-line
     }, [selectedCategory])
 
     // console.log(data)
@@ -70,10 +71,11 @@ const CreateEvent = ({ navigation }) => {
 
     useEffect(() => {
         if (template) {
-            setBudget(templates.find(item => item.id === template).amount)
+            setBudget(templates.find((item) => item.id === template).amount)
         } else {
-            setBudget("")
+            setBudget('')
         }
+        // eslint-disable-next-line
     }, [template])
 
     const [createEvent, { loading }] = useMutation(CREATE_ONE_EVENT, {
@@ -127,8 +129,12 @@ const CreateEvent = ({ navigation }) => {
         }
         let spendings = undefined
         if (template) {
-            const selectedTempate = templates.find(item => item.id === template)
-            if (selectedTempate && selectedTempate.services && selectedTempate.services.length > 0) {
+            const selectedTempate = templates.find((item) => item.id === template)
+            if (
+                selectedTempate &&
+                selectedTempate.services &&
+                selectedTempate.services.length > 0
+            ) {
                 let create = selectedTempate.services.map((item) => {
                     return {
                         description: item.description,
@@ -230,24 +236,28 @@ const CreateEvent = ({ navigation }) => {
                                     key={item.id}
                                     activeOpacity={0.8}
                                     style={[styles.template, {}]}
-                                    onPress={() => navigation.navigate("Template", { template: item, setTemplate: setTemplate, selected: template === item.id })}
+                                    onPress={() =>
+                                        navigation.navigate('Template', {
+                                            template: item,
+                                            setTemplate: setTemplate,
+                                            selected: template === item.id
+                                        })
+                                    }
                                 >
                                     <Text style={styles.templateTitle}>{item.name}</Text>
                                     <Text style={styles.amountText}>{item.amount} руб</Text>
-                                    {
-                                        item.id === template ? (
-                                            <Ionicons
-                                                name="checkmark-circle-outline"
-                                                style={{
-                                                    position: 'absolute',
-                                                    right: 5,
-                                                    top: 5
-                                                }}
-                                                color="green"
-                                                size={20}
-                                            />
-                                        ) : null
-                                    }
+                                    {item.id === template ? (
+                                        <Ionicons
+                                            name="checkmark-circle-outline"
+                                            style={{
+                                                position: 'absolute',
+                                                right: 5,
+                                                top: 5
+                                            }}
+                                            color="green"
+                                            size={20}
+                                        />
+                                    ) : null}
                                 </TouchableOpacity>
                             ))}
                         </ScrollView>
