@@ -146,7 +146,7 @@ const CreateEvent = ({ navigation }) => {
                             setSelectedCategory(item)
                         }}
                     >
-                        {categories.map((item, index) => (
+                        {categories.map((item) => (
                             <Picker.Item key={item.value} value={item.value} label={item.lable} />
                         ))}
                     </Picker>
@@ -162,6 +162,28 @@ const CreateEvent = ({ navigation }) => {
                         size={20}
                     />
                 </View>
+                {selectedCategory !== 'empty' ? (
+                    <>
+                        <Text style={[styles.label, { marginBottom: 0 }]}>
+                            Мероприятие под ключ
+                        </Text>
+                        <ScrollView
+                            scrollEventThrottle={200}
+                            pagingEnabled
+                            contentContainerStyle={{ paddingBottom: 10 }}
+                            horizontal={true}
+                            style={styles.templates}
+                        >
+                            {[1, 2, 3, 4, 5, 6, 7, 8, 9].map((object) => (
+                                <TouchableOpacity style={[styles.template, {}]}>
+                                    <Text style={styles.templateTitle}>Кейтеринг Радость</Text>
+                                    <Text style={styles.amountText}>1500 руб</Text>
+                                </TouchableOpacity>
+                            ))}
+                        </ScrollView>
+                    </>
+                ) : null}
+
                 <TouchableOpacity style={styles.button} onPress={onSubmit}>
                     <Text style={styles.buttonText}>Создать</Text>
                 </TouchableOpacity>
@@ -210,7 +232,7 @@ const styles = StyleSheet.create({
         alignItems: 'center',
         backgroundColor: '#4b76a8',
         borderRadius: 5,
-        marginTop: 15,
+        marginTop: 10,
         justifyContent: 'center'
     },
     buttonText: {
@@ -224,6 +246,28 @@ const styles = StyleSheet.create({
         textAlign: 'left',
         paddingLeft: 5,
         color: 'grey'
+    },
+    templates: {
+        width: '90%',
+        marginTop: 8
+    },
+    template: {
+        width: 200,
+        marginRight: 10,
+        backgroundColor: 'white',
+        borderColor: 'rgb(216, 216, 216)',
+        borderWidth: 1,
+        boxShadow: 'rgb(216, 216, 216) 0px 0px 0px',
+        borderRadius: 5,
+        padding: 10
+    },
+    templateTitle: {
+        fontWeight: '500'
+    },
+    amountText: {
+        fontSize: 17,
+        fontWeight: '500',
+        marginTop: 5
     }
 })
 
