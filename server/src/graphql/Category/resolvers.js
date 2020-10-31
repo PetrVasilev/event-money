@@ -17,7 +17,9 @@ const Category = {
     },
   },
   Mutation: {
-    createOneCategory: (_parent, args, { prisma }) => {
+    createOneCategory: async (_parent, args, { prisma }) => {
+      const exist = await prisma.category.findOne({ where: { name: args.data.name } })
+      if (exist) throw new Error('exist')
       return prisma.category.create(args)
     },
     updateOneCategory: (_parent, args, { prisma }) => {

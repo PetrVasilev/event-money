@@ -1,13 +1,16 @@
 const Auth = {
   Query: {
-    admin: (_parent, args, { prisma }) => {
-      return prisma.admin.findFirst(args)
+    admin: async (_parent, args, { prisma, access }) => {
+      const { id } = await access.admin()
+      args.where = {
+        id
+      }
+      return prisma.admin.findOne(args)
     },
     user: async (_parent, args, { prisma, access }) => {
       if (!args.where) {
         const userId = await access.user()
-        console.log('to query user', userId)
-        if(userId) {
+        if (userId) {
           args.where = {
             id: userId
           }
