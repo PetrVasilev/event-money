@@ -1,11 +1,26 @@
 import React, { useState, useEffect, useMemo } from 'react'
 import Ionicons from 'react-native-vector-icons/dist/Ionicons'
 import randomColor from 'randomcolor'
-import { ScrollView, View, StyleSheet, Text, TouchableOpacity } from 'react-native'
+import { ScrollView, View, StyleSheet, Text, TouchableOpacity, Image } from 'react-native'
 import { PieChart } from 'react-minimal-pie-chart'
 import { useQuery } from '@apollo/client'
 
 import { FIND_MANY_SPENDING } from '../gqls/spending'
+
+const organizators = [
+    {
+        id: 1,
+        name: 'Пётр Васильев',
+        avatar:
+            'https://sun5-3.userapi.com/impf/c630919/v630919438/127da/txDQNEXAQNI.jpg?size=400x0&quality=90&crop=0,350,1409,1410&sign=14fa59e47c7a3ab1d1193d92430b3ebe&ava=1'
+    },
+    {
+        id: 2,
+        name: 'Тит Эверстов',
+        avatar:
+            'https://sun5-4.userapi.com/impg/c856036/v856036319/1a2711/_f7jAK14LoQ.jpg?size=400x0&quality=90&crop=133,0,1074,1074&sign=977f59afc8d369ff5ba444ee906c063f&ava=1'
+    }
+]
 
 const Event = ({ route, navigation }) => {
     const { event } = route.params
@@ -170,7 +185,6 @@ const Event = ({ route, navigation }) => {
                     <Text>Организаторы</Text>
                 </TouchableOpacity>
             </View>
-
             {tab === 0 && (
                 <>
                     {spendings.length > 0 ? (
@@ -189,8 +203,35 @@ const Event = ({ route, navigation }) => {
                     </TouchableOpacity>
                 </>
             )}
-
-            {tab === 1 && <div>Hello World</div>}
+            {tab === 1 && (
+                <>
+                    {organizators.map((item, index) => (
+                        <View
+                            style={[
+                                styles.card,
+                                {
+                                    marginBottom: organizators.length - 1 === index ? 0 : 10,
+                                    justifyContent: 'flex-start'
+                                }
+                            ]}
+                            key={item.id}
+                        >
+                            <Image
+                                style={{ borderRadius: '50%', width: 35, height: 35 }}
+                                source={{ uri: item.avatar }}
+                            />
+                            <Text style={{ marginLeft: 10, fontSize: 14 }}>{item.name}</Text>
+                        </View>
+                    ))}
+                    <TouchableOpacity
+                        activeOpacity={0.8}
+                        style={styles.button}
+                        onPress={() => navigation.navigate('CreateOrganizator', { event })}
+                    >
+                        <Text style={styles.buttonText}>Добавить организаторов</Text>
+                    </TouchableOpacity>
+                </>
+            )}
         </ScrollView>
     )
 }
