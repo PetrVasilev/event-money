@@ -2,10 +2,13 @@ import React, {useState} from 'react'
 import styled from 'styled-components'
 import {Title} from "../components/defaultTexts"
 import AddField from "../components/addField"
-import {useMutation} from "@apollo/react-hooks"
+import {useMutation, useQuery} from "@apollo/react-hooks"
 import {Button, message} from "antd"
-import {CREATE_ONE_CATEGORY} from "../gqls/category/mutations"
 import LoadingBar from "../components/loadingBar"
+import {CREATE_ONE_SERVICE} from "../gqls/service/mutations"
+import {FIND_MANY_CATEGORY} from "../gqls/category/queries"
+import AddFieldNumber from "../components/addFieldNumber"
+import AddFieldSelect from "../components/addFieldSelect"
 
 const Container = styled.div`
   display: flex;
@@ -13,21 +16,40 @@ const Container = styled.div`
   flex-direction: column;
 `
 const Fields = styled.div`
-  margin-top:24px;
+  margin-top: 24px;
   display: flex;
-  .gap{
-    margin-right: 16px;
-    margin-bottom: 16px;
-    @media screen and (max-width: 800px){
+
+  .gap {
+    margin-right: 24px;
+    margin-bottom: 24px;
+    @media screen and (max-width: 800px) {
       margin-right: 0;
     }
   }
-  
+
+  @media screen and (max-width: 800px) {
+    flex-direction: column;
+  }
+
+`
+const BottomContainer = styled.div`
+  display: flex;
 `
 const AddService = () => {
     const [name, setName] = useState('')
+    const [amount, setAmount] = useState(0)
+    const [description, setDescription] = useState('')
+    const [category, setCategory] = useState()
+    const [categoryArray, setCategoryArray] = useState()
 
-    const [save, {loading}] = useMutation(CREATE_ONE_CATEGORY, {
+    const {loading: queryLoading} = useQuery(FIND_MANY_CATEGORY, {
+        errorPolicy: 'ignore',
+        onCompleted: ({findManyCategory}) => {
+            setCategoryArray(findManyCategory)
+        }
+    })
+
+    const [save, {loading}] = useMutation(CREATE_ONE_SERVICE, {
         onCompleted: () => {
             message.success('Добавлено')
         },
@@ -41,20 +63,32 @@ const AddService = () => {
             message.error('Введите имя')
             return null
         }
+        if (description === '') {
+            message.error('Введите описание')
+            return null
+        }
+        if (!category) {
+            message.error('Выберите категорию')
+            return null
+        }
+        console.log(category)
         save({
             variables: {
                 data: {
-                    name
+                    name,
+                    description,
+                    amount: amount + '',
+                    category: {
+                        connect: {
+                            id: category.value
+                        }
+                    }
+
                 }
             }
         })
 
     }
-
-    if (loading)
-        return (
-            <LoadingBar/>
-        )
 
     return (
         <Container>
@@ -71,14 +105,58 @@ const AddService = () => {
                         }
                     }
                 />
+                <AddFieldNumber
+                    text={'Стоимость'}
+                    className={'gap'}
+                    placeholder={'Введите стоимость'}
+                    value={amount}
+                    onChange={
+                        (value) => {
+                            setAmount(value)
+                        }
+                    }
+                    defaultValue={0}
+                />
+                <AddField
+                    text={'Описание'}
+                    className={'gap'}
+                    placeholder={'Введите описание'}
+                    value={description}
+                    onChange={
+                        (e) => {
+                            setDescription(e.target.value)
+                        }
+                    }
+                />
+                <AddFieldSelect
+                    text={'Категория'}
+                    className={'gap'}
+                    placeholder={'Выберите категорию'}
+                    value={category}
+                    onChange={
+                        (value) => {
+                            setCategory(value)
+                        }
+                    }
+                    data={categoryArray}
+                    loading={queryLoading}
+
+                />
             </Fields>
-            <Button
-                style={{marginTop: 16, maxWidth: 200}}
-                type={'primary'}
-                onClick={onSave}
-            >
-                Добавить
-            </Button>
+            <BottomContainer>
+                {
+                    loading ?
+                        <LoadingBar/>
+                        :
+                        <Button
+                            style={{marginTop: 16, maxWidth: 200}}
+                            type={'primary'}
+                            onClick={onSave}
+                        >
+                            Добавить
+                        </Button>}
+            </BottomContainer>
+
         </Container>
     )
 }

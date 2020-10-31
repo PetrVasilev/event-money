@@ -6,7 +6,7 @@ const Auth = gql`
     user(where: AuthUserInput): User!
   }
   type Mutation {
-    signInAdmin(data: SignInAdmin!): Admin!
+    signInAdmin(data: SignInAdmin): Admin!
   }
   input SignInAdmin {
     login: String!

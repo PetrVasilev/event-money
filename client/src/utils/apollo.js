@@ -12,7 +12,7 @@ const authLink = setContext((_, { headers }) => {
     return {
         headers: {
             ...headers,
-            userId: userId ? userId : ''
+            id: userId ? userId : ''
         }
     }
 })

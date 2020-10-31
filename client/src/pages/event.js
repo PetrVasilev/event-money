@@ -48,7 +48,7 @@ const Event = ({ route, navigation }) => {
         spendingPrice += item.price
         return (
             <TouchableOpacity
-                onPress={() => navigation.navigate("Spending", { spending: item })}
+                onPress={() => navigation.navigate('Spending', { spending: item })}
                 activeOpacity={0.6}
                 key={item.id}
                 style={[styles.card, additionalStyle]}
@@ -65,8 +65,6 @@ const Event = ({ route, navigation }) => {
             </TouchableOpacity>
         )
     })
-
-    const onSubmit = () => { }
 
     return (
         <ScrollView style={styles.container}>
@@ -121,8 +119,7 @@ const Event = ({ route, navigation }) => {
             <TouchableOpacity
                 activeOpacity={0.8}
                 style={styles.button}
-                onPress={onSubmit}
-                onPress={() => navigation.navigate("CreateSpending")}
+                onPress={() => navigation.navigate('CreateSpending')}
             >
                 <Text style={styles.buttonText}>Добавить расход</Text>
             </TouchableOpacity>
@@ -206,7 +203,7 @@ const styles = StyleSheet.create({
     buttonText: {
         color: '#ffffff',
         fontSize: 16
-    },
+    }
 })
 
 export default Event
