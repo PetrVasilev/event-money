@@ -12,5 +12,12 @@ export const CREATE_ONE_SERVICE = gql`
         }
     }
 `
+export const UPDATE_ONE_SERVICE = gql`
+    mutation ($data:ServiceUpdateInput!,$where:ServiceWhereInput){
+        updateOneService(where:$where,data:$data ){
+            
+        }
+    }
+`
 
 
