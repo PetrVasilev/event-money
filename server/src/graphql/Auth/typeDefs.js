@@ -7,6 +7,7 @@ const Auth = gql`
   }
   type Mutation {
     signInAdmin(data: SignInAdminInput): AdminAuthOutput!
+    addUsers(where: EventWhereUniqueInput!, data: AddUsersInput!): [User]
   }
   input SignInAdminInput {
     login: String!
@@ -22,6 +23,14 @@ const Auth = gql`
   type AdminAuthOutput{
     admin:Admin!
     token:String!
+  }
+  input AddUserInput {
+    id: String!
+    avatar: String,
+    name: String!
+  }
+  input AddUsersInput {
+    users: [AddUserInput]
   }
 `
 
