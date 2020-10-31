@@ -28,8 +28,8 @@ const Events = ({ navigation }) => {
                 {events.length === 0 ? (
                     <>
                         <Ionicons name="folder-open-outline" color="#4b76a8" size={55} />
-                        <Text style={{ marginTop: 15 }}>
-                            Вы еще не создали ни одного мероприятия
+                        <Text style={{ marginTop: 15, textAlign: 'center' }}>
+                            Создайте мероприятие, чтобы начать учет расходов
                         </Text>
                     </>
                 ) : (

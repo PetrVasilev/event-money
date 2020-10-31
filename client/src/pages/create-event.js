@@ -156,9 +156,14 @@ const CreateEvent = ({ navigation }) => {
                     </Picker>
                     <Ionicons
                         name="chevron-down"
-                        style={{ position: 'absolute', right: 5, top: 10, alignSelf: 'flex-end' }}
-                        color="#000000"
-                        size={22}
+                        style={{
+                            position: 'absolute',
+                            right: 12,
+                            top: '50%',
+                            transform: 'translateY(-50%)'
+                        }}
+                        color="silver"
+                        size={20}
                     />
                 </View>
                 {selectedCategory === 'other' ? (
