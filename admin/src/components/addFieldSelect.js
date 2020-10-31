@@ -14,7 +14,20 @@ const Label = styled.div`
   font-weight: bold;
 `
 
-const AddFieldSelect = ({text, style, type, placeholder, className, value, onChange, data, loading}) => {
+const AddFieldSelect = (
+    {
+        text,
+        style,
+        type,
+        placeholder,
+        className,
+        value,
+        onChange,
+        data,
+        loading,
+        mode
+    }
+) => {
     return (
         <Container style={style} className={className}>
             <Label>{text}</Label>
@@ -25,6 +38,7 @@ const AddFieldSelect = ({text, style, type, placeholder, className, value, onCha
                 value={value}
                 onChange={onChange}
                 loading={loading}
+                mode={mode}
             >
 
                 {

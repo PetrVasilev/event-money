@@ -55,7 +55,17 @@ const Sider = () => {
                 >
                     Добавить Услугу
                 </Menu.Item>
-
+                <Menu.Item
+                    key="/authorized/addTemplate"
+                    onClick={
+                        () => {
+                            history.push('/authorized/addTemplate')
+                        }
+                    }
+                    icon={<ShopOutlined/>}
+                >
+                    Добавить Шаблон
+                </Menu.Item>
                 <Menu.Item
                     key="exit"
                     onClick={() => {

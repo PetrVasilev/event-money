@@ -9,6 +9,7 @@ import Category from "./pages/category"
 import Padding from "./components/padding"
 import AddCategory from "./pages/addCategory"
 import AddService from "./pages/addService"
+import AddTemplate from "./pages/addTemplate"
 
 const App = () => {
     return (
@@ -22,6 +23,7 @@ const App = () => {
                             {/*<Route exact path={'/authorized/category'} component={Category}/>*/}
                             <Route exact path={'/authorized/addCategory'} component={AddCategory}/>
                             <Route exact path={'/authorized/addService'}  component={AddService}/>
+                            <Route exact path={'/authorized/addTemplate'}  component={AddTemplate}/>
                         </Padding>
                     </Switch>
                 </Route>

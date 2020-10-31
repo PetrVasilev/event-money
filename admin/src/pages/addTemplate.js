@@ -5,10 +5,9 @@ import AddField from "../components/addField"
 import {useMutation, useQuery} from "@apollo/react-hooks"
 import {Button, message} from "antd"
 import LoadingBar from "../components/loadingBar"
-import {CREATE_ONE_SERVICE} from "../gqls/service/mutations"
-import {FIND_MANY_CATEGORY} from "../gqls/category/queries"
-import AddFieldNumber from "../components/addFieldNumber"
 import AddFieldSelect from "../components/addFieldSelect"
+import {CREATE_ONE_TEMPLATE} from "../gqls/template/mutations"
+import {FIND_MANY_SERVICE} from "../gqls/service/queries"
 
 const Container = styled.div`
   display: flex;
@@ -26,6 +25,9 @@ const Fields = styled.div`
       margin-right: 0;
     }
   }
+  .input{
+    min-width: 290px;
+  }
 
   @media screen and (max-width: 800px) {
     flex-direction: column;
@@ -35,21 +37,19 @@ const Fields = styled.div`
 const BottomContainer = styled.div`
   display: flex;
 `
-const AddService = () => {
+const AddTemplate = () => {
     const [name, setName] = useState('')
-    const [amount, setAmount] = useState(0)
-    const [description, setDescription] = useState('')
-    const [category, setCategory] = useState()
-    const [categoryArray, setCategoryArray] = useState()
+    const [service, setService] = useState()
+    const [serviceArray, setServiceArray] = useState()
 
-    const {loading: queryLoading} = useQuery(FIND_MANY_CATEGORY, {
+    const {loading: queryLoading} = useQuery(FIND_MANY_SERVICE, {
         errorPolicy: 'ignore',
-        onCompleted: ({findManyCategory}) => {
-            setCategoryArray(findManyCategory)
+        onCompleted: ({findManyService}) => {
+            setServiceArray(findManyService)
         }
     })
 
-    const [save, {loading}] = useMutation(CREATE_ONE_SERVICE, {
+    const [save, {loading}] = useMutation(CREATE_ONE_TEMPLATE, {
         onCompleted: () => {
             message.success('Добавлено')
         },
@@ -63,26 +63,23 @@ const AddService = () => {
             message.error('Введите имя')
             return null
         }
-        if (description === '') {
-            message.error('Введите описание')
-            return null
-        }
-        if (!category) {
-            message.error('Выберите категорию')
+        if (!service) {
+            message.error('Выберите услугу')
             return null
         }
         const variables = {
             data: {
                 name,
-                description,
-                amount: amount + '',
-                category: {
-                    connect: {
-                        id: category
-                    }
+                services: {
+                    connect: service.map(
+                        (item) => {
+                            return {id: item}
+                        }
+                    )
                 }
             }
         }
+        console.log(variables)
         save({
             variables
         })
@@ -91,7 +88,7 @@ const AddService = () => {
 
     return (
         <Container>
-            <Title>Добавление услуги</Title>
+            <Title>Добавление шаблона</Title>
             <Fields>
                 <AddField
                     text={'Название'}
@@ -104,40 +101,18 @@ const AddService = () => {
                         }
                     }
                 />
-                <AddFieldNumber
-                    text={'Стоимость'}
-                    className={'gap'}
-                    placeholder={'Введите стоимость'}
-                    value={amount}
-                    onChange={
-                        (value) => {
-                            setAmount(value)
-                        }
-                    }
-                    defaultValue={0}
-                />
-                <AddField
-                    text={'Описание'}
-                    className={'gap'}
-                    placeholder={'Введите описание'}
-                    value={description}
-                    onChange={
-                        (e) => {
-                            setDescription(e.target.value)
-                        }
-                    }
-                />
                 <AddFieldSelect
-                    text={'Категория'}
-                    className={'gap'}
-                    placeholder={'Выберите категорию'}
-                    value={category}
+                    text={'Услуга'}
+                    className={'gap input'}
+                    placeholder={'Выберите услугу'}
+                    mode={'multiple'}
+                    value={service}
                     onChange={
                         (value) => {
-                            setCategory(value)
+                            setService(value)
                         }
                     }
-                    data={categoryArray}
+                    data={serviceArray}
                     loading={queryLoading}
 
                 />
@@ -160,4 +135,4 @@ const AddService = () => {
     )
 }
 
-export default AddService
+export default AddTemplate
