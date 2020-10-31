@@ -61,7 +61,7 @@ const CreateEvent = ({ navigation }) => {
                     where: {
                         users: { some: { id: { contains: localStorage.getItem('userId') } } }
                     },
-                    orderBy: { createdAt: "desc" }
+                    orderBy: { createdAt: 'desc' }
                 }
             })
             await client.writeQuery({
@@ -70,7 +70,7 @@ const CreateEvent = ({ navigation }) => {
                     where: {
                         users: { some: { id: { contains: localStorage.getItem('userId') } } }
                     },
-                    orderBy: { createdAt: "desc" }
+                    orderBy: { createdAt: 'desc' }
                 },
                 data: {
                     findManyEvent: [data.createOneEvent, ...prev.findManyEvent]
@@ -197,7 +197,6 @@ const CreateEvent = ({ navigation }) => {
 
 const styles = StyleSheet.create({
     container: {
-        flex: 1,
         width,
         backgroundColor: '#fafafa',
         height: window.innerHeight - 60
@@ -234,7 +233,7 @@ const styles = StyleSheet.create({
         alignItems: 'center',
         backgroundColor: '#4b76a8',
         borderRadius: 5,
-        marginTop: 10,
+        marginTop: 20,
         justifyContent: 'center'
     },
     buttonText: {
