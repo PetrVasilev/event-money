@@ -6,6 +6,8 @@ import {Title} from "../components/defaultTexts"
 import {useQuery} from "@apollo/react-hooks"
 import {FIND_MANY_SERVICE} from "../gqls/service/queries"
 
+const {Column} = Table
+
 const Container = styled.div`
   display: flex;
   flex: 1;
@@ -18,7 +20,8 @@ const Service = () => {
         onCompleted: ({findManyService}) => {
             setDataSource(findManyService)
         },
-        errorPolicy: "ignore"
+        errorPolicy: "ignore",
+        variables: {where: {}}
     })
 
     const history = useHistory()
@@ -58,24 +61,16 @@ const Service = () => {
                     key={'description'}
                 />
                 <Column
-                    title={'Вид категории'}
-                    dataIndex={'types'}
-                    key={'types'}
+                    title={'Категория'}
+                    dataIndex={'category'}
+                    key={'category'}
                     render={
-                        (categories) => {
-                            console.log(categories)
+                        (category) => {
                             return (
-                                categories.map(
-                                    (item, index) => {
-                                        return (
-                                            <Tag key={index} color={enumColorMap[item]}>{enumMap[item]}</Tag>
-                                        )
-                                    }
-                                )
+                                <Tag>{category.name}</Tag>
                             )
                         }
                     }
-
                 />
             </Table>
         </Container>

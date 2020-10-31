@@ -8,6 +8,7 @@ import {CREATE_ONE_SERVICE} from "../gqls/service/mutations"
 import {FIND_MANY_CATEGORY} from "../gqls/category/queries"
 import AddFieldNumber from "../components/addFieldNumber"
 import AddFieldSelect from "../components/addFieldSelect"
+import {useHistory} from "react-router-dom"
 
 const Container = styled.div`
   display: flex;
@@ -40,6 +41,8 @@ const AddService = () => {
     const [description, setDescription] = useState('')
     const [category, setCategory] = useState()
     const [categoryArray, setCategoryArray] = useState()
+
+    const history = useHistory()
 
     const {loading: queryLoading} = useQuery(FIND_MANY_CATEGORY, {
         errorPolicy: 'ignore',
@@ -149,6 +152,16 @@ const AddService = () => {
                 loading={loading}
             >
                 Добавить
+            </Button>
+            <Button
+                style={{marginTop: 16, maxWidth: 200}}
+                onClick={
+                    () => {
+                        history.goBack()
+                    }
+                }
+            >
+                Назад
             </Button>
         </Container>
     )
