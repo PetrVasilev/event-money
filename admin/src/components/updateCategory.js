@@ -91,7 +91,11 @@ const UpdateCategory = ({ data }) => {
 
     return (
         <Container>
-            <Form initialValues={{ remember: true }} onFinish={submit} onFinishFailed={() => {}}>
+            <Form
+                initialValues={{ remember: true }}
+                onFinish={submit}
+                layout={'vertical'}
+            >
                 <Form.Item
                     label="Название"
                     name="name"

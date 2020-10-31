@@ -1,10 +1,10 @@
-import React, { useRef } from 'react'
-import { Menu, Popconfirm } from 'antd'
-import { useApolloClient } from '@apollo/react-hooks'
-import { HomeOutlined, ShopOutlined, UserDeleteOutlined } from '@ant-design/icons'
-import { useHistory } from 'react-router-dom'
+import React, {useRef} from 'react'
+import {Menu, Popconfirm} from 'antd'
+import {useApolloClient} from '@apollo/react-hooks'
+import {CustomerServiceOutlined, ReadOutlined, SwitcherOutlined, UserDeleteOutlined} from '@ant-design/icons'
+import {useHistory} from 'react-router-dom'
 import styled from 'styled-components'
-import { ADMIN } from '../gqls/auth/queries'
+import {ADMIN} from '../gqls/auth/queries'
 
 const Container = styled.div`
     display: flex;
@@ -19,7 +19,7 @@ const Sider = () => {
 
     const logOut = () => {
         localStorage.setItem('token', '')
-        apollo.writeQuery({ query: ADMIN, data: { admin: null } })
+        apollo.writeQuery({query: ADMIN, data: {admin: null}})
     }
 
     return (
@@ -30,7 +30,7 @@ const Sider = () => {
                         history.push('/authorized/category')
                     }}
                     key="/authorized/category"
-                    icon={<HomeOutlined />}
+                    icon={<SwitcherOutlined/>}
                 >
                     Категории
                 </Menu.Item>
@@ -39,7 +39,7 @@ const Sider = () => {
                     onClick={() => {
                         history.push('/authorized/service')
                     }}
-                    icon={<ShopOutlined />}
+                    icon={<CustomerServiceOutlined/>}
                 >
                     Услуги
                 </Menu.Item>
@@ -48,7 +48,7 @@ const Sider = () => {
                     onClick={() => {
                         history.push('/authorized/template')
                     }}
-                    icon={<ShopOutlined />}
+                    icon={<ReadOutlined/>}
                 >
                     Шаблоны
                 </Menu.Item>
@@ -57,7 +57,7 @@ const Sider = () => {
                     onClick={() => {
                         exitEl.current.onClick()
                     }}
-                    icon={<UserDeleteOutlined />}
+                    icon={<UserDeleteOutlined/>}
                 >
                     <Popconfirm
                         ref={exitEl}
