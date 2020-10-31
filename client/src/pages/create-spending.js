@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import {
     View,
     ScrollView,
@@ -10,10 +10,11 @@ import {
     TouchableOpacity
 } from 'react-native'
 import Ionicons from 'react-native-vector-icons/dist/Ionicons'
-import { useQuery, useMutation } from '@apollo/client'
+import { useQuery, useMutation, useLazyQuery } from '@apollo/client'
 
 import LoadingView from '../components/loadingView'
 import { FIND_MANY_CATEGORY } from '../gqls/category'
+import { FIND_MANY_SERVICE } from '../gqls/service'
 import { CREATE_ONE_SPENDING, FIND_MANY_SPENDING } from '../gqls/spending'
 
 const { width } = Dimensions.get('window')
@@ -21,25 +22,16 @@ const { width } = Dimensions.get('window')
 const CreateSpending = ({ navigation, route }) => {
     const { event } = route.params
     const [selectedCategory, setSelectedCategory] = useState()
-    const [ownCategory, setOwnCategory] = useState('')
     const [budget, setBudget] = useState('')
     const [description, setDescription] = useState('')
+    const [service, setService] = useState(null)
+
+    const [findServices, { data: servicesData }] = useLazyQuery(FIND_MANY_SERVICE, {
+        fetchPolicy: 'network-only'
+    })
 
     const { data } = useQuery(FIND_MANY_CATEGORY, {
-        fetchPolicy: 'network-only',
-        onCompleted: (data) => {
-            const categoriesArray =
-                data && data.findManyCategory
-                    ? event.type !== 'OTHER'
-                        ? data.findManyCategory.filter(
-                            (item) => item.types.indexOf(event.type) !== -1
-                        )
-                        : data.findManyCategory
-                    : []
-            if (categoriesArray.length > 0) {
-                setSelectedCategory(categoriesArray[0].id)
-            }
-        }
+        fetchPolicy: 'network-only'
     })
 
     const [createSpending, { loading }] = useMutation(CREATE_ONE_SPENDING, {
@@ -70,6 +62,32 @@ const CreateSpending = ({ navigation, route }) => {
         }
     })
 
+    const services = servicesData && servicesData.findManyService ? servicesData.findManyService : []
+
+    useEffect(() => {
+        if (service) {
+            const selectedService = services.find(item => item.id === service)
+            setBudget(selectedService.amount)
+            setDescription(selectedService.description)
+        } else {
+            setBudget("")
+            setDescription("")
+        }
+    })
+
+    useEffect(() => {
+        if (selectedCategory && selectedCategory !== "empty") {
+            findServices({
+                variables: {
+                    where: {
+                        category: { id: { equals: selectedCategory } }
+                    }
+                }
+            })
+            setService(null)
+        }
+    }, [selectedCategory])
+
     const categoriesArray =
         data && data.findManyCategory
             ? event.type !== 'OTHER'
@@ -96,7 +114,8 @@ const CreateSpending = ({ navigation, route }) => {
                     },
                     event: {
                         connect: { id: event.id }
-                    }
+                    },
+                    service: service ? { connect: { id: service } } : undefined
                 }
             }
         })
@@ -122,10 +141,9 @@ const CreateSpending = ({ navigation, route }) => {
                     value={selectedCategory}
                     onValueChange={(item) => {
                         setSelectedCategory(item)
-                        setOwnCategory('')
                     }}
                 >
-                    {categoriesArray.map((item, index) => (
+                    {[{ id: 'empty', name: 'Выберите категорию' }, ...categoriesArray].map((item, index) => (
                         <Picker.Item key={item.id} value={item.id} label={item.name} />
                     ))}
                 </Picker>
@@ -136,17 +154,6 @@ const CreateSpending = ({ navigation, route }) => {
                     size={22}
                 />
             </View>
-            {selectedCategory === 'other' ? (
-                <>
-                    <Text style={styles.label}>Свой расход</Text>
-                    <TextInput
-                        value={ownCategory}
-                        onChangeText={(text) => setOwnCategory(text)}
-                        style={styles.textInput}
-                        placeholder="Введите свой вариант"
-                    />
-                </>
-            ) : null}
             <Text style={styles.label}>Комментарий к расходу</Text>
             <TextInput
                 value={description}
@@ -154,6 +161,48 @@ const CreateSpending = ({ navigation, route }) => {
                 style={styles.textInput}
                 placeholder="Комментарий к расходу"
             />
+            {selectedCategory !== 'empty' && services.length > 0 ? (
+                <>
+                    <Text style={[styles.label, { marginBottom: 0 }]}>
+                        Доступные услуги
+                    </Text>
+                    <ScrollView
+                        scrollEventThrottle={200}
+                        pagingEnabled
+                        contentContainerStyle={{ paddingBottom: 10 }}
+                        horizontal={true}
+                        style={styles.templates}
+                    >
+                        {
+                            services.map(item => (
+                                <TouchableOpacity
+                                    key={item.id}
+                                    activeOpacity={0.8}
+                                    style={[styles.template, {}]}
+                                    onPress={() => navigation.navigate("Service", { service: item, setService: setService, selected: service === item.id })}
+                                >
+                                    <Text style={styles.templateTitle}>{item.category.name}</Text>
+                                    <Text style={styles.amountText}>{item.amount} руб</Text>
+                                    {
+                                        item.id === service ? (
+                                            <Ionicons
+                                                name="checkmark-circle-outline"
+                                                style={{
+                                                    position: 'absolute',
+                                                    right: 5,
+                                                    top: 5
+                                                }}
+                                                color="green"
+                                                size={20}
+                                            />
+                                        ) : null
+                                    }
+                                </TouchableOpacity>
+                            ))
+                        }
+                    </ScrollView>
+                </>
+            ) : null}
             <TouchableOpacity style={styles.button} onPress={onSubmit}>
                 <Text style={styles.buttonText}>Добавить</Text>
             </TouchableOpacity>
@@ -215,6 +264,28 @@ const styles = StyleSheet.create({
         textAlign: 'left',
         paddingLeft: 5,
         color: 'grey'
+    },
+    templates: {
+        width: '90%',
+        marginTop: 8
+    },
+    template: {
+        width: 200,
+        marginRight: 10,
+        backgroundColor: 'white',
+        borderColor: 'rgb(216, 216, 216)',
+        borderWidth: 1,
+        boxShadow: 'rgb(216, 216, 216) 0px 0px 0px',
+        borderRadius: 5,
+        padding: 10
+    },
+    templateTitle: {
+        fontWeight: '500'
+    },
+    amountText: {
+        fontSize: 17,
+        fontWeight: '500',
+        marginTop: 5
     }
 })
 

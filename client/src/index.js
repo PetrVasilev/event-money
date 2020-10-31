@@ -18,6 +18,7 @@ import CreateSpending from './pages/create-spending'
 import Spending from './pages/spending'
 import EditSpending from './pages/edit-spending'
 import Template from './pages/template'
+import Service from './pages/service'
 
 const iconFontStyles = `@font-face {
     src: url(${iconFont});
@@ -204,6 +205,21 @@ const App = () => {
                     })}
                     name="Template"
                     component={Template}
+                />
+                <Stack.Screen
+                    options={({ navigation, route }) => ({
+                        headerTitle: 'Услуга',
+                        headerLeft: () => (
+                            <Ionicons
+                                onPress={() => navigation.goBack()}
+                                name="md-chevron-back-sharp"
+                                style={{ color: '#4b76a8', marginLeft: 16 }}
+                                size={25}
+                            />
+                        )
+                    })}
+                    name="Service"
+                    component={Service}
                 />
             </Stack.Navigator>
         </NavigationContainer>
