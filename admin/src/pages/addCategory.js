@@ -32,6 +32,11 @@ const AddCategory = () => {
             message.success('Добавлено')
         },
         onError: (error) => {
+            console.log(error.message)
+            if (error.message === 'GraphQL error: exist') {
+                message.error('Категория уже существует')
+                return null
+            }
             message.error('Что то пошло не так')
         }
     })

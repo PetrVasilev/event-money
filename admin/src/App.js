@@ -8,6 +8,7 @@ import Sider from "./components/sider"
 import Category from "./pages/category"
 import Padding from "./components/padding"
 import AddCategory from "./pages/addCategory"
+import AddService from "./pages/addService"
 
 const App = () => {
     return (
@@ -18,8 +19,9 @@ const App = () => {
                     <Sider/>
                     <Switch>
                         <Padding>
-                            <Route exact path={'/authorized/category'} component={Category}/>
+                            {/*<Route exact path={'/authorized/category'} component={Category}/>*/}
                             <Route exact path={'/authorized/addCategory'} component={AddCategory}/>
+                            <Route exact path={'/authorized/addService'}  component={AddService}/>
                         </Padding>
                     </Switch>
                 </Route>
