@@ -55,11 +55,20 @@ const CreateEvent = ({ navigation }) => {
             console.error(e)
         },
         update: async (client, { data }) => {
-            let prev = await client.readQuery({ query: FIND_MANY_EVENTS })
+            let prev = await client.readQuery({
+                query: FIND_MANY_EVENTS,
+                variables: {
+                    where: {
+                        users: { some: { id: { contains: localStorage.getItem('userId') } } }
+                    }
+                }
+            })
             await client.writeQuery({
                 query: FIND_MANY_EVENTS,
-                where: {
-                    id: localStorage.getItem('userId')
+                variables: {
+                    where: {
+                        users: { some: { id: { contains: localStorage.getItem('userId') } } }
+                    }
                 },
                 data: {
                     findManyEvent: [data.createOneEvent, ...prev.findManyEvent]

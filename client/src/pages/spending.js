@@ -10,11 +10,11 @@ const Spending = ({ route, navigation }) => {
             <View style={styles.bottom}>
                 <View style={styles.bottomPrice}>
                     <Text>Название</Text>
-                    <Text>{spending.name}</Text>
+                    <Text>{spending.category.name}</Text>
                 </View>
                 <View style={styles.bottomSpending}>
                     <Text>Стоимость</Text>
-                    <Text>{spending.price} руб.</Text>
+                    <Text>{spending.amount} руб.</Text>
                 </View>
                 <View style={styles.bottomSpending}>
                     <Text>Комметарий</Text>

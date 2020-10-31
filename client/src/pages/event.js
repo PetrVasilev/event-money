@@ -1,8 +1,11 @@
 import React from 'react'
-import { ScrollView, View, StyleSheet, Text, TouchableOpacity } from 'react-native'
+import { ScrollView, View, StyleSheet, Text, TouchableOpacity, ActivityIndicator } from 'react-native'
 import Ionicons from 'react-native-vector-icons/dist/Ionicons'
 import { PieChart } from 'react-minimal-pie-chart'
 import randomColor from 'randomcolor'
+import { useQuery } from '@apollo/client'
+
+import { FIND_MANY_SPENDING } from '../gqls/spending'
 
 const spendings = [
     {
@@ -31,7 +34,15 @@ const Event = ({ route, navigation }) => {
     let leavePrice = event.amount
     let spendingPrice = 0
 
-    let coloredSpendings = event.spendings.map((item) => {
+    const { data } = useQuery(FIND_MANY_SPENDING, {
+        variables: {
+            where: { event: { id: { equals: event.id } } }
+        }
+    })
+
+    const spendings = data && data.findManySpending ? data.findManySpending : []
+
+    let coloredSpendings = spendings.map((item) => {
         return {
             ...item,
             color: randomColor({
@@ -44,8 +55,8 @@ const Event = ({ route, navigation }) => {
     const spendingsView = coloredSpendings.map((item, index) => {
         const isLast = spendings.length - 1 === index
         const additionalStyle = { marginBottom: isLast ? 0 : 10 }
-        leavePrice -= item.price
-        spendingPrice += item.price
+        leavePrice -= parseInt(item.amount)
+        spendingPrice += parseInt(item.amount)
         return (
             <TouchableOpacity
                 onPress={() => navigation.navigate('Spending', { spending: item })}
@@ -59,9 +70,9 @@ const Event = ({ route, navigation }) => {
                         style={{ color: item.color, marginRight: 10 }}
                         size={25}
                     />
-                    <Text style={styles.spendingName}>{item.name}</Text>
+                    <Text style={styles.spendingName}>{item.category.name}</Text>
                 </View>
-                <Text style={styles.spendingPrice}>{item.price} руб.</Text>
+                <Text style={styles.spendingPrice}>{item.amount} руб.</Text>
             </TouchableOpacity>
         )
     })
@@ -104,8 +115,8 @@ const Event = ({ route, navigation }) => {
                                 color: '#52d726'
                             },
                             ...coloredSpendings.map((item) => ({
-                                title: item.name,
-                                value: item.price,
+                                title: item.category.name,
+                                value: parseInt(item.amount),
                                 color: item.color
                             }))
                         ]}
@@ -115,11 +126,13 @@ const Event = ({ route, navigation }) => {
                 </View>
             </View>
             <Text style={[styles.textInfo, { marginTop: 15 }]}>Расходы</Text>
-            {event.spendings.length > 0 ? spendingsView : (
-                <View style={styles.card}>
-                    <Text style={{ color: "grey" }}>Нет расходов</Text>
-                </View>
-            )}
+            {
+                spendings.length > 0 ? spendingsView : (
+                    <View style={styles.card}>
+                        <Text style={{ color: "grey" }}>Нет расходов</Text>
+                    </View>
+                )
+            }
             <TouchableOpacity
                 activeOpacity={0.8}
                 style={styles.button}
