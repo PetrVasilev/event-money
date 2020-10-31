@@ -3,7 +3,7 @@ import styled from 'styled-components'
 import {Title} from "../components/defaultTexts"
 import AddField from "../components/addField"
 import {useMutation, useQuery} from "@apollo/react-hooks"
-import {Button, message} from "antd"
+import {Button, message, Switch} from "antd"
 import AddFieldSelect from "../components/addFieldSelect"
 import {CREATE_ONE_TEMPLATE} from "../gqls/template/mutations"
 import {FIND_MANY_SERVICE} from "../gqls/service/queries"
@@ -64,6 +64,7 @@ const AddTemplate = () => {
     const [serviceArray, setServiceArray] = useState([])
     const [types, setTypes] = useState([])
     const [amount, setAmount] = useState(0)
+    const [autoCalc, setAutoCalc] = useState(true)
 
     const {loading: queryLoading} = useQuery(FIND_MANY_SERVICE, {
         errorPolicy: 'ignore',
@@ -105,7 +106,7 @@ const AddTemplate = () => {
                         }
                     )
                 },
-                amount:amount.toString(),
+                amount: amount.toString(),
                 types: {
                     set: types
                 }
@@ -131,6 +132,18 @@ const AddTemplate = () => {
     return (
         <Container>
             <Title>Добавление шаблона</Title>
+            <Switch
+                style={{maxWidth: 100}}
+                checkedChildren={'Авторасчет'}
+                unCheckedChildren={'Авторасчет'}
+                value={autoCalc}
+                onChange={
+                    (value) => {
+                        setAutoCalc(value)
+                    }
+                }
+                defaultChecked
+            />
             <Fields>
                 <AddField
                     text={'Название'}
@@ -165,6 +178,17 @@ const AddTemplate = () => {
                     onChange={
                         (value) => {
                             setService(value)
+                            if (autoCalc) {
+                                const array = serviceArray.filter(
+                                    (item) => {
+                                        return value.includes(item.id)
+                                    }
+                                )
+                                const sum = array.reduce((acum, item) => {
+                                    return acum + parseInt(item.amount)
+                                }, 0)
+                                setAmount(sum)
+                            }
                         }
                     }
                     data={servicesData}

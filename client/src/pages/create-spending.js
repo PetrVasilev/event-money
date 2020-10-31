@@ -26,6 +26,7 @@ const CreateSpending = ({ navigation, route }) => {
     const [description, setDescription] = useState('')
 
     const { data } = useQuery(FIND_MANY_CATEGORY, {
+        fetchPolicy: 'network-only',
         onCompleted: (data) => {
             const categoriesArray =
                 data && data.findManyCategory
@@ -60,7 +61,7 @@ const CreateSpending = ({ navigation, route }) => {
                     where: { event: { id: { equals: event.id } } }
                 },
                 data: {
-                    findManyEvent: [...prev.findManySpending, data.createOneSpending]
+                    findManySpending: [...prev.findManySpending, data.createOneSpending]
                 }
             })
         }
