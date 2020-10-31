@@ -32,8 +32,8 @@ const CreateSpending = ({ navigation, route }) => {
                 data && data.findManyCategory
                     ? event.type !== 'OTHER'
                         ? data.findManyCategory.filter(
-                              (item) => item.types.indexOf(event.type) !== -1
-                          )
+                            (item) => item.types.indexOf(event.type) !== -1
+                        )
                         : data.findManyCategory
                     : []
             if (categoriesArray.length > 0) {
@@ -53,16 +53,18 @@ const CreateSpending = ({ navigation, route }) => {
             let prev = await client.readQuery({
                 query: FIND_MANY_SPENDING,
                 variables: {
-                    where: { event: { id: { equals: event.id } } }
+                    where: { event: { id: { equals: event.id } } },
+                    orderBy: { createdAt: "desc" }
                 }
             })
             await client.writeQuery({
                 query: FIND_MANY_SPENDING,
                 variables: {
-                    where: { event: { id: { equals: event.id } } }
+                    where: { event: { id: { equals: event.id } } },
+                    orderBy: { createdAt: "desc" }
                 },
                 data: {
-                    findManySpending: [...prev.findManySpending, data.createOneSpending]
+                    findManySpending: [data.createOneSpending, ...prev.findManySpending]
                 }
             })
         }

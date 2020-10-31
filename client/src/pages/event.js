@@ -22,7 +22,8 @@ const Event = ({ route, navigation }) => {
 
     const { data } = useQuery(FIND_MANY_SPENDING, {
         variables: {
-            where: { event: { id: { equals: event.id } } }
+            where: { event: { id: { equals: event.id } } },
+            orderBy: { createdAt: 'desc' }
         }
     })
 

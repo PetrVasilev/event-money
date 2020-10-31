@@ -52,6 +52,45 @@ const Auth = {
         admin: exist
       }
     },
+    addUsers: async (_parent, { data: { users }, where }, { prisma, access }) => {
+      const ids = users.map(obj => obj.id)
+
+      const exists = await prisma.user.findMany({
+        where: {
+          id: {
+            in: ids
+          }
+        }
+      })
+
+      if (exists && exists.length > 0) {
+        const connect = exists.map(obj => ({
+          id: obj.id
+        }))
+        await prisma.event.update({
+          where,
+          data: {
+            users: {
+              connect
+            }
+          }
+        })
+      }
+
+      const create = users.filter(obj => !exists.find(exist => exist.id === obj.id))
+
+      if(create && create.length > 0) {
+        await prisma.event.update({
+          where,
+          data: {
+            users: {
+              create
+            }
+          }
+        })
+      }
+      return prisma.event.findOne({where}).users()
+    },
   },
 }
 

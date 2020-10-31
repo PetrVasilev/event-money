@@ -1,8 +1,8 @@
 import { gql } from '@apollo/client'
 
 export const FIND_MANY_EVENTS = gql`
-    query($where: EventWhereInput) {
-        findManyEvent(where: $where) {
+    query($where: EventWhereInput $orderBy: [EventOrderByInput!]) {
+        findManyEvent(where: $where orderBy: $orderBy) {
             id
             createdAt
             name

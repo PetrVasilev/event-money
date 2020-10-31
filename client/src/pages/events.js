@@ -14,7 +14,8 @@ const Events = ({ navigation }) => {
         variables: {
             where: {
                 users: { some: { id: { contains: localStorage.getItem('userId') } } }
-            }
+            },
+            orderBy: { createdAt: "desc" }
         }
     })
 

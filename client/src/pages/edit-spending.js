@@ -23,7 +23,8 @@ const EditSpending = ({ navigation, route }) => {
             let prev = await client.readQuery({
                 query: FIND_MANY_SPENDING,
                 variables: {
-                    where: { event: { id: { equals: event.id } } }
+                    where: { event: { id: { equals: event.id } } },
+                    orderBy: { createdAt: "desc" }
                 }
             })
             const newSpendings = prev.findManySpending.map((item) => {
@@ -36,7 +37,8 @@ const EditSpending = ({ navigation, route }) => {
             await client.writeQuery({
                 query: FIND_MANY_SPENDING,
                 variables: {
-                    where: { event: { id: { equals: event.id } } }
+                    where: { event: { id: { equals: event.id } } },
+                    orderBy: { createdAt: "desc" }
                 },
                 data: {
                     findManySpending: newSpendings

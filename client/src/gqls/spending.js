@@ -17,8 +17,8 @@ export const CREATE_ONE_SPENDING = gql`
 `
 
 export const FIND_MANY_SPENDING = gql`
-    query($where: SpendingWhereInput) {
-        findManySpending(where: $where) {
+    query($where: SpendingWhereInput $orderBy: [SpendingOrderByInput!]) {
+        findManySpending(where: $where orderBy: $orderBy) {
             id
             createdAt
             amount
