@@ -4,6 +4,7 @@ import {Title} from "../components/defaultTexts"
 import {Button, Table, Tag} from "antd"
 import {useQuery} from '@apollo/react-hooks'
 import {FIND_MANY_CATEGORY} from "../gqls/category/queries"
+import {useHistory} from 'react-router-dom'
 
 const {Column} = Table;
 
@@ -11,11 +12,6 @@ const Container = styled.div`
   display: flex;
   flex: 1;
   flex-direction: column;
-`
-const TableContainer = styled.div`
-  display: flex;
-  flex: 1;
-  margin-top: 24px;
 `
 
 const enumMap = {
@@ -40,6 +36,9 @@ const Category = () => {
         },
         errorPolicy: "ignore"
     })
+
+    const history = useHistory()
+
     return (
         <Container>
             <Title>Список категории</Title>
@@ -48,7 +47,7 @@ const Category = () => {
                 style={{marginTop: 16, maxWidth: 200}}
                 onClick={
                     () => {
-
+                        history.push('/authorized/addCategory')
                     }
                 }
             >
