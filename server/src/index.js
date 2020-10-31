@@ -34,7 +34,6 @@ const server = new GraphQLServer({
             admin: () => checkRole(authorization, 'admin'),
             user: () => {
                 if (id) {
-                    console.log('to access', id)
                     return id
                 } else {
                     throw new Error('not access')
