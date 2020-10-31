@@ -2,17 +2,16 @@ import React, {useState} from 'react'
 import styled from 'styled-components'
 import {useMutation} from '@apollo/react-hooks'
 import {useHistory} from 'react-router-dom'
-import {Button, message} from 'antd'
+import {Button, Form, Input, message, Select} from 'antd'
 
 import {Title} from '../components/defaultTexts'
-import AddField from '../components/addField'
 import {CREATE_ONE_CATEGORY} from '../gqls/category/mutations'
-import AddFieldSelect from '../components/addFieldSelect'
 
 const Container = styled.div`
     display: flex;
     flex: 1;
     flex-direction: column;
+    max-width: 500px;
 `
 
 const Fields = styled.div`
@@ -31,6 +30,11 @@ const Fields = styled.div`
     @media screen and (max-width: 800px) {
         flex-direction: column;
     }
+`
+const ButtonsContainer = styled.div`
+  display: flex;
+  justify-content: space-between;
+  flex-wrap: wrap;
 `
 
 const typeEnum = [
@@ -57,17 +61,15 @@ const typeEnum = [
 ]
 
 const AddCategory = () => {
-    const [name, setName] = useState('')
-    const [types, setTypes] = useState()
 
     const history = useHistory()
 
     const [save, {loading}] = useMutation(CREATE_ONE_CATEGORY, {
         onCompleted: () => {
             message.success('Добавлено')
+            history.goBack()
         },
         onError: (error) => {
-            console.log(error.message)
             if (error.message === 'GraphQL error: exist') {
                 message.error('Категория уже существует')
                 return null
@@ -76,15 +78,7 @@ const AddCategory = () => {
         }
     })
 
-    const onSave = () => {
-        if (name === '') {
-            message.error('Введите имя')
-            return null
-        }
-        if (!types) {
-            message.error('Выберите тип')
-            return null
-        }
+    const onSave = ({name,types}) => {
         const variables = {
             data: {
                 name,
@@ -101,46 +95,57 @@ const AddCategory = () => {
     return (
         <Container>
             <Title>Добавление категории</Title>
-            <Fields>
-                <AddField
-                    text={'Название'}
-                    className={'gap'}
-                    placeholder={'Введите название'}
-                    value={name}
-                    onChange={(e) => {
-                        setName(e.target.value)
-                    }}
-                />
-                <AddFieldSelect
-                    text={'Тип мероприятия'}
-                    className={'gap'}
-                    placeholder={'Выберите мероприятие'}
-                    value={types}
-                    onChange={(value) => {
-                        setTypes(value)
-                    }}
-                    data={typeEnum}
-                    mode={'multiple'}
-                />
-            </Fields>
-            <Button
-                style={{marginTop: 16, maxWidth: 200}}
-                type={'primary'}
-                onClick={onSave}
-                loading={loading}
+            <Form
+                onFinish={onSave}
+                initialValues={{remember: true}}
+                layout={'vertical'}
+                style={{marginTop: 16}}
             >
-                Добавить
-            </Button>
-            <Button
-                style={{marginTop: 16, maxWidth: 200}}
-                onClick={
-                    () => {
-                        history.goBack()
-                    }
-                }
-            >
-                Назад
-            </Button>
+                <Form.Item
+                    name={'name'}
+                    label={'Название'}
+                    rules={[{required: true, message: 'Введите имя'}]}
+                    initialValue={''}
+                >
+                    <Input
+                        placeholder={'Введите название'}
+                    />
+                </Form.Item>
+                <Form.Item
+                    name={'types'}
+                    label={'Тип мероприятия'}
+                    rules={[{required: true, message: 'Введите имя'}]}
+                >
+                    <Select  mode={'multiple'}>
+                        {typeEnum.map((item) => {
+                            return (
+                                <Select.Option key={item.id} value={item.id}>
+                                    {item.name}
+                                </Select.Option>
+                            )
+                        })}
+                    </Select>
+                </Form.Item>
+                <ButtonsContainer>
+                    <Button
+                        htmlType={'submit'}
+                        loading={loading}
+                        type={'primary'}
+                    >
+                        Добавить
+                    </Button>
+                    <Button
+                        onClick={
+                            () => {
+                                history.goBack()
+                            }
+                        }
+                    >
+                        Назад
+                    </Button>
+
+                </ButtonsContainer>
+            </Form>
         </Container>
     )
 }
