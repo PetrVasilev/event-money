@@ -17,7 +17,7 @@ const Container = styled.div`
 
 const Template = () => {
     const [dataSource, setDataSource] = useState([])
-    const {loading,refetch} = useQuery(FIND_MANY_SERVICE, {
+    const {loading} = useQuery(FIND_MANY_SERVICE, {
         onCompleted: ({findManyService}) => {
             setDataSource(findManyService.map(
                 (item) => {

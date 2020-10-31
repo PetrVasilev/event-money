@@ -72,8 +72,6 @@ const AddTemplate = () => {
     const {loading: queryLoading} = useQuery(FIND_MANY_SERVICE, {
         errorPolicy: 'ignore',
         onCompleted: ({findManyService}) => {
-            console.log('before', findManyService)
-
             setServiceArray(findManyService)
         },
         variables: {
