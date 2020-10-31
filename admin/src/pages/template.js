@@ -42,6 +42,7 @@ const Template = () => {
             ))
         },
         errorPolicy: "ignore",
+        fetchPolicy:'network-only',
         variables: {where: {}}
     })
 
