@@ -5,7 +5,8 @@ const User = gql`
     id: String!
     createdAt: DateTime!
     updatedAt: DateTime!
-    connect: String
+    name: String!
+    avatar: String
     events(
       where: EventWhereInput
       orderBy: EventOrderByInput
