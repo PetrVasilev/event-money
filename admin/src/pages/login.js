@@ -5,6 +5,7 @@ import {useHistory} from 'react-router-dom'
 import {useApolloClient, useMutation} from '@apollo/react-hooks'
 import {SIGN_IN_ADMIN} from '../gqls/auth/mutations'
 import {ADMIN} from '../gqls/auth/queries'
+import Footer from "../components/footer"
 
 const Container = styled.div`
     flex: 1;
@@ -12,9 +13,9 @@ const Container = styled.div`
     justify-content: center;
     align-items: center;
     display: flex;
-    margin: 20px 40px;
+    margin: 0 40px;
     @media screen and (max-width: 800px) {
-        margin: 15px;
+        margin: 0 15px;
     }
 `
 const Title = styled.div`
@@ -24,14 +25,14 @@ const Title = styled.div`
     text-align: center;
     display: flex;
 `
-const Label = styled.div`
-    font-size: 16px;
-`
+
 const ContentContainer = styled.div`
     display: flex;
     flex-direction: column;
     max-width: 290px;
     align-items: center;
+    justify-content: center;
+    flex: 1;
 `
 
 const Login = () => {
@@ -103,6 +104,7 @@ const Login = () => {
                 </Form>
 
             </ContentContainer>
+            <Footer/>
         </Container>
     )
 }
