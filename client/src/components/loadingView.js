@@ -1,9 +1,5 @@
 import React from 'react'
-import {
-    ActivityIndicator,
-    View,
-    StyleSheet
-} from 'react-native'
+import { ActivityIndicator, View, StyleSheet } from 'react-native'
 
 const LoadingView = ({ loading }) => {
     if (loading === true) {
@@ -20,8 +16,8 @@ const styles = StyleSheet.create({
     loading: {
         ...StyleSheet.absoluteFillObject,
         alignItems: 'center',
-        justifyContent: "center",
-        backgroundColor: "rgba(255,255,255,0.5)"
+        justifyContent: 'center',
+        backgroundColor: 'rgba(255,255,255,0.5)'
     }
 })
 

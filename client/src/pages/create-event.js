@@ -7,7 +7,7 @@ import {
     Text,
     TextInput,
     Picker,
-    TouchableOpacity,
+    TouchableOpacity
 } from 'react-native'
 import Ionicons from 'react-native-vector-icons/dist/Ionicons'
 import IMask from 'imask'
@@ -75,7 +75,7 @@ const CreateEvent = ({ navigation }) => {
         onCompleted: () => {
             navigation.goBack()
         },
-        onError: e => {
+        onError: (e) => {
             console.error(e)
         },
         update: async (client, { data }) => {
@@ -95,25 +95,25 @@ const CreateEvent = ({ navigation }) => {
     const onSubmit = () => {
         const userId = localStorage.getItem('userId')
         if (!name) {
-            alert("Введите название")
+            alert('Введите название')
             return false
         }
         if (!date) {
-            alert("Введите примерную дату")
+            alert('Введите примерную дату')
             return false
-        } else if (moment().isAfter(moment(date, "DD.MM.YYYY"))) {
-            alert("Введите корректную дату")
+        } else if (moment().isAfter(moment(date, 'DD.MM.YYYY'))) {
+            alert('Введите корректную дату')
             return false
         }
         if (!selectedCategory) {
-            alert("Выберете категорию")
+            alert('Выберите категорию')
             return false
         }
         createEvent({
             variables: {
                 data: {
                     name,
-                    date: moment(date, "DD.MM.YYYY"),
+                    date: moment(date, 'DD.MM.YYYY'),
                     amount: budget,
                     users: {
                         connect: [{ id: userId }]
@@ -155,7 +155,7 @@ const CreateEvent = ({ navigation }) => {
                 <View style={styles.pickerContainer}>
                     <Picker
                         style={styles.picker}
-                        placeholder="Выберете категорию"
+                        placeholder="Выберите категорию"
                         value={selectedCategory}
                         onValueChange={(item) => {
                             setSelectedCategory(item)
@@ -168,9 +168,14 @@ const CreateEvent = ({ navigation }) => {
                     </Picker>
                     <Ionicons
                         name="chevron-down"
-                        style={{ position: 'absolute', right: 5, top: 10, alignSelf: 'flex-end' }}
-                        color="#000000"
-                        size={22}
+                        style={{
+                            position: 'absolute',
+                            right: 12,
+                            top: '50%',
+                            transform: 'translateY(-50%)'
+                        }}
+                        color="silver"
+                        size={20}
                     />
                 </View>
                 <TouchableOpacity style={styles.button} onPress={onSubmit}>
