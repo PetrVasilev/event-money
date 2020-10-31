@@ -1,7 +1,7 @@
 import { gql } from '@apollo/client'
 
 export const CREATE_ONE_SPENDING = gql`
-    mutation($data: SpendingCreateInput!){
+    mutation($data: SpendingCreateInput!) {
         createOneSpending(data: $data) {
             id
             createdAt
@@ -16,8 +16,8 @@ export const CREATE_ONE_SPENDING = gql`
 `
 
 export const FIND_MANY_SPENDING = gql`
-    query($where: SpendingWhereInput){
-        findManySpending(where: $where){
+    query($where: SpendingWhereInput) {
+        findManySpending(where: $where) {
             id
             createdAt
             amount
@@ -30,9 +30,9 @@ export const FIND_MANY_SPENDING = gql`
     }
 `
 
-export const DELTE_ONE_SPENDING = gql`
-    mutation{
-        deleteOneSpending(where:{id: "ckgxcy1gr0146vkw83c3eje7v"}){
+export const DELETE_ONE_SPENDING = gql`
+    mutation($where: SpendingWhereUniqueInput!) {
+        deleteOneSpending(where: $where) {
             id
         }
     }

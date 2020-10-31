@@ -54,7 +54,6 @@ const CreateSpending = ({ navigation, route }) => {
                     where: { event: { id: { equals: event.id } } }
                 }
             })
-            console.log([...prev.findManySpending, data.createOneSpending])
             await client.writeQuery({
                 query: FIND_MANY_SPENDING,
                 variables: {

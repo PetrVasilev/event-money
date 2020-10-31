@@ -37,7 +37,7 @@ const Event = ({ route, navigation }) => {
         spendingPrice += parseInt(item.amount)
         return (
             <TouchableOpacity
-                onPress={() => navigation.navigate('Spending', { spending: item })}
+                onPress={() => navigation.navigate('Spending', { spending: item, event })}
                 activeOpacity={0.6}
                 key={item.id}
                 style={[styles.card, additionalStyle]}
