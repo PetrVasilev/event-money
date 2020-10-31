@@ -1,13 +1,13 @@
 import { gql } from '@apollo/client'
 
 export const FIND_MANY_EVENTS = gql`
-    query($where: EventWhereInput){
-        findManyEvent(where: $where){
+    query($where: EventWhereInput) {
+        findManyEvent(where: $where) {
             id
             createdAt
             name
             amount
-            spendings{
+            spendings {
                 id
             }
         }
@@ -20,7 +20,7 @@ export const CREATE_ONE_EVENT = gql`
             createdAt
             name
             amount
-            spendings{
+            spendings {
                 id
             }
         }

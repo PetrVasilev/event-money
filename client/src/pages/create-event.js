@@ -7,7 +7,7 @@ import {
     Text,
     TextInput,
     Picker,
-    TouchableOpacity,
+    TouchableOpacity
 } from 'react-native'
 import Ionicons from 'react-native-vector-icons/dist/Ionicons'
 import IMask from 'imask'
@@ -17,32 +17,9 @@ import moment from 'moment'
 import LoadingView from '../components/loadingView'
 import { CREATE_ONE_EVENT, FIND_MANY_EVENTS } from '../gqls/event'
 import { FIND_MANY_CATEGORY } from '../gqls/category'
-import { } from '../utils'
+import {} from '../utils'
 
 const { width } = Dimensions.get('window')
-
-const categories = [
-    {
-        value: '1',
-        lable: 'Свадьба'
-    },
-    {
-        value: '2',
-        lable: 'День рождения'
-    },
-    {
-        value: '3',
-        lable: 'Утренник'
-    },
-    {
-        value: '4',
-        lable: 'Мальчишник/Девишник'
-    },
-    {
-        value: 'other',
-        lable: 'Другое'
-    }
-]
 
 const dateMask = IMask.createMask({
     mask: 'DD.MM.YYYY',
@@ -66,16 +43,15 @@ const dateMask = IMask.createMask({
 })
 
 const CreateEvent = ({ navigation }) => {
-    const [selectedCategory, setSelectedCategory] = useState("")
+    const [selectedCategory, setSelectedCategory] = useState('')
     const [name, setName] = useState('')
     const [ownCategory, setOwnCategory] = useState('')
     const [date, setDate] = useState('')
     const [budget, setBudget] = useState('')
 
     const { data } = useQuery(FIND_MANY_CATEGORY, {
-        fetchPolicy: "network-only",
+        fetchPolicy: 'network-only',
         onCompleted: ({ findManyCategory }) => {
-            console.log(findManyCategory)
             if (findManyCategory.length > 0) {
                 setSelectedCategory(findManyCategory[0].id)
             }
@@ -88,7 +64,7 @@ const CreateEvent = ({ navigation }) => {
         onCompleted: () => {
             navigation.goBack()
         },
-        onError: e => {
+        onError: (e) => {
             console.error(e)
         },
         update: async (client, { createOneCategory }) => {
@@ -105,28 +81,28 @@ const CreateEvent = ({ navigation }) => {
     const onSubmit = () => {
         const userId = localStorage.getItem('userId')
         if (!name) {
-            alert("Введите название")
+            alert('Введите название')
             return false
         }
         if (!date) {
-            alert("Введите примерную дату")
+            alert('Введите примерную дату')
             return false
-        } else if (moment().isAfter(moment(date, "DD.MM.YYYY"))) {
-            alert("Введите корректную дату")
+        } else if (moment().isAfter(moment(date, 'DD.MM.YYYY'))) {
+            alert('Введите корректную дату')
             return false
         }
         if (!selectedCategory) {
-            alert("Выберете категорию")
+            alert('Выберите категорию')
             return false
-        } else if (selectedCategory === "other" && !ownCategory) {
-            alert("Введит свой вариант")
+        } else if (selectedCategory === 'other' && !ownCategory) {
+            alert('Введитe свой вариант')
             return false
         }
         createEvent({
             variables: {
                 data: {
                     name,
-                    date: moment(date, "DD.MM.YYYY"),
+                    date: moment(date, 'DD.MM.YYYY'),
                     amount: budget,
                     users: {
                         connect: [{ id: userId }]
@@ -167,14 +143,14 @@ const CreateEvent = ({ navigation }) => {
                 <View style={styles.pickerContainer}>
                     <Picker
                         style={styles.picker}
-                        placeholder="Выберете категорию"
+                        placeholder="Выберите категорию"
                         value={selectedCategory}
                         onValueChange={(item) => {
                             setSelectedCategory(item)
                             setOwnCategory('')
                         }}
                     >
-                        {categories.map((item, index) => (
+                        {categories.map((item) => (
                             <Picker.Item key={item.id} value={item.id} label={item.name} />
                         ))}
                     </Picker>
