@@ -9,3 +9,13 @@ export const AUTH_USER = gql`
         }
     }
 `
+
+export const FIND_MANY_USER = gql`
+    query($where: UserWhereInput) {
+        findManyUser(where: $where) {
+            id
+            name
+            avatar
+        }
+    }
+`
