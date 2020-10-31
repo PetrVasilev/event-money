@@ -28,7 +28,6 @@ const spendings = [
 
 const Event = ({ route, navigation }) => {
     const { event } = route.params
-    console.log(event)
     let leavePrice = event.amount
     let spendingPrice = 0
 
@@ -117,19 +116,14 @@ const Event = ({ route, navigation }) => {
             </View>
             <Text style={[styles.textInfo, { marginTop: 15 }]}>Расходы</Text>
             {event.spendings.length > 0 ? spendingsView : (
-                <View style={[
-                    styles.card,
-                    {
-                        
-                    }
-                ]}>
-                    <Text>Нет расходов</Text>
+                <View style={styles.card}>
+                    <Text style={{ color: "grey" }}>Нет расходов</Text>
                 </View>
             )}
             <TouchableOpacity
                 activeOpacity={0.8}
                 style={styles.button}
-                onPress={() => navigation.navigate('CreateSpending')}
+                onPress={() => navigation.navigate('CreateSpending', { event })}
             >
                 <Text style={styles.buttonText}>Добавить расход</Text>
             </TouchableOpacity>
