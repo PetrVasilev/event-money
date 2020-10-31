@@ -1,13 +1,20 @@
-import React, { useState } from 'react'
+import React, {useState} from 'react'
 import styled from 'styled-components'
-import { Button, Form, Input, message, Popconfirm, Select } from 'antd'
-import { useMutation } from '@apollo/react-hooks'
-import { DELETE_ONE_CATEGORY, UPDATE_ONE_CATEGORY } from '../gqls/category/mutations'
-import { FIND_MANY_CATEGORY } from '../gqls/category/queries'
+import {Button, Form, Input, message, Popconfirm, Select} from 'antd'
+import {useMutation} from '@apollo/react-hooks'
+import {DELETE_ONE_CATEGORY, UPDATE_ONE_CATEGORY} from '../gqls/category/mutations'
+import {FIND_MANY_CATEGORY} from '../gqls/category/queries'
 
 const Container = styled.div`
     display: flex;
     flex-direction: column;
+    max-width: 500px;
+`
+
+const ButtonsContainer = styled.div`
+  display: flex;
+  justify-content: space-between;
+  flex-wrap: wrap;
 `
 
 const typeEnum = [
@@ -33,10 +40,10 @@ const typeEnum = [
     }
 ]
 
-const UpdateCategory = ({ data }) => {
+const UpdateCategory = ({data}) => {
     const [types, setTypes] = useState(data.types)
 
-    const [update, { loading: updateLoading }] = useMutation(UPDATE_ONE_CATEGORY, {
+    const [update, {loading: updateLoading}] = useMutation(UPDATE_ONE_CATEGORY, {
         onError: () => {
             message.error('Что то пошло не так!')
         },
@@ -45,16 +52,16 @@ const UpdateCategory = ({ data }) => {
         }
     })
 
-    const [delItem, { loading: delLoading }] = useMutation(DELETE_ONE_CATEGORY, {
+    const [delItem, {loading: delLoading}] = useMutation(DELETE_ONE_CATEGORY, {
         onCompleted: async () => {
             message.success('Удалено!')
         },
         onError: () => {
             message.error('Что то пошло не так!')
         },
-        update: (cache, { data: requestData }) => {
+        update: (cache, {data: requestData}) => {
             if (cache && requestData.deleteOneCategory) {
-                const { findManyCategory: oldCategories } = cache.readQuery({
+                const {findManyCategory: oldCategories} = cache.readQuery({
                     query: FIND_MANY_CATEGORY
                 })
                 cache.writeQuery({
@@ -77,8 +84,8 @@ const UpdateCategory = ({ data }) => {
     const submit = (args) => {
         const variables = {
             data: {
-                name: { set: args.name },
-                types: { set: args.types }
+                name: {set: args.name},
+                types: {set: args.types}
             },
             where: {
                 id: data.id
@@ -92,7 +99,7 @@ const UpdateCategory = ({ data }) => {
     return (
         <Container>
             <Form
-                initialValues={{ remember: true }}
+                initialValues={{remember: true}}
                 onFinish={submit}
                 layout={'vertical'}
             >
@@ -100,15 +107,15 @@ const UpdateCategory = ({ data }) => {
                     label="Название"
                     name="name"
                     initialValue={data.name}
-                    rules={[{ required: true, message: 'Введите имя!' }]}
+                    rules={[{required: true, message: 'Введите имя!'}]}
                 >
-                    <Input />
+                    <Input/>
                 </Form.Item>
                 <Form.Item
                     label="Тип мероприятия"
                     name="types"
                     initialValue={data.types}
-                    rules={[{ required: true, message: 'Выберите мероприятие!' }]}
+                    rules={[{required: true, message: 'Выберите мероприятие!'}]}
                 >
                     <Select value={types} mode={'multiple'} onChange={(value) => setTypes(value)}>
                         {typeEnum.map((item) => {
@@ -120,18 +127,17 @@ const UpdateCategory = ({ data }) => {
                         })}
                     </Select>
                 </Form.Item>
-                <Form.Item>
+                <ButtonsContainer>
                     <Button type="primary" htmlType="submit" loading={updateLoading}>
                         Обновить
                     </Button>
-                </Form.Item>
-                <Form.Item>
                     <Popconfirm onConfirm={delItem} title="Вы уверены" okText="Да" cancelText="Нет">
                         <Button type="danger" loading={delLoading}>
                             Удалить
                         </Button>
                     </Popconfirm>
-                </Form.Item>
+                </ButtonsContainer>
+
             </Form>
         </Container>
     )
