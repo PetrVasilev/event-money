@@ -16,7 +16,6 @@ const User = gql`
       distinct: EventDistinctFieldEnum
     ): [Event!]!
   }
-
   type Query {
     findManyUser(
       where: UserWhereInput

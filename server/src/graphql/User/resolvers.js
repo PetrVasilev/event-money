@@ -1,20 +1,25 @@
 const User = {
   Query: {
-    findManyUser: (_parent, args, { prisma }) => {
+    findManyUser: async (_parent, args, { prisma, access }) => {
+      await access.or('user', 'admin')
       return prisma.user.findMany(args)
     },
-    findManyUserCount: (_parent, args, { prisma }) => {
+    findManyUserCount: async (_parent, args, { prisma, access }) => {
+      await access.or('user', 'admin')
       return prisma.user.count(args)
     },
   },
   Mutation: {
-    createOneUser: (_parent, args, { prisma }) => {
+    createOneUser: async (_parent, args, { prisma, access }) => {
+      await access.or('user', 'admin')
       return prisma.user.create(args)
     },
-    updateOneUser: (_parent, args, { prisma }) => {
+    updateOneUser: async (_parent, args, { prisma, access }) => {
+      await access.or('user', 'admin')
       return prisma.user.update(args)
     },
-    deleteOneUser: async (_parent, args, { prisma }) => {
+    deleteOneUser: async (_parent, args, { prisma, access }) => {
+      await access.or('user', 'admin')
       return prisma.user.delete(args)
     },
   },

@@ -1,20 +1,25 @@
 const Template = {
   Query: {
-    findManyTemplate: (_parent, args, { prisma }) => {
+    findManyTemplate: async (_parent, args, { prisma, access }) => {
+      await access.or('user', 'admin')
       return prisma.template.findMany(args)
     },
-    findManyTemplateCount: (_parent, args, { prisma }) => {
+    findManyTemplateCount: async (_parent, args, { prisma, access }) => {
+      await access.or('user', 'admin')
       return prisma.template.count(args)
     },
   },
   Mutation: {
-    createOneTemplate: (_parent, args, { prisma }) => {
+    createOneTemplate: async (_parent, args, { prisma, access }) => {
+      await access.or('user', 'admin')
       return prisma.template.create(args)
     },
-    updateOneTemplate: (_parent, args, { prisma }) => {
+    updateOneTemplate: async (_parent, args, { prisma, access }) => {
+      await access.or('user', 'admin')
       return prisma.template.update(args)
     },
-    deleteOneTemplate: async (_parent, args, { prisma }) => {
+    deleteOneTemplate: async (_parent, args, { prisma, access }) => {
+      await access.or('user', 'admin')
       return prisma.template.delete(args)
     },
   },

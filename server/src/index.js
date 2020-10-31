@@ -31,12 +31,28 @@ const server = new GraphQLServer({
     context: ({ request, response }) => {
         const { authorization, id } = request.headers
         const access = {
-            admin: () => checkRole(authorization, 'admin'),
+            admin: () => checkRole(authorization, 'admin', true),
             user: () => {
                 if (id) {
                     return id
                 } else {
                     throw new Error('not access')
+                }
+            },
+            or: async (...roles) => {
+                const checks = await Promise.all(roles.map(async role => {
+                    if (id) {
+                        return id
+                    }
+                    const cheking = await checkRole(authorization, role, false)
+                    return cheking
+                }))
+                const find = checks.find(object => object)
+
+                if (find) {
+                    return find
+                } else {
+                    throw new Error('Not access')
                 }
             }
         }

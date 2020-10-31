@@ -1,20 +1,25 @@
 const Service = {
   Query: {
-    findManyService: (_parent, args, { prisma }) => {
+    findManyService: async (_parent, args, { prisma, access }) => {
+      await access.or('user', 'admin')
       return prisma.service.findMany(args)
     },
-    findManyServiceCount: (_parent, args, { prisma }) => {
+    findManyServiceCount: async (_parent, args, { prisma, access }) => {
+      await access.or('user', 'admin')
       return prisma.service.count(args)
     },
   },
   Mutation: {
-    createOneService: (_parent, args, { prisma }) => {
+    createOneService: async (_parent, args, { prisma, access }) => {
+      await access.or('user', 'admin')
       return prisma.service.create(args)
     },
-    updateOneService: (_parent, args, { prisma }) => {
+    updateOneService: async (_parent, args, { prisma, access }) => {
+      await access.or('user', 'admin')
       return prisma.service.update(args)
     },
-    deleteOneService: async (_parent, args, { prisma }) => {
+    deleteOneService: async (_parent, args, { prisma, access }) => {
+      await access.or('user', 'admin')
       return prisma.service.delete(args)
     },
   },

@@ -1,22 +1,27 @@
 const Category = {
   Query: {
-    findManyCategory: (_parent, args, { prisma }) => {
+    findManyCategory: async (_parent, args, { prisma, access }) => {
+      await access.or('user', 'admin')
       return prisma.category.findMany(args)
     },
-    findManyCategoryCount: (_parent, args, { prisma }) => {
+    findManyCategoryCount: async (_parent, args, { prisma, access }) => {
+      await access.or('user', 'admin')
       return prisma.category.count(args)
     },
   },
   Mutation: {
-    createOneCategory: async (_parent, args, { prisma }) => {
+    createOneCategory: async (_parent, args, { prisma, access }) => {
+      await access.or('user', 'admin')
       const exist = await prisma.category.findOne({ where: { name: args.data.name } })
       if (exist) throw new Error('exist')
       return prisma.category.create(args)
     },
-    updateOneCategory: (_parent, args, { prisma }) => {
+    updateOneCategory: async (_parent, args, { prisma, access }) => {
+      await access.or('user', 'admin')
       return prisma.category.update(args)
     },
-    deleteOneCategory: async (_parent, args, { prisma }) => {
+    deleteOneCategory: async (_parent, args, { prisma, access }) => {
+      await access.or('user', 'admin')
       return prisma.category.delete(args)
     },
   },
