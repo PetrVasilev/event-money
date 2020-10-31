@@ -7,9 +7,17 @@ export const FIND_MANY_EVENTS = gql`
             createdAt
             name
             amount
+            type
             spendings {
                 id
+                createdAt
+                amount
+                category {
+                    id
+                    name
+                }
             }
+            type
         }
     }
 `
@@ -20,9 +28,17 @@ export const CREATE_ONE_EVENT = gql`
             createdAt
             name
             amount
+            type
             spendings {
                 id
+                createdAt
+                amount
+                category {
+                    id
+                    name
+                }
             }
+            type
         }
     }
 `

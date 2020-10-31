@@ -10,6 +10,11 @@ import {
     TouchableOpacity
 } from 'react-native'
 import Ionicons from 'react-native-vector-icons/dist/Ionicons'
+import { useQuery, useMutation } from '@apollo/client'
+
+import { FIND_MANY_CATEGORY } from '../gqls/category'
+
+import { CREATE_ONE_SPENDING } from '../gqls/spending'
 
 const { width } = Dimensions.get('window')
 
@@ -36,11 +41,23 @@ const categories = [
     }
 ]
 
-const CreateSpending = ({ navigation }) => {
+const CreateSpending = ({ navigation, route }) => {
+    const { event } = route.params
     const [selectedCategory, setSelectedCategory] = useState()
     const [ownCategory, setOwnCategory] = useState('')
     const [budget, setBudget] = useState('')
     const [description, setDescription] = useState('')
+
+    const { data, loading } = useQuery(FIND_MANY_CATEGORY, {
+        fetchPolicy: "network-only",
+        variables: {
+            where: {
+                types: { equals: [event.type] }
+            }
+        }
+    })
+
+    console.log(data)
 
     const onSubmit = () => {
         navigation.goBack()

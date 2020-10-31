@@ -16,32 +16,9 @@ import moment from 'moment'
 
 import LoadingView from '../components/loadingView'
 import { CREATE_ONE_EVENT, FIND_MANY_EVENTS } from '../gqls/event'
-import { } from '../utils'
+import { categories } from '../utils'
 
 const { width } = Dimensions.get('window')
-
-const categories = [
-    {
-        value: 'WEDDING',
-        lable: 'Свадьба'
-    },
-    {
-        value: 'BIRTHDAY',
-        lable: 'День рождения'
-    },
-    {
-        value: 'MATINEE',
-        lable: 'Утренник'
-    },
-    {
-        value: 'STAG',
-        lable: 'Мальчишник/Девишник'
-    },
-    {
-        value: 'OTHER',
-        lable: 'Другое'
-    }
-]
 
 const dateMask = IMask.createMask({
     mask: 'DD.MM.YYYY',
@@ -67,7 +44,6 @@ const dateMask = IMask.createMask({
 const CreateEvent = ({ navigation }) => {
     const [selectedCategory, setSelectedCategory] = useState(categories[0].value)
     const [name, setName] = useState('')
-    const [ownCategory, setOwnCategory] = useState('')
     const [date, setDate] = useState('')
     const [budget, setBudget] = useState('')
 
@@ -83,7 +59,7 @@ const CreateEvent = ({ navigation }) => {
             await client.writeQuery({
                 query: FIND_MANY_EVENTS,
                 where: {
-                    id: localStorage.getItem("userId")
+                    id: localStorage.getItem('userId')
                 },
                 data: {
                     findManyEvent: [data.createOneEvent, ...prev.findManyEvent]
@@ -105,7 +81,7 @@ const CreateEvent = ({ navigation }) => {
             alert('Введите корректную дату')
             return false
         }
-        if (!selectedCategory) {
+        if (selectedCategory === 'empty') {
             alert('Выберите категорию')
             return false
         }
@@ -159,7 +135,6 @@ const CreateEvent = ({ navigation }) => {
                         value={selectedCategory}
                         onValueChange={(item) => {
                             setSelectedCategory(item)
-                            setOwnCategory('')
                         }}
                     >
                         {categories.map((item, index) => (
