@@ -8,6 +8,7 @@ import AddFieldSelect from "../components/addFieldSelect"
 import {CREATE_ONE_TEMPLATE} from "../gqls/template/mutations"
 import {FIND_MANY_SERVICE} from "../gqls/service/queries"
 import AddFieldNumber from "../components/addFieldNumber"
+import {useHistory} from "react-router-dom"
 
 const Container = styled.div`
   display: flex;
@@ -65,6 +66,8 @@ const AddTemplate = () => {
     const [types, setTypes] = useState([])
     const [amount, setAmount] = useState(0)
     const [autoCalc, setAutoCalc] = useState(true)
+
+    const history = useHistory()
 
     const {loading: queryLoading} = useQuery(FIND_MANY_SERVICE, {
         errorPolicy: 'ignore',
@@ -133,7 +136,7 @@ const AddTemplate = () => {
         <Container>
             <Title>Добавление шаблона</Title>
             <Switch
-                style={{maxWidth: 100}}
+                style={{maxWidth: 100,marginTop:16}}
                 checkedChildren={'Авторасчет'}
                 unCheckedChildren={'Авторасчет'}
                 value={autoCalc}
@@ -214,6 +217,16 @@ const AddTemplate = () => {
                 loading={loading}
             >
                 Добавить
+            </Button>
+            <Button
+                style={{marginTop: 16, maxWidth: 200}}
+                onClick={
+                    () => {
+                        history.goBack()
+                    }
+                }
+            >
+                Назад
             </Button>
 
         </Container>
