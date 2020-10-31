@@ -29,9 +29,9 @@ const Events = ({ navigation }) => {
                         ? { paddingBottom: 70 }
                         : { flex: 1, alignItems: 'center', justifyContent: 'center' }
                 }
-                refreshControl={<RefreshControl refreshing={loading} onRefresh={() => { }} />}
+                refreshControl={<RefreshControl refreshing={loading} onRefresh={() => {}} />}
             >
-                {events.length === 0 ? (
+                {!loading && events.length === 0 ? (
                     <>
                         <Ionicons name="folder-open-outline" color="#4b76a8" size={55} />
                         <Text style={{ marginTop: 15, textAlign: 'center' }}>
@@ -39,27 +39,27 @@ const Events = ({ navigation }) => {
                         </Text>
                     </>
                 ) : (
-                        events.map((item, index) => (
-                            <TouchableOpacity
-                                style={[
-                                    styles.item,
-                                    { marginBottom: events.length - 1 === index ? 0 : 10 }
-                                ]}
-                                key={item.id}
-                                onPress={() => navigation.push(`Event`, { event: item })}
-                            >
-                                <Text style={styles.eventTitle}>{item.name}</Text>
-                                <View style={styles.eventBottom}>
-                                    <Text style={styles.eventCategory}>
-                                        {categories.find((i) => i.value === item.type).lable}
-                                    </Text>
-                                    <Text style={styles.eventCreated}>
-                                        {moment(item.date).format('DD.MM.YYYY')}
-                                    </Text>
-                                </View>
-                            </TouchableOpacity>
-                        ))
-                    )}
+                    events.map((item, index) => (
+                        <TouchableOpacity
+                            style={[
+                                styles.item,
+                                { marginBottom: events.length - 1 === index ? 0 : 10 }
+                            ]}
+                            key={item.id}
+                            onPress={() => navigation.push(`Event`, { event: item })}
+                        >
+                            <Text style={styles.eventTitle}>{item.name}</Text>
+                            <View style={styles.eventBottom}>
+                                <Text style={styles.eventCategory}>
+                                    {categories.find((i) => i.value === item.type).lable}
+                                </Text>
+                                <Text style={styles.eventCreated}>
+                                    {moment(item.date).format('DD.MM.YYYY')}
+                                </Text>
+                            </View>
+                        </TouchableOpacity>
+                    ))
+                )}
             </ScrollView>
             <TouchableOpacity
                 activeOpacity={1}

@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useState, useEffect, useMemo } from 'react'
 import Ionicons from 'react-native-vector-icons/dist/Ionicons'
 import randomColor from 'randomcolor'
 import { ScrollView, View, StyleSheet, Text, TouchableOpacity } from 'react-native'
@@ -12,36 +12,44 @@ const Event = ({ route, navigation }) => {
     let leavePrice = event.amount
     let spendingPrice = 0
 
+    const [tab, setTab] = useState(0)
+    const [coloredSpendings, setColoredSpendings] = useState([])
+
     const { data } = useQuery(FIND_MANY_SPENDING, {
         variables: {
             where: { event: { id: { equals: event.id } } }
         }
     })
 
-    const spendings = data && data.findManySpending ? data.findManySpending : []
+    const spendings = useMemo(() => {
+        return data && data.findManySpending ? data.findManySpending : []
+    }, [data])
 
-    let coloredSpendings = spendings.reduce((acc, current) => {
-        const exist = acc.find((item) => item.category.id === current.category.id)
-        if (!exist) {
+    useEffect(() => {
+        const arr = spendings.reduce((acc, current) => {
+            const exist = acc.find((item) => item.category.id === current.category.id)
+            if (!exist) {
+                return [
+                    ...acc,
+                    {
+                        ...current,
+                        color: randomColor({
+                            hue: 'orange, yellow, blue, purple, pink',
+                            luminosity: 'dark'
+                        })
+                    }
+                ]
+            }
             return [
                 ...acc,
                 {
                     ...current,
-                    color: randomColor({
-                        hue: 'orange, yellow, blue, purple, pink',
-                        luminosity: 'dark'
-                    })
+                    color: exist.color
                 }
             ]
-        }
-        return [
-            ...acc,
-            {
-                ...current,
-                color: exist.color
-            }
-        ]
-    }, [])
+        }, [])
+        setColoredSpendings(arr)
+    }, [spendings])
 
     const spendingsView = coloredSpendings.map((item, index) => {
         const isLast = spendings.length - 1 === index
@@ -137,21 +145,52 @@ const Event = ({ route, navigation }) => {
                     </View>
                 ) : null
             ) : null}
-            <Text style={[styles.textInfo, { marginTop: 15 }]}>Расходы</Text>
-            {spendings.length > 0 ? (
-                spendingsView
-            ) : (
-                <View style={styles.card}>
-                    <Text style={{ color: 'grey' }}>Нет расходов</Text>
-                </View>
+
+            <View style={styles.tabContainer}>
+                <TouchableOpacity
+                    style={[
+                        styles.tabItem,
+                        {
+                            borderBottomColor: tab === 0 ? '#4b76a8' : 'transparent'
+                        }
+                    ]}
+                    onPress={() => setTab(0)}
+                >
+                    <Text>Расходы</Text>
+                </TouchableOpacity>
+                <TouchableOpacity
+                    style={[
+                        styles.tabItem,
+                        {
+                            borderBottomColor: tab === 1 ? '#4b76a8' : 'transparent'
+                        }
+                    ]}
+                    onPress={() => setTab(1)}
+                >
+                    <Text>Организаторы</Text>
+                </TouchableOpacity>
+            </View>
+
+            {tab === 0 && (
+                <>
+                    {spendings.length > 0 ? (
+                        spendingsView
+                    ) : (
+                        <View style={styles.card}>
+                            <Text style={{ color: 'grey' }}>Нет расходов</Text>
+                        </View>
+                    )}
+                    <TouchableOpacity
+                        activeOpacity={0.8}
+                        style={styles.button}
+                        onPress={() => navigation.navigate('CreateSpending', { event })}
+                    >
+                        <Text style={styles.buttonText}>Добавить расход</Text>
+                    </TouchableOpacity>
+                </>
             )}
-            <TouchableOpacity
-                activeOpacity={0.8}
-                style={styles.button}
-                onPress={() => navigation.navigate('CreateSpending', { event })}
-            >
-                <Text style={styles.buttonText}>Добавить расход</Text>
-            </TouchableOpacity>
+
+            {tab === 1 && <div>Hello World</div>}
         </ScrollView>
     )
 }
@@ -233,6 +272,20 @@ const styles = StyleSheet.create({
     buttonText: {
         color: '#ffffff',
         fontSize: 16
+    },
+    tabContainer: {
+        flexDirection: 'row',
+        alignItems: 'center',
+        justifyContent: 'space-between',
+        marginTop: 7,
+        marginBottom: 10
+    },
+    tabItem: {
+        width: '50%',
+        alignItems: 'center',
+        justifyContent: 'center',
+        paddingVertical: 12,
+        borderBottomWidth: 3
     }
 })
 

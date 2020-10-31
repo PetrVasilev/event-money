@@ -17,23 +17,22 @@ const Spending = ({ route, navigation }) => {
             console.error(err)
             alert('Не удалось удалить')
         },
-        update: async (cache, { data }) => {
+        update: (cache, { data }) => {
             if (cache && data.deleteOneSpending) {
-                let prev = await cache.readQuery({
+                const prev = cache.readQuery({
                     query: FIND_MANY_SPENDING,
                     variables: {
                         where: { event: { id: { equals: event.id } } }
                     }
                 })
-                await cache.writeQuery({
+                const lastSpendings = [...prev.findManySpending]
+                cache.writeQuery({
                     query: FIND_MANY_SPENDING,
                     variables: {
                         where: { event: { id: { equals: event.id } } }
                     },
                     data: {
-                        findManySpending: prev.findManySpending.filter(
-                            (item) => item.id !== spending.id
-                        )
+                        findManySpending: lastSpendings.filter((item) => item.id !== spending.id)
                     }
                 })
             }
