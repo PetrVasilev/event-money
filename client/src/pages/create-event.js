@@ -172,6 +172,30 @@ const CreateEvent = ({ navigation }) => {
                 style={styles.container}
                 contentContainerStyle={{ alignItems: 'center', paddingBottom: 15 }}
             >
+                <Text style={styles.label}>Город</Text>
+                <View style={styles.pickerContainer}>
+                    <Picker
+                        style={styles.picker}
+                        placeholder="Выберите город"
+                        // value={selectedCategory}
+                        // onValueChange={(item) => {
+                        //     setSelectedCategory(item)
+                        // }}
+                    >
+                        <Picker.Item key={1} value={1} label={"Якутск"} />
+                    </Picker>
+                    <Ionicons
+                        name="chevron-down"
+                        style={{
+                            position: 'absolute',
+                            right: 12,
+                            top: '50%',
+                            transform: 'translateY(-50%)'
+                        }}
+                        color="silver"
+                        size={20}
+                    />
+                </View>
                 <Text style={styles.label}>Название мероприятия</Text>
                 <TextInput
                     value={name}
