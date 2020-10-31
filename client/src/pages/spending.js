@@ -17,7 +17,7 @@ const Spending = ({ route, navigation }) => {
                     <Text>{spending.amount} руб.</Text>
                 </View>
                 <View style={styles.bottomSpending}>
-                    <Text>Комметарий</Text>
+                    <Text>Комментарий</Text>
                     <Text>{spending.description ? spending.description : '-'}</Text>
                 </View>
                 <View style={styles.bottomSpending}>

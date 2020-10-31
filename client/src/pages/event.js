@@ -1,33 +1,11 @@
 import React from 'react'
-import { ScrollView, View, StyleSheet, Text, TouchableOpacity, ActivityIndicator } from 'react-native'
+import { ScrollView, View, StyleSheet, Text, TouchableOpacity } from 'react-native'
 import Ionicons from 'react-native-vector-icons/dist/Ionicons'
 import { PieChart } from 'react-minimal-pie-chart'
 import randomColor from 'randomcolor'
 import { useQuery } from '@apollo/client'
 
 import { FIND_MANY_SPENDING } from '../gqls/spending'
-
-const spendings = [
-    {
-        id: 1,
-        name: 'Фотограф',
-        price: 10000,
-        createdAt: new Date(),
-        icon: ''
-    },
-    {
-        id: 2,
-        name: 'Видеограф',
-        price: 15000,
-        createdAt: new Date()
-    },
-    {
-        id: 3,
-        name: 'Тамада',
-        price: 10000,
-        createdAt: new Date()
-    }
-]
 
 const Event = ({ route, navigation }) => {
     const { event } = route.params
@@ -83,7 +61,7 @@ const Event = ({ route, navigation }) => {
             <View style={styles.bottom}>
                 <View style={styles.bottomPrice}>
                     <Text style={{ color: 'green' }}>Бюджет</Text>
-                    <Text>{event.amount} руб.</Text>
+                    <Text>{event.amount ? event.amount : spendingPrice} руб.</Text>
                 </View>
                 <View style={styles.bottomSpending}>
                     <Text style={{ color: 'red' }}>Расходы</Text>
@@ -91,48 +69,52 @@ const Event = ({ route, navigation }) => {
                 </View>
                 <View style={styles.bottomLeave}>
                     <Text style={{ color: 'gray' }}>Остаток</Text>
-                    <Text>{leavePrice} руб.</Text>
+                    <Text>{leavePrice ? leavePrice : 0} руб.</Text>
                 </View>
             </View>
-            <View
-                style={[
-                    styles.card,
-                    {
-                        marginTop: 15,
-                        marginBottom: 0,
-                        alignItems: 'center',
-                        justifyContent: 'center',
-                        paddingVertical: 20
-                    }
-                ]}
-            >
-                <View style={{ height: 160, width: '73%' }}>
-                    <PieChart
-                        data={[
+            {coloredSpendings.length > 0 || event.amount ? (
+                leavePrice ? (
+                    <View
+                        style={[
+                            styles.card,
                             {
-                                title: 'Остаток',
-                                value: leavePrice < 0 ? 0 : leavePrice,
-                                color: '#52d726'
-                            },
-                            ...coloredSpendings.map((item) => ({
-                                title: item.category.name,
-                                value: parseInt(item.amount),
-                                color: item.color
-                            }))
+                                marginTop: 15,
+                                marginBottom: 0,
+                                alignItems: 'center',
+                                justifyContent: 'center',
+                                paddingVertical: 20
+                            }
                         ]}
-                        lineWidth={20}
-                        paddingAngle={1}
-                    />
-                </View>
-            </View>
-            <Text style={[styles.textInfo, { marginTop: 15 }]}>Расходы</Text>
-            {
-                spendings.length > 0 ? spendingsView : (
-                    <View style={styles.card}>
-                        <Text style={{ color: "grey" }}>Нет расходов</Text>
+                    >
+                        <View style={{ height: 160, width: '73%' }}>
+                            <PieChart
+                                data={[
+                                    {
+                                        title: 'Остаток',
+                                        value: leavePrice < 0 ? 0 : leavePrice,
+                                        color: '#52d726'
+                                    },
+                                    ...coloredSpendings.map((item) => ({
+                                        title: item.category.name,
+                                        value: parseInt(item.amount),
+                                        color: item.color
+                                    }))
+                                ]}
+                                lineWidth={20}
+                                paddingAngle={1}
+                            />
+                        </View>
                     </View>
-                )
-            }
+                ) : null
+            ) : null}
+            <Text style={[styles.textInfo, { marginTop: 15 }]}>Расходы</Text>
+            {spendings.length > 0 ? (
+                spendingsView
+            ) : (
+                <View style={styles.card}>
+                    <Text style={{ color: 'grey' }}>Нет расходов</Text>
+                </View>
+            )}
             <TouchableOpacity
                 activeOpacity={0.8}
                 style={styles.button}

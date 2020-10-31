@@ -15,7 +15,6 @@ import { useQuery, useMutation } from '@apollo/client'
 import LoadingView from '../components/loadingView'
 import { FIND_MANY_CATEGORY } from '../gqls/category'
 import { CREATE_ONE_SPENDING, FIND_MANY_SPENDING } from '../gqls/spending'
-import { FIND_MANY_EVENTS } from '../gqls/event'
 
 const { width } = Dimensions.get('window')
 
@@ -27,8 +26,15 @@ const CreateSpending = ({ navigation, route }) => {
     const [description, setDescription] = useState('')
 
     const { data } = useQuery(FIND_MANY_CATEGORY, {
-        onCompleted: data => {
-            const categoriesArray = data && data.findManyCategory ? event.type !== "OTHER" ? data.findManyCategory.filter(item => item.types.indexOf(event.type) !== -1) : data.findManyCategory : []
+        onCompleted: (data) => {
+            const categoriesArray =
+                data && data.findManyCategory
+                    ? event.type !== 'OTHER'
+                        ? data.findManyCategory.filter(
+                              (item) => item.types.indexOf(event.type) !== -1
+                          )
+                        : data.findManyCategory
+                    : []
             setSelectedCategory(categoriesArray[0].id)
         }
     })
@@ -45,7 +51,7 @@ const CreateSpending = ({ navigation, route }) => {
                 query: FIND_MANY_SPENDING,
                 variables: {
                     where: { event: { id: { equals: event.id } } }
-                },
+                }
             })
             console.log([...prev.findManySpending, data.createOneSpending])
             await client.writeQuery({
@@ -60,11 +66,14 @@ const CreateSpending = ({ navigation, route }) => {
         }
     })
 
-    const categoriesArray = data && data.findManyCategory ? event.type !== "OTHER" ? data.findManyCategory.filter(item => item.types.indexOf(event.type) !== -1) : data.findManyCategory : []
-    // console.log(selectedCategory)
+    const categoriesArray =
+        data && data.findManyCategory
+            ? event.type !== 'OTHER'
+                ? data.findManyCategory.filter((item) => item.types.indexOf(event.type) !== -1)
+                : data.findManyCategory
+            : []
 
     const onSubmit = () => {
-        // navigation.goBack()
         if (!budget) {
             alert('Введите стоимость расхода')
             return false
