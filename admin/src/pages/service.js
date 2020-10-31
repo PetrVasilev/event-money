@@ -27,7 +27,7 @@ const Service = () => {
             )
         },
         errorPolicy: 'ignore',
-        fetchPolicy: 'network-only',
+        fetchPolicy:'network-only',
         variables: {where: {}}
     })
 

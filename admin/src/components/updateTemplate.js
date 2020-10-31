@@ -1,6 +1,6 @@
-import React, {useState,useRef} from 'react'
+import React, {useRef, useState} from 'react'
 import styled from 'styled-components'
-import {Button, Form, Input, InputNumber, Menu, message, Popconfirm, Select} from "antd"
+import {Button, Form, Input, InputNumber, message, Popconfirm, Select} from "antd"
 import {useApolloClient, useMutation, useQuery} from '@apollo/react-hooks'
 import {FIND_MANY_SERVICE} from "../gqls/service/queries"
 import {DELETE_ONE_TEMPLATE, UPDATE_ONE_TEMPLATE} from "../gqls/template/mutations"
@@ -38,7 +38,7 @@ const UpdateTemplate = ({data, oldDataSource, setDataSource}) => {
     const [serviceArray, setServiceArray] = useState([])
     const [types, setTypes] = useState(data.types)
 
-    const delEl= useRef(null)
+    const delEl = useRef(null)
 
     const apollo = useApolloClient()
 
@@ -89,7 +89,7 @@ const UpdateTemplate = ({data, oldDataSource, setDataSource}) => {
             await apollo.writeQuery({
                 query: FIND_MANY_TEMPLATE,
                 data: {
-                    findManyService: newDataSource
+                    findManyTemplate: newDataSource
                 }
             })
             setDataSource(newDataSource)
