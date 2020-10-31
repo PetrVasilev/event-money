@@ -1,10 +1,12 @@
 import React, { useState } from 'react'
 import styled from 'styled-components'
-import { Title } from '../components/defaultTexts'
 import { Button, Table, Tag } from 'antd'
 import { useQuery } from '@apollo/react-hooks'
-import { FIND_MANY_CATEGORY } from '../gqls/category/queries'
 import { useHistory } from 'react-router-dom'
+
+import { Title } from '../components/defaultTexts'
+import { FIND_MANY_CATEGORY } from '../gqls/category/queries'
+import UpdateCategory from '../components/updateCategory'
 
 const { Column } = Table
 
@@ -29,16 +31,18 @@ const enumColorMap = {
     MATINEE: 'lime'
 }
 const Category = () => {
-    const [dataSource, setDataSource] = useState([])
-    const { loading } = useQuery(FIND_MANY_CATEGORY, {
-        onCompleted: ({ findManyCategory }) => {
-            setDataSource(findManyCategory)
-        },
+    const { loading, data } = useQuery(FIND_MANY_CATEGORY, {
         fetchPolicy: 'network-only',
         errorPolicy: 'ignore'
     })
 
     const history = useHistory()
+
+    const dataSource = data ? data.findManyCategory : []
+
+    const expandedRowRender = (data) => {
+        return <UpdateCategory data={data} />
+    }
 
     return (
         <Container>
@@ -57,6 +61,7 @@ const Category = () => {
                 style={{ flex: 1, marginTop: 24 }}
                 dataSource={dataSource}
                 loading={loading}
+                expandable={{ expandedRowRender }}
             >
                 <Column title={'Название'} dataIndex={'name'} key={'name'} />
                 <Column

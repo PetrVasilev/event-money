@@ -18,8 +18,7 @@
     },
     "scripts": {
         "start": "nodemon src/index.js",
-        "build": "prisma migrate save --experimental && prisma migrate up --experimental && prisma generate",
-        "generate": "node src/generate.js"
+        "build": "prisma migrate save --experimental && prisma migrate up --experimental && prisma generate"
     },
     "devDependencies": {
         "@prisma/cli": "^2.10.1",

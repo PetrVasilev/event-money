@@ -1,29 +1,25 @@
 const Event = {
   Query: {
-    findOneEvent: (_parent, args, { prisma }) => {
-      return prisma.event.findOne(args)
-    },
-    findFirstEvent: (_parent, args, { prisma }) => {
-      return prisma.event.findFirst(args)
-    },
-    findManyEvent: (_parent, args, { prisma }) => {
+    findManyEvent: async (_parent, args, { prisma, access }) => {
+      await access.or('user', 'admin')
       return prisma.event.findMany(args)
     },
-    findManyEventCount: (_parent, args, { prisma }) => {
+    findManyEventCount: async (_parent, args, { prisma, access }) => {
+      await access.or('user', 'admin')
       return prisma.event.count(args)
-    },
-    aggregateEvent: (_parent, args, { prisma }) => {
-      return prisma.event.aggregate(args)
-    },
+    }
   },
   Mutation: {
-    createOneEvent: (_parent, args, { prisma }) => {
+    createOneEvent: async (_parent, args, { prisma, access }) => {
+      await access.or('user', 'admin')
       return prisma.event.create(args)
     },
-    updateOneEvent: (_parent, args, { prisma }) => {
+    updateOneEvent: async (_parent, args, { prisma, access }) => {
+      await access.or('user', 'admin')
       return prisma.event.update(args)
     },
-    deleteOneEvent: async (_parent, args, { prisma }) => {
+    deleteOneEvent: async (_parent, args, { prisma, access }) => {
+      await access.or('user', 'admin')
       return prisma.event.delete(args)
     },
   },

@@ -5,8 +5,25 @@ export const CREATE_ONE_CATEGORY = gql`
         createOneCategory(data: $data) {
             id
             name
-            updatedAt
-            createdAt
+            types
+        }
+    }
+`
+export const UPDATE_ONE_CATEGORY = gql`
+    mutation($data: CategoryUpdateInput!, $where: CategoryWhereUniqueInput!) {
+        updateOneCategory(data: $data, where: $where) {
+            id
+            name
+            types
+        }
+    }
+`
+
+export const DELETE_ONE_CATEGORY = gql`
+    mutation($where: CategoryWhereUniqueInput!) {
+        deleteOneCategory(where: $where) {
+            id
+            name
             types
         }
     }

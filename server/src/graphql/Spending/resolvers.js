@@ -1,29 +1,25 @@
 const Spending = {
   Query: {
-    findOneSpending: (_parent, args, { prisma }) => {
-      return prisma.spending.findOne(args)
-    },
-    findFirstSpending: (_parent, args, { prisma }) => {
-      return prisma.spending.findFirst(args)
-    },
-    findManySpending: (_parent, args, { prisma }) => {
+    findManySpending: async (_parent, args, { prisma, access }) => {
+      await access.or('user', 'admin')
       return prisma.spending.findMany(args)
     },
-    findManySpendingCount: (_parent, args, { prisma }) => {
+    findManySpendingCount: async (_parent, args, { prisma, access }) => {
+      await access.or('user', 'admin')
       return prisma.spending.count(args)
-    },
-    aggregateSpending: (_parent, args, { prisma }) => {
-      return prisma.spending.aggregate(args)
     },
   },
   Mutation: {
-    createOneSpending: (_parent, args, { prisma }) => {
+    createOneSpending: async (_parent, args, { prisma, access }) => {
+      await access.or('user', 'admin')
       return prisma.spending.create(args)
     },
-    updateOneSpending: (_parent, args, { prisma }) => {
+    updateOneSpending: async (_parent, args, { prisma, access }) => {
+      await access.or('user', 'admin')
       return prisma.spending.update(args)
     },
-    deleteOneSpending: async (_parent, args, { prisma }) => {
+    deleteOneSpending: async (_parent, args, { prisma, access }) => {
+      await access.or('user', 'admin')
       return prisma.spending.delete(args)
     },
   },

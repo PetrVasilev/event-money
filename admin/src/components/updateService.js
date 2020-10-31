@@ -1,9 +1,10 @@
 import React, { useState } from 'react'
 import styled from 'styled-components'
-import { Button, Form, Input, InputNumber, message, Select } from 'antd'
+import { Button, Form, Input, InputNumber, message, Select, Popconfirm } from 'antd'
 import { useMutation, useQuery } from '@apollo/react-hooks'
+
 import { FIND_MANY_CATEGORY } from '../gqls/category/queries'
-import { UPDATE_ONE_SERVICE } from '../gqls/service/mutations'
+import { UPDATE_ONE_SERVICE, DELETE_ONE_SERVICE } from '../gqls/service/mutations'
 import { FIND_MANY_SERVICE } from '../gqls/service/queries'
 
 const Container = styled.div`
@@ -27,6 +28,35 @@ const UpdateService = ({ data }) => {
         },
         onCompleted: () => {
             message.success('Обновлено!')
+        }
+    })
+
+    const [delItem, { loading: delLoading }] = useMutation(DELETE_ONE_SERVICE, {
+        onCompleted: async () => {
+            message.success('Удалено!')
+        },
+        onError: () => {
+            message.error('Что то пошло не так!')
+        },
+        update: (cache, { data: requestData }) => {
+            if (cache && requestData.deleteOneService) {
+                const { findManyService: oldServices } = cache.readQuery({
+                    query: FIND_MANY_SERVICE
+                })
+                cache.writeQuery({
+                    query: FIND_MANY_SERVICE,
+                    data: {
+                        findManyService: oldServices.filter(
+                            (item) => item.id !== requestData.deleteOneService.id
+                        )
+                    }
+                })
+            }
+        },
+        variables: {
+            where: {
+                id: data.id
+            }
         }
     })
 
@@ -77,7 +107,6 @@ const UpdateService = ({ data }) => {
                 >
                     <Input.TextArea />
                 </Form.Item>
-
                 <Form.Item
                     label="Категория"
                     name="category"
@@ -98,6 +127,13 @@ const UpdateService = ({ data }) => {
                     <Button type="primary" htmlType="submit" loading={updateLoading}>
                         Обновить
                     </Button>
+                </Form.Item>
+                <Form.Item>
+                    <Popconfirm onConfirm={delItem} title="Вы уверены" okText="Да" cancelText="Нет">
+                        <Button type="danger" loading={delLoading}>
+                            Удалить
+                        </Button>
+                    </Popconfirm>
                 </Form.Item>
             </Form>
         </Container>

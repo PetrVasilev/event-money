@@ -4,11 +4,9 @@ const { Category } = require('./Category/resolvers')
 const { Spending } = require('./Spending/resolvers')
 const { Event } = require('./Event/resolvers')
 const { User } = require('./User/resolvers')
-const { Admin } = require('./Admin/resolvers')
 const { Auth } = require('./Auth/resolvers')
 
 const resolvers = [
-  Admin,
   User,
   Event,
   Spending,

@@ -1,14 +1,15 @@
-import React, { useState } from 'react'
+import React, {useState} from 'react'
 import styled from 'styled-components'
-import { Title } from '../components/defaultTexts'
+import {Title} from '../components/defaultTexts'
 import AddField from '../components/addField'
-import { useMutation, useQuery } from '@apollo/react-hooks'
-import { Button, message } from 'antd'
-import { CREATE_ONE_SERVICE } from '../gqls/service/mutations'
-import { FIND_MANY_CATEGORY } from '../gqls/category/queries'
+import {useApolloClient, useMutation, useQuery} from '@apollo/react-hooks'
+import {Button, message} from 'antd'
+import {CREATE_ONE_SERVICE} from '../gqls/service/mutations'
+import {FIND_MANY_CATEGORY} from '../gqls/category/queries'
 import AddFieldNumber from '../components/addFieldNumber'
 import AddFieldSelect from '../components/addFieldSelect'
-import { useHistory } from 'react-router-dom'
+import {useHistory} from 'react-router-dom'
+import {FIND_MANY_SERVICE} from "../gqls/service/queries"
 
 const Container = styled.div`
     display: flex;
@@ -41,16 +42,28 @@ const AddService = () => {
 
     const history = useHistory()
 
-    const { loading: queryLoading } = useQuery(FIND_MANY_CATEGORY, {
+    const apollo = useApolloClient()
+
+    const {loading: queryLoading} = useQuery(FIND_MANY_CATEGORY, {
         errorPolicy: 'ignore',
-        onCompleted: ({ findManyCategory }) => {
+        onCompleted: ({findManyCategory}) => {
             setCategoryArray(findManyCategory)
         }
     })
 
-    const [save, { loading }] = useMutation(CREATE_ONE_SERVICE, {
-        onCompleted: () => {
+    const [save, {loading}] = useMutation(CREATE_ONE_SERVICE, {
+        onCompleted: async ({createOneService}) => {
+            try {
+                const {data} = await apollo.readQuery({query: FIND_MANY_SERVICE})
+                await apollo.writeQuery({
+                    query: FIND_MANY_SERVICE,
+                    data: [...data, createOneService]
+                })
+            } catch (e) {
+
+            }
             message.success('Добавлено')
+            history.goBack()
         },
         onError: (error) => {
             message.error('Что то пошло не так')
@@ -133,7 +146,7 @@ const AddService = () => {
             </Fields>
 
             <Button
-                style={{ marginTop: 16, maxWidth: 200 }}
+                style={{marginTop: 16, maxWidth: 200}}
                 type={'primary'}
                 onClick={onSave}
                 loading={loading}
@@ -141,7 +154,7 @@ const AddService = () => {
                 Добавить
             </Button>
             <Button
-                style={{ marginTop: 16, maxWidth: 200 }}
+                style={{marginTop: 16, maxWidth: 200}}
                 onClick={() => {
                     history.goBack()
                 }}
