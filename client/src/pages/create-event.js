@@ -177,10 +177,10 @@ const CreateEvent = ({ navigation }) => {
                     <Picker
                         style={styles.picker}
                         placeholder="Выберите город"
-                        // value={selectedCategory}
-                        // onValueChange={(item) => {
-                        //     setSelectedCategory(item)
-                        // }}
+                    // value={selectedCategory}
+                    // onValueChange={(item) => {
+                    //     setSelectedCategory(item)
+                    // }}
                     >
                         <Picker.Item key={1} value={1} label={"Якутск"} />
                     </Picker>
