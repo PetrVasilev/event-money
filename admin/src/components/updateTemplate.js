@@ -138,12 +138,7 @@ const UpdateTemplate = ({ data }) => {
                 >
                     <InputNumber />
                 </Form.Item>
-                <Form.Item
-                    label="Описание"
-                    name="description"
-                    initialValue={data.description}
-                    rules={[{ required: true, message: 'Введите описание!' }]}
-                >
+                <Form.Item label="Описание" name="description" initialValue={data.description}>
                     <Input.TextArea />
                 </Form.Item>
                 <Form.Item
