@@ -20,7 +20,7 @@ export const categories = [
     },
     {
         value: 'STAG',
-        lable: 'Мальчишник/Девишник'
+        lable: 'Мальчишник/Девичник'
     },
     {
         value: 'JUBILEE',
