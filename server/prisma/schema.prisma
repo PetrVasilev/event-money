@@ -74,14 +74,14 @@ model Service {
 }
 
 model Template {
-    id        String     @id @default(cuid())
-    createdAt DateTime   @default(now())
-    updatedAt DateTime   @updatedAt
-    name      String
+    id          String     @id @default(cuid())
+    createdAt   DateTime   @default(now())
+    updatedAt   DateTime   @updatedAt
+    name        String
     description String?
-    types     TypeEnum[]
-    amount    String
-    services  Service[]
+    types       TypeEnum[]
+    amount      String
+    services    Service[]
 }
 
 enum TypeEnum {

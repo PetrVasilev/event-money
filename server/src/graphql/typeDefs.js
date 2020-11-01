@@ -10,15 +10,15 @@ const { mergeTypeDefs } = require('@graphql-tools/merge')
 const { sdlInputs } = require('@paljs/plugins')
 
 const typeDefs = mergeTypeDefs([
-  sdlInputs(),
-  Admin,
-  User,
-  Event,
-  Spending,
-  Category,
-  Service,
-  Template,
-  Auth,
+    sdlInputs(),
+    Admin,
+    User,
+    Event,
+    Spending,
+    Category,
+    Service,
+    Template,
+    Auth
 ])
 
 module.exports = { typeDefs }

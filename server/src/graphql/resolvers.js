@@ -6,14 +6,6 @@ const { Event } = require('./Event/resolvers')
 const { User } = require('./User/resolvers')
 const { Auth } = require('./Auth/resolvers')
 
-const resolvers = [
-  User,
-  Event,
-  Spending,
-  Category,
-  Service,
-  Template,
-  Auth,
-]
+const resolvers = [User, Event, Spending, Category, Service, Template, Auth]
 
 module.exports = { resolvers }

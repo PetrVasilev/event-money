@@ -98,11 +98,9 @@ const UpdateTemplate = ({ data }) => {
             data: {
                 amount: { set: args.amount.toString() },
                 services: {
-                    set: args.services.map((item) => {
-                        return {
-                            id: item
-                        }
-                    })
+                    set: args.services.map((item) => ({
+                        id: item
+                    }))
                 },
                 description: { set: args.description },
                 name: { set: args.name },
