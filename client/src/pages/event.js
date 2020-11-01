@@ -89,7 +89,7 @@ const Event = ({ route, navigation }) => {
 
     useEffect(() => {
         const arr = spendings.reduce((acc, current) => {
-            const exist = acc.find((item) => item.category.id === current.category.id)
+            const exist = acc.find((item) => item && item.category && item.category.id && current && current.category && current.category.id &&  item.category.id === current.category.id)
             if (!exist) {
                 return [
                     ...acc,
