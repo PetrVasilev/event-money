@@ -43,15 +43,13 @@ const Spending = ({ route, navigation }) => {
     })
 
     const handleDelete = () => {
-        if (window.confirm('Удалить?')) {
-            deleteSpending({
-                variables: {
-                    where: {
-                        id: spending.id
-                    }
+        deleteSpending({
+            variables: {
+                where: {
+                    id: spending.id
                 }
-            })
-        }
+            }
+        })
     }
 
     return (

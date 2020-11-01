@@ -361,10 +361,7 @@ const Event = ({ route, navigation }) => {
                     activeOpacity={0.8}
                     style={[styles.button, { backgroundColor: 'rgb(214, 69, 65)', marginTop: 10 }]}
                     onPress={() => {
-                        const remove = window.confirm("Удалить мероприятие?");
-                        if (remove) {
-                            deleteEvent()
-                        }
+                        deleteEvent()
                     }}
                 >
                     <Text style={styles.buttonText}>Удалить мероприятие</Text>
