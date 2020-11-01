@@ -8,8 +8,8 @@ import {ADMIN} from '../gqls/auth/queries'
 
 const Container = styled.div`
     display: flex;
-    flex: 1;
     max-width: 300px;
+    min-width: 300px;
 `
 
 const Sider = () => {

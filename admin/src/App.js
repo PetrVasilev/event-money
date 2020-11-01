@@ -46,19 +46,21 @@ const App = () => {
                 <Route exact path={'/login'} component={Login}/>
 
                 <Route exact path="/authorized/:path?/">
-                    <Sider/>
-                    <Switch>
-                        <Padding>
-                            <Header/>
-                            <Route exact path={'/authorized/category'} component={Category}/>
-                            <Route exact path={'/authorized/service'} component={Service}/>
-                            <Route exact path={'/authorized/addCategory'} component={AddCategory}/>
-                            <Route exact path={'/authorized/addService'} component={AddService}/>
-                            <Route exact path={'/authorized/addTemplate'} component={AddTemplate}/>
-                            <Route exact path={'/authorized/template'} component={Template}/>
-                            <Footer/>
-                        </Padding>
-                    </Switch>
+                    <div style={{ display: 'flex', minHeight: '100vh' }}>
+                        <Sider/>
+                        <Switch>
+                            <Padding>
+                                <Header/>
+                                <Route exact path={'/authorized/category'} component={Category}/>
+                                <Route exact path={'/authorized/service'} component={Service}/>
+                                <Route exact path={'/authorized/addCategory'} component={AddCategory}/>
+                                <Route exact path={'/authorized/addService'} component={AddService}/>
+                                <Route exact path={'/authorized/addTemplate'} component={AddTemplate}/>
+                                <Route exact path={'/authorized/template'} component={Template}/>
+                                <Footer/>
+                            </Padding>
+                        </Switch>
+                    </div>
                 </Route>
             </Router>
         </ApolloProvider>
