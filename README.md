@@ -14,4 +14,4 @@
 ### Панель администратора
 Для получения инструкции по развертыванию панели администратора откройте файл README.md в папке [admin](https://github.com/PetrVasilev/event-money/tree/master/admin)
 
-**Проект был создан командой [ITKichecn](https://itkitchen.su)**
+**Проект был создан командой [IT Kitchen](https://itkitchen.su)**
