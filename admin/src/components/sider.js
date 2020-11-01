@@ -25,6 +25,7 @@ const Sider = () => {
     return (
         <Container>
             <Menu theme="dark" mode="inline" defaultSelectedKeys={[history.location.pathname]}>
+                <img alt={'banner'} src={'/images/banner.png'} style={{maxWidth:300,marginBottom:24}}/>
                 <Menu.Item
                     onClick={() => {
                         history.push('/authorized/category')

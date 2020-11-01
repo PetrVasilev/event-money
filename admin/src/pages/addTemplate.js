@@ -81,7 +81,7 @@ const AddTemplate = () => {
         }
     })
 
-    const onSave = ({services, name, amount}) => {
+    const onSave = ({services, name, amount, description}) => {
         const variables = {
             data: {
                 name,
@@ -93,7 +93,8 @@ const AddTemplate = () => {
                 amount: amount.toString(),
                 types: {
                     set: types
-                }
+                },
+                description
             }
         }
         save({
