@@ -58,9 +58,9 @@ export const ENUM_COLOR_MAP = {
     BIRTHDAY: 'magenta',
     STAG: 'gold',
     MATINEE: 'lime',
-    JUBILEE:'white',
+    JUBILEE:'orange',
     CORPORATE:'pink',
-    BUSINESS:'blue',
+    BUSINESS:'brown',
     FORUM:'green',
     HACKATHON:'yellow'
 }
