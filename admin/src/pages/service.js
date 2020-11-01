@@ -54,6 +54,9 @@ const Service = () => {
                     dataIndex={'category'}
                     key={'category'}
                     render={(category) => {
+                        if (!category) {
+                            return null
+                        }
                         return <Tag>{category.name}</Tag>
                     }}
                 />
