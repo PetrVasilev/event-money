@@ -25,7 +25,7 @@ export const TYPES_ENUMS = [
     },
     {
         id: 'CORPORATE',
-        name: 'Корпоротив'
+        name: 'Корпоратив'
     },
     {
         id: 'BUSINESS',
@@ -47,7 +47,7 @@ export const ENUM_MAP = {
     STAG: 'Девичник/Мальчишник',
     MATINEE: 'Утренник',
     JUBILEE:'Юбилей',
-    CORPORATE:'Корпоротив',
+    CORPORATE:'Корпоратив',
     BUSINESS:'Бизнес-семинар',
     FORUM:'Форум, конференция',
     HACKATHON:'Хакатон'
@@ -58,9 +58,9 @@ export const ENUM_COLOR_MAP = {
     BIRTHDAY: 'magenta',
     STAG: 'gold',
     MATINEE: 'lime',
-    JUBILEE:'white',
+    JUBILEE:'orange',
     CORPORATE:'pink',
-    BUSINESS:'blue',
+    BUSINESS:'brown',
     FORUM:'green',
     HACKATHON:'yellow'
 }
