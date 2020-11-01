@@ -190,7 +190,7 @@ const CreateSpending = ({ navigation, route }) => {
                                     })
                                 }
                             >
-                                <Text style={styles.templateTitle}>{item.category.name}</Text>
+                                <Text style={styles.templateTitle}>{item.name}</Text>
                                 <Text style={styles.amountText}>{item.amount} руб</Text>
                                 {item.id === service ? (
                                     <Ionicons

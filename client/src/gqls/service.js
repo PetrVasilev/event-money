@@ -5,6 +5,7 @@ export const FIND_MANY_SERVICE = gql`
         findManyService(where: $where){
             id
             amount
+            name
             description
             category{
                 id

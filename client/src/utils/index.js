@@ -13,14 +13,34 @@ export const categories = [
     },
     {
         value: 'MATINEE',
-        lable: 'Утренник'
+        lable: 'Детский праздник (утренник)'
     },
     {
         value: 'STAG',
         lable: 'Мальчишник/Девишник'
     },
     {
+        value: 'Юбилей',
+        lable: 'JUBILEE'
+    },
+    {
+        value: 'Корпоратив',
+        lable: 'CORPORATE'
+    },
+    {
+        value: 'BUSINESS',
+        lable: 'Бизнес-семинар'
+    },
+    {
+        value: 'FORUM',
+        lable: 'Форум, конференция'
+    },
+    {
+        value: 'HACKATHON',
+        lable: 'Хакатон'
+    },
+    {
         value: 'OTHER',
         lable: 'Другое'
-    }
+    },
 ]

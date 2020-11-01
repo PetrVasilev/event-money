@@ -196,29 +196,6 @@ const CreateEvent = ({ navigation }) => {
                         size={20}
                     />
                 </View>
-                <Text style={styles.label}>Название мероприятия</Text>
-                <TextInput
-                    value={name}
-                    onChangeText={(text) => setName(text)}
-                    style={styles.textInput}
-                    placeholder="Название мероприятия"
-                />
-                <Text style={styles.label}>Дата проведения</Text>
-                <TextInput
-                    value={date}
-                    onChangeText={(text) => setDate(dateMask.resolve(text))}
-                    style={styles.textInput}
-                    placeholder="ДД.ММ.ГГГГ"
-                />
-                <Text style={styles.label}>Бюджет мероприятия</Text>
-                <TextInput
-                    value={budget}
-                    onChangeText={(text) => setBudget(text.replace(/\D/gm, ""))}
-                    style={styles.textInput}
-                    placeholder="Бюджет мероприятия"
-                    keyboardType="numeric"
-                    type="number"
-                />
                 <Text style={styles.label}>Категория мероприятия</Text>
                 <View style={styles.pickerContainer}>
                     <Picker
@@ -245,6 +222,29 @@ const CreateEvent = ({ navigation }) => {
                         size={20}
                     />
                 </View>
+                <Text style={styles.label}>Название мероприятия</Text>
+                <TextInput
+                    value={name}
+                    onChangeText={(text) => setName(text)}
+                    style={styles.textInput}
+                    placeholder="Название мероприятия"
+                />
+                <Text style={styles.label}>Дата проведения</Text>
+                <TextInput
+                    value={date}
+                    onChangeText={(text) => setDate(dateMask.resolve(text))}
+                    style={styles.textInput}
+                    placeholder="ДД.ММ.ГГГГ"
+                />
+                <Text style={styles.label}>Бюджет мероприятия</Text>
+                <TextInput
+                    value={budget}
+                    onChangeText={(text) => setBudget(text.replace(/\D/gm, ""))}
+                    style={styles.textInput}
+                    placeholder="Бюджет мероприятия"
+                    keyboardType="numeric"
+                    type="number"
+                />
                 {selectedCategory !== 'empty' && templates.length > 0 ? (
                     <>
                         <Text style={[styles.label, { marginBottom: 0 }]}>
