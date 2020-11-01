@@ -4,6 +4,7 @@ import { useMutation } from '@apollo/client'
 
 import LoadingView from '../components/loadingView'
 import { UPDATE_ONE_SPENDING, FIND_MANY_SPENDING } from '../gqls/spending'
+import { isIphoneX } from '../utils'
 
 const { width } = Dimensions.get('window')
 
@@ -97,7 +98,7 @@ const styles = StyleSheet.create({
         flex: 1,
         width,
         backgroundColor: '#fafafa',
-        height: window.innerHeight - 60
+        height: window.innerHeight - (isIphoneX() ? 100 : 60)
     },
     textInput: {
         width: '90%',

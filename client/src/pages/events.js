@@ -6,7 +6,7 @@ import { useQuery } from '@apollo/client'
 
 import { FIND_MANY_EVENTS } from '../gqls/event'
 import LoadingView from '../components/loadingView'
-import { categories } from '../utils'
+import { categories, isIphoneX } from '../utils'
 
 const Events = ({ navigation }) => {
     const { data, loading } = useQuery(FIND_MANY_EVENTS, {
@@ -83,7 +83,7 @@ const Events = ({ navigation }) => {
 const styles = StyleSheet.create({
     list: {
         backgroundColor: '#fafafa',
-        height: window.innerHeight - 60
+        height: window.innerHeight - (isIphoneX() ? 100 : 60)
     },
     item: {
         backgroundColor: 'white',

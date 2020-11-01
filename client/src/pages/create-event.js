@@ -17,7 +17,7 @@ import moment from 'moment'
 import LoadingView from '../components/loadingView'
 import { CREATE_ONE_EVENT, FIND_MANY_EVENTS } from '../gqls/event'
 import { FIND_MENY_TEMPLATE } from '../gqls/template'
-import { categories } from '../utils'
+import { categories, isIphoneX } from '../utils'
 
 const { width } = Dimensions.get('window')
 
@@ -302,7 +302,7 @@ const styles = StyleSheet.create({
     container: {
         width,
         backgroundColor: '#fafafa',
-        height: window.innerHeight - 60
+        height: window.innerHeight - (isIphoneX() ? 100 : 60)
     },
     textInput: {
         width: '90%',
