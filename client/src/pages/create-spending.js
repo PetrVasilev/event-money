@@ -129,14 +129,6 @@ const CreateSpending = ({ navigation, route }) => {
             style={styles.container}
             contentContainerStyle={{ alignItems: 'center', paddingBottom: 15 }}
         >
-            <Text style={styles.label}>Стоимость расхода</Text>
-            <TextInput
-                value={budget}
-                onChangeText={(text) => setBudget(text.replace(/\D/gm, ''))}
-                style={styles.textInput}
-                placeholder="Стоимость расхода"
-                keyboardType="numeric"
-            />
             <Text style={styles.label}>Категория расхода</Text>
             <View style={styles.pickerContainer}>
                 <Picker
@@ -160,6 +152,14 @@ const CreateSpending = ({ navigation, route }) => {
                     size={22}
                 />
             </View>
+            <Text style={styles.label}>Стоимость расхода</Text>
+            <TextInput
+                value={budget}
+                onChangeText={(text) => setBudget(text.replace(/\D/gm, ''))}
+                style={styles.textInput}
+                placeholder="Стоимость расхода"
+                keyboardType="numeric"
+            />
             <Text style={styles.label}>Комментарий к расходу</Text>
             <TextInput
                 value={description}
