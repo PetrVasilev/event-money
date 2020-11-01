@@ -90,4 +90,9 @@ enum TypeEnum {
     BIRTHDAY
     STAG
     MATINEE
+    JUBILEE
+    CORPORATE
+    BUSINESS
+    FORUM
+    HACKATHON
 }

@@ -56,6 +56,11 @@ const Event = gql`
         BIRTHDAY
         STAG
         MATINEE
+        JUBILEE
+        CORPORATE
+        BUSINESS
+        FORUM
+        HACKATHON
     }
 `
 
