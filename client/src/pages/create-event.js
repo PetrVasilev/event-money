@@ -177,12 +177,38 @@ const CreateEvent = ({ navigation }) => {
                     <Picker
                         style={styles.picker}
                         placeholder="Выберите город"
-                        // value={selectedCategory}
-                        // onValueChange={(item) => {
-                        //     setSelectedCategory(item)
-                        // }}
+                    // value={selectedCategory}
+                    // onValueChange={(item) => {
+                    //     setSelectedCategory(item)
+                    // }}
                     >
                         <Picker.Item key={1} value={1} label={"Якутск"} />
+                    </Picker>
+                    <Ionicons
+                        name="chevron-down"
+                        style={{
+                            position: 'absolute',
+                            right: 12,
+                            top: '50%',
+                            transform: 'translateY(-50%)'
+                        }}
+                        color="silver"
+                        size={20}
+                    />
+                </View>
+                <Text style={styles.label}>Категория мероприятия</Text>
+                <View style={styles.pickerContainer}>
+                    <Picker
+                        style={styles.picker}
+                        placeholder="Выберите категорию"
+                        value={selectedCategory}
+                        onValueChange={(item) => {
+                            setSelectedCategory(item)
+                        }}
+                    >
+                        {categories.map((item) => (
+                            <Picker.Item key={item.value} value={item.value} label={item.lable} />
+                        ))}
                     </Picker>
                     <Ionicons
                         name="chevron-down"
@@ -219,32 +245,6 @@ const CreateEvent = ({ navigation }) => {
                     keyboardType="numeric"
                     type="number"
                 />
-                <Text style={styles.label}>Категория мероприятия</Text>
-                <View style={styles.pickerContainer}>
-                    <Picker
-                        style={styles.picker}
-                        placeholder="Выберите категорию"
-                        value={selectedCategory}
-                        onValueChange={(item) => {
-                            setSelectedCategory(item)
-                        }}
-                    >
-                        {categories.map((item) => (
-                            <Picker.Item key={item.value} value={item.value} label={item.lable} />
-                        ))}
-                    </Picker>
-                    <Ionicons
-                        name="chevron-down"
-                        style={{
-                            position: 'absolute',
-                            right: 12,
-                            top: '50%',
-                            transform: 'translateY(-50%)'
-                        }}
-                        color="silver"
-                        size={20}
-                    />
-                </View>
                 {selectedCategory !== 'empty' && templates.length > 0 ? (
                     <>
                         <Text style={[styles.label, { marginBottom: 0 }]}>
