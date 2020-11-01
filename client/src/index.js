@@ -102,10 +102,7 @@ const App = () => {
             <Stack.Navigator
                 screenOptions={{
                     headerStyle: {
-                        height: 60,
-                    },
-                    headerTitleStyle: {
-                        paddingVertical: 15
+                        height: 100,
                     },
                     animationEnabled: true
                 }}
