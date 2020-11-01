@@ -10,6 +10,12 @@ import {FIND_MANY_SERVICE} from '../gqls/service/queries'
 const Container = styled.div`
     display: flex;
     flex-direction: column;
+    max-width: 500px;
+`
+const ButtonsContainer = styled.div`
+  display: flex;
+  justify-content: space-between;
+  flex-wrap: wrap;
 `
 
 const UpdateService = ({data}) => {
@@ -123,18 +129,16 @@ const UpdateService = ({data}) => {
                         })}
                     </Select>
                 </Form.Item>
-                <Form.Item>
+                <ButtonsContainer>
                     <Button type="primary" htmlType="submit" loading={updateLoading}>
                         Обновить
                     </Button>
-                </Form.Item>
-                <Form.Item>
                     <Popconfirm onConfirm={delItem} title="Вы уверены" okText="Да" cancelText="Нет">
                         <Button type="danger" loading={delLoading}>
                             Удалить
                         </Button>
                     </Popconfirm>
-                </Form.Item>
+                </ButtonsContainer>
             </Form>
         </Container>
     )

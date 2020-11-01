@@ -1,13 +1,10 @@
 import React, {useState} from 'react'
 import styled from 'styled-components'
 import {Title} from '../components/defaultTexts'
-import AddField from '../components/addField'
 import {useApolloClient, useMutation, useQuery} from '@apollo/react-hooks'
-import {Button, message} from 'antd'
+import {Button, Form, Input, InputNumber, message, Select} from 'antd'
 import {CREATE_ONE_SERVICE} from '../gqls/service/mutations'
 import {FIND_MANY_CATEGORY} from '../gqls/category/queries'
-import AddFieldNumber from '../components/addFieldNumber'
-import AddFieldSelect from '../components/addFieldSelect'
 import {useHistory} from 'react-router-dom'
 import {FIND_MANY_SERVICE} from "../gqls/service/queries"
 
@@ -15,30 +12,16 @@ const Container = styled.div`
     display: flex;
     flex: 1;
     flex-direction: column;
+    max-width: 500px;
 `
-const Fields = styled.div`
-    margin-top: 24px;
-    display: flex;
-
-    .gap {
-        margin-right: 24px;
-        margin-bottom: 24px;
-        @media screen and (max-width: 800px) {
-            margin-right: 0;
-        }
-    }
-
-    @media screen and (max-width: 800px) {
-        flex-direction: column;
-    }
+const ButtonsContainer = styled.div`
+  display: flex;
+  justify-content: space-between;
+  flex-wrap: wrap;
 `
 
 const AddService = () => {
-    const [name, setName] = useState('')
-    const [amount, setAmount] = useState(0)
-    const [description, setDescription] = useState('')
-    const [category, setCategory] = useState()
-    const [categoryArray, setCategoryArray] = useState()
+    const [categoryArray, setCategoryArray] = useState([])
 
     const history = useHistory()
 
@@ -70,24 +53,12 @@ const AddService = () => {
         }
     })
 
-    const onSave = () => {
-        if (name === '') {
-            message.error('Введите имя')
-            return null
-        }
-        if (description === '') {
-            message.error('Введите описание')
-            return null
-        }
-        if (!category) {
-            message.error('Выберите категорию')
-            return null
-        }
+    const onSave = ({name, description, category, amount}) => {
         const variables = {
             data: {
                 name,
                 description,
-                amount: amount + '',
+                amount: amount.toString(),
                 category: {
                     connect: {
                         id: category
@@ -103,64 +74,70 @@ const AddService = () => {
     return (
         <Container>
             <Title>Добавление услуги</Title>
-            <Fields>
-                <AddField
-                    text={'Название'}
-                    className={'gap'}
-                    placeholder={'Введите название'}
-                    value={name}
-                    onChange={(e) => {
-                        setName(e.target.value)
-                    }}
-                />
-                <AddFieldNumber
-                    text={'Стоимость'}
-                    className={'gap'}
-                    placeholder={'Введите стоимость'}
-                    value={amount}
-                    onChange={(value) => {
-                        setAmount(value)
-                    }}
-                    defaultValue={0}
-                />
-                <AddField
-                    text={'Описание'}
-                    className={'gap'}
-                    placeholder={'Введите описание'}
-                    value={description}
-                    onChange={(e) => {
-                        setDescription(e.target.value)
-                    }}
-                />
-                <AddFieldSelect
-                    text={'Категория'}
-                    className={'gap'}
-                    placeholder={'Выберите категорию'}
-                    value={category}
-                    onChange={(value) => {
-                        setCategory(value)
-                    }}
-                    data={categoryArray}
-                    loading={queryLoading}
-                />
-            </Fields>
-
-            <Button
-                style={{marginTop: 16, maxWidth: 200}}
-                type={'primary'}
-                onClick={onSave}
-                loading={loading}
+            <Form
+                onFinish={onSave}
+                layout={'vertical'}
+                initialValues={{remember: true}}
+                style={{marginTop: 16}}
             >
-                Добавить
-            </Button>
-            <Button
-                style={{marginTop: 16, maxWidth: 200}}
-                onClick={() => {
-                    history.goBack()
-                }}
-            >
-                Назад
-            </Button>
+                <Form.Item
+                    name={'name'}
+                    label={'Название'}
+                    rules={[{required: true, message: 'Введите имя'}]}
+                    initialValue={''}
+                >
+                    <Input
+                        placeholder={'Введите название'}
+                    />
+                </Form.Item>
+                <Form.Item
+                    label="Стоимость"
+                    name="amount"
+                    initialValue={0}
+                    rules={[{required: true, message: 'Введите стоимость!'}]}
+                >
+                    <InputNumber placeholder={'Введите стоимость'}/>
+                </Form.Item>
+                <Form.Item
+                    label="Описание"
+                    name="description"
+                    rules={[{required: true, message: 'Введите описание!'}]}
+                >
+                    <Input.TextArea placeholder={'Введите описание'}/>
+                </Form.Item>
+                <Form.Item
+                    label="Категория"
+                    name="category"
+                    rules={[{required: true, message: 'Выберете категорию!'}]}
+                >
+                    <Select
+                        placeholder={'Выберите категорию'}
+                        loading={queryLoading}
+                    >
+                        {categoryArray.map((item) => {
+                            return (
+                                <Select.Option key={item.id} value={item.id}>
+                                    {item.name}
+                                </Select.Option>
+                            )
+                        })}
+                    </Select>
+                </Form.Item>
+                <ButtonsContainer>
+                    <Button
+                        htmlType={'submit'}
+                        loading={loading}
+                        type={'primary'}
+                    >
+                        Добавить
+                    </Button>
+                    <Button
+                        onClick={history.goBack}
+                    >
+                        Назад
+                    </Button>
+                </ButtonsContainer>
+            </Form>
         </Container>
     )
 }

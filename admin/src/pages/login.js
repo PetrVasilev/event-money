@@ -1,4 +1,4 @@
-import React, {useState} from 'react'
+import React from 'react'
 import styled from 'styled-components'
 import {Button, Form, Input, message} from 'antd'
 import {useHistory} from 'react-router-dom'
@@ -36,9 +36,6 @@ const ContentContainer = styled.div`
 `
 
 const Login = () => {
-    const [login, setLogin] = useState('')
-    const [password, setPassword] = useState('')
-
     const apollo = useApolloClient()
 
     const history = useHistory()
