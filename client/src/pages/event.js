@@ -84,7 +84,7 @@ const Event = ({ route, navigation }) => {
     })
 
     const spendings = useMemo(() => {
-        return data && data.findManySpending ? data.findManySpending : []
+        return data && data.findManySpending ? data.findManySpending.filter((item => item.category && item.category.id && item.category.name)) : []
     }, [data])
 
     useEffect(() => {

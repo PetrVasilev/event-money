@@ -1,5 +1,4 @@
 import * as React from 'react'
-import { SafeAreaView } from 'react-native';
 import ReactDOM from 'react-dom'
 import iconFont from 'react-native-vector-icons/Fonts/Ionicons.ttf'
 import Ionicons from 'react-native-vector-icons/dist/Ionicons'
@@ -103,7 +102,7 @@ const App = () => {
             <Stack.Navigator
                 screenOptions={{
                     headerStyle: {
-                        height: 60
+                        height: 100,
                     },
                     animationEnabled: true
                 }}
@@ -230,9 +229,7 @@ const App = () => {
 const AppStarter = () => {
     return (
         <ApolloProvider client={apolloClient}>
-            <SafeAreaView>
-                <App />
-            </SafeAreaView>
+            <App />
         </ApolloProvider>
     )
 }
