@@ -16,6 +16,7 @@ import LoadingView from '../components/loadingView'
 import { FIND_MANY_CATEGORY } from '../gqls/category'
 import { FIND_MANY_SERVICE } from '../gqls/service'
 import { CREATE_ONE_SPENDING, FIND_MANY_SPENDING } from '../gqls/spending'
+import { isIphoneX } from '../utils'
 
 const { width } = Dimensions.get('window')
 
@@ -222,7 +223,7 @@ const styles = StyleSheet.create({
         flex: 1,
         width,
         backgroundColor: '#fafafa',
-        height: window.innerHeight - 60
+        height: window.innerHeight - (isIphoneX() ? 100 : 60)
     },
     textInput: {
         width: '90%',

@@ -10,6 +10,7 @@ import Loading from '../components/loadingView'
 import { UPDATE_ONE_EVENT, DELETE_ONE_EVENT, FIND_MANY_EVENTS } from '../gqls/event'
 import { FIND_MANY_SPENDING } from '../gqls/spending'
 import { ADD_ORGANIZATORS } from '../gqls/user'
+import { isIphoneX } from '../utils'
 
 const Event = ({ route, navigation }) => {
     const { event } = route.params
@@ -380,7 +381,7 @@ const styles = StyleSheet.create({
         backgroundColor: '#fafafa',
         paddingHorizontal: 16,
         paddingVertical: 10,
-        height: window.innerHeight - 60
+        height: window.innerHeight - (isIphoneX() ? 100 : 60)
     },
     textInfo: {
         fontSize: 14,

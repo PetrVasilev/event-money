@@ -1,5 +1,6 @@
 import React from 'react'
 import { ScrollView, StyleSheet, View, Text, TouchableOpacity } from 'react-native'
+import { isIphoneX } from '../utils'
 
 const Template = ({ navigation, route }) => {
     const { template, selected, setTemplate } = route.params
@@ -75,7 +76,7 @@ const Template = ({ navigation, route }) => {
 
 const styles = StyleSheet.create({
     container: {
-        height: window.innerHeight - 60,
+        height: window.innerHeight - (isIphoneX() ? 100 : 60),
         backgroundColor: '#fafafa'
     },
     textInfo: {
