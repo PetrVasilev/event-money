@@ -47,7 +47,7 @@ export const ENUM_MAP = {
     STAG: 'Девичник/Мальчишник',
     MATINEE: 'Утренник',
     JUBILEE:'Юбилей',
-    CORPORATE:'Корпоротив',
+    CORPORATE:'Корпоратив',
     BUSINESS:'Бизнес-семинар',
     FORUM:'Форум, конференция',
     HACKATHON:'Хакатон'
