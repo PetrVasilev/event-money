@@ -3,7 +3,6 @@ import ReactDOM from 'react-dom'
 import iconFont from 'react-native-vector-icons/Fonts/Ionicons.ttf'
 import Ionicons from 'react-native-vector-icons/dist/Ionicons'
 import bridge from '@vkontakte/vk-bridge'
-import { SafeAreaProvider, SafeAreaView } from 'react-native-safe-area-context'
 import { NavigationContainer } from '@react-navigation/native'
 import { createStackNavigator } from '@react-navigation/stack'
 import { ApolloProvider } from '@apollo/client'
@@ -229,13 +228,9 @@ const App = () => {
 
 const AppStarter = () => {
     return (
-        <SafeAreaProvider>
-            <ApolloProvider client={apolloClient}>
-                <SafeAreaView>
-                    <App />
-                </SafeAreaView>
-            </ApolloProvider>
-        </SafeAreaProvider>
+        <ApolloProvider client={apolloClient}>
+            <App />
+        </ApolloProvider>
     )
 }
 
