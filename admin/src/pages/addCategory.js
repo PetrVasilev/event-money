@@ -5,6 +5,7 @@ import {useHistory} from 'react-router-dom'
 import {Button, Form, Input, message, Select} from 'antd'
 import {Title} from '../components/defaultTexts'
 import {CREATE_ONE_CATEGORY} from '../gqls/category/mutations'
+import {TYPES_ENUMS} from "../utils/enums"
 
 const Container = styled.div`
     display: flex;
@@ -18,29 +19,7 @@ const ButtonsContainer = styled.div`
   flex-wrap: wrap;
 `
 
-const typeEnum = [
-    {
-        id: 'OTHER',
-        name: 'Другие'
-    },
-    {
-        id: 'WEDDING',
-        name: 'Свадьба'
-    },
-    {
-        id: 'BIRTHDAY',
-        name: 'День рождения'
-    },
-    {
-        id: 'STAG',
-        name: 'Девичник/Мальчишник'
-    },
-    {
-        id: 'MATINEE',
-        name: 'Утренник'
-    }
-]
-
+const typeEnum = TYPES_ENUMS
 const AddCategory = () => {
 
     const history = useHistory()

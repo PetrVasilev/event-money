@@ -7,6 +7,7 @@ import { useHistory } from 'react-router-dom'
 import { Title } from '../components/defaultTexts'
 import { FIND_MANY_CATEGORY } from '../gqls/category/queries'
 import UpdateCategory from '../components/updateCategory'
+import {ENUM_COLOR_MAP, ENUM_MAP} from "../utils/enums"
 
 const { Column } = Table
 
@@ -16,20 +17,8 @@ const Container = styled.div`
     flex-direction: column;
 `
 
-const enumMap = {
-    OTHER: 'Другие',
-    WEDDING: 'Свадьба',
-    BIRTHDAY: 'День рождения',
-    STAG: 'Девичник/Мальчишник',
-    MATINEE: 'Утренник'
-}
-const enumColorMap = {
-    OTHER: 'red',
-    WEDDING: 'blue',
-    BIRTHDAY: 'magenta',
-    STAG: 'gold',
-    MATINEE: 'lime'
-}
+const enumMap = ENUM_MAP
+const enumColorMap = ENUM_COLOR_MAP
 const Category = () => {
     const { loading, data } = useQuery(FIND_MANY_CATEGORY, {
         fetchPolicy: 'network-only',

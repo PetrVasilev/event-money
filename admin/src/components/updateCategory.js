@@ -4,6 +4,7 @@ import {Button, Form, Input, message, Popconfirm, Select} from 'antd'
 import {useMutation} from '@apollo/react-hooks'
 import {DELETE_ONE_CATEGORY, UPDATE_ONE_CATEGORY} from '../gqls/category/mutations'
 import {FIND_MANY_CATEGORY} from '../gqls/category/queries'
+import {TYPES_ENUMS} from "../utils/enums"
 
 const Container = styled.div`
     display: flex;
@@ -17,28 +18,7 @@ const ButtonsContainer = styled.div`
   flex-wrap: wrap;
 `
 
-const typeEnum = [
-    {
-        id: 'OTHER',
-        name: 'Другие'
-    },
-    {
-        id: 'WEDDING',
-        name: 'Свадьба'
-    },
-    {
-        id: 'BIRTHDAY',
-        name: 'День рождения'
-    },
-    {
-        id: 'STAG',
-        name: 'Девичник/Мальчишник'
-    },
-    {
-        id: 'MATINEE',
-        name: 'Утренник'
-    }
-]
+const typeEnum = TYPES_ENUMS
 
 const UpdateCategory = ({data}) => {
     const [types, setTypes] = useState(data.types)

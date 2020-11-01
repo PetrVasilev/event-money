@@ -1,14 +1,15 @@
 import React from 'react'
 import styled from 'styled-components'
-import { Button, Table, Tag } from 'antd'
-import { useHistory } from 'react-router-dom'
-import { useQuery } from '@apollo/react-hooks'
+import {Button, Table, Tag} from 'antd'
+import {useHistory} from 'react-router-dom'
+import {useQuery} from '@apollo/react-hooks'
 
-import { Title } from '../components/defaultTexts'
-import { FIND_MANY_TEMPLATE } from '../gqls/template/queries'
+import {Title} from '../components/defaultTexts'
+import {FIND_MANY_TEMPLATE} from '../gqls/template/queries'
 import UpdateTemplate from '../components/updateTemplate'
+import {ENUM_COLOR_MAP, ENUM_MAP} from "../utils/enums"
 
-const { Column } = Table
+const {Column} = Table
 
 const Container = styled.div`
     display: flex;
@@ -16,23 +17,10 @@ const Container = styled.div`
     flex-direction: column;
 `
 
-const enumMap = {
-    OTHER: 'Другие',
-    WEDDING: 'Свадьба',
-    BIRTHDAY: 'День рождения',
-    STAG: 'Девичник/Мальчишник',
-    MATINEE: 'Утренник'
-}
-const enumColorMap = {
-    OTHER: 'red',
-    WEDDING: 'blue',
-    BIRTHDAY: 'magenta',
-    STAG: 'gold',
-    MATINEE: 'lime'
-}
-
+const enumMap = ENUM_MAP
+const enumColorMap = ENUM_COLOR_MAP
 const Template = () => {
-    const { loading, data } = useQuery(FIND_MANY_TEMPLATE, {
+    const {loading, data} = useQuery(FIND_MANY_TEMPLATE, {
         errorPolicy: 'ignore',
         fetchPolicy: 'network-only'
     })
@@ -41,14 +29,14 @@ const Template = () => {
 
     const dataSource = data ? data.findManyTemplate : []
 
-    const expandedRowRender = (data) => <UpdateTemplate data={data} />
+    const expandedRowRender = (data) => <UpdateTemplate data={data}/>
 
     return (
         <Container>
             <Title>Список шаблонов</Title>
             <Button
                 type={'dashed'}
-                style={{ marginTop: 16, maxWidth: 200 }}
+                style={{marginTop: 16, maxWidth: 200}}
                 onClick={() => {
                     history.push('/authorized/addTemplate')
                 }}
@@ -56,15 +44,15 @@ const Template = () => {
                 Добавить услугу
             </Button>
             <Table
-                style={{ flex: 1, marginTop: 24 }}
+                style={{flex: 1, marginTop: 24}}
                 dataSource={dataSource}
                 loading={loading}
-                expandable={{ expandedRowRender }}
+                expandable={{expandedRowRender}}
                 rowKey={(obj) => obj.id}
             >
-                <Column title={'Название'} dataIndex={'name'} key={'name'} />
-                <Column title={'Цена'} dataIndex={'amount'} key={'amount'} />
-                <Column title={'Описание'} dataIndex={'description'} key={'description'} />
+                <Column title={'Название'} dataIndex={'name'} key={'name'}/>
+                <Column title={'Цена'} dataIndex={'amount'} key={'amount'}/>
+                <Column title={'Описание'} dataIndex={'description'} key={'description'}/>
                 <Column
                     title={'Тип мероприятия'}
                     dataIndex={'types'}

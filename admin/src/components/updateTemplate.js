@@ -6,6 +6,7 @@ import { useMutation, useQuery } from '@apollo/react-hooks'
 import { FIND_MANY_SERVICE } from '../gqls/service/queries'
 import { DELETE_ONE_TEMPLATE, UPDATE_ONE_TEMPLATE } from '../gqls/template/mutations'
 import { FIND_MANY_TEMPLATE } from '../gqls/template/queries'
+import {TYPES_ENUMS} from "../utils/enums"
 
 const Container = styled.div`
     display: flex;
@@ -18,28 +19,7 @@ const ButtonsContainer = styled.div`
     flex-wrap: wrap;
 `
 
-const typeEnum = [
-    {
-        id: 'OTHER',
-        name: 'Другие'
-    },
-    {
-        id: 'WEDDING',
-        name: 'Свадьба'
-    },
-    {
-        id: 'BIRTHDAY',
-        name: 'День рождения'
-    },
-    {
-        id: 'STAG',
-        name: 'Девичник/Мальчишник'
-    },
-    {
-        id: 'MATINEE',
-        name: 'Утренник'
-    }
-]
+const typeEnum = TYPES_ENUMS
 
 const UpdateTemplate = ({ data }) => {
     const [serviceArray, setServiceArray] = useState([])

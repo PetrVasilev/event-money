@@ -7,6 +7,7 @@ import {CREATE_ONE_TEMPLATE} from '../gqls/template/mutations'
 import {FIND_MANY_SERVICE} from '../gqls/service/queries'
 import {useHistory} from 'react-router-dom'
 import {FIND_MANY_TEMPLATE} from '../gqls/template/queries'
+import {TYPES_ENUMS} from "../utils/enums"
 
 const Container = styled.div`
     display: flex;
@@ -21,28 +22,7 @@ const ButtonsContainer = styled.div`
   align-items: center;
 `
 
-const typeEnum = [
-    {
-        id: 'OTHER',
-        name: 'Другие'
-    },
-    {
-        id: 'WEDDING',
-        name: 'Свадьба'
-    },
-    {
-        id: 'BIRTHDAY',
-        name: 'День рождения'
-    },
-    {
-        id: 'STAG',
-        name: 'Девичник/Мальчишник'
-    },
-    {
-        id: 'MATINEE',
-        name: 'Утренник'
-    }
-]
+const typeEnum = TYPES_ENUMS
 
 const AddTemplate = () => {
     const [serviceArray, setServiceArray] = useState([])
