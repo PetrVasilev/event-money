@@ -25,7 +25,7 @@ export const TYPES_ENUMS = [
     },
     {
         id: 'CORPORATE',
-        name: 'Корпоротив'
+        name: 'Корпоратив'
     },
     {
         id: 'BUSINESS',
