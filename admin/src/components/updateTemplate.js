@@ -1,11 +1,11 @@
-import React, {useState} from 'react'
+import React, { useState } from 'react'
 import styled from 'styled-components'
-import {Button, Form, Input, InputNumber, message, Popconfirm, Select} from 'antd'
-import {useMutation, useQuery} from '@apollo/react-hooks'
+import { Button, Form, Input, InputNumber, message, Popconfirm, Select } from 'antd'
+import { useMutation, useQuery } from '@apollo/react-hooks'
 
-import {FIND_MANY_SERVICE} from '../gqls/service/queries'
-import {DELETE_ONE_TEMPLATE, UPDATE_ONE_TEMPLATE} from '../gqls/template/mutations'
-import {FIND_MANY_TEMPLATE} from '../gqls/template/queries'
+import { FIND_MANY_SERVICE } from '../gqls/service/queries'
+import { DELETE_ONE_TEMPLATE, UPDATE_ONE_TEMPLATE } from '../gqls/template/mutations'
+import { FIND_MANY_TEMPLATE } from '../gqls/template/queries'
 
 const Container = styled.div`
     display: flex;
@@ -13,10 +13,9 @@ const Container = styled.div`
     max-width: 500px;
 `
 const ButtonsContainer = styled.div`
-  display: flex;
-  justify-content: space-between;
-  flex-wrap: wrap;
-
+    display: flex;
+    justify-content: space-between;
+    flex-wrap: wrap;
 `
 
 const typeEnum = [
@@ -42,13 +41,13 @@ const typeEnum = [
     }
 ]
 
-const UpdateTemplate = ({data}) => {
+const UpdateTemplate = ({ data }) => {
     const [serviceArray, setServiceArray] = useState([])
     const [types, setTypes] = useState(data.types)
 
-    const {loading: queryLoading} = useQuery(FIND_MANY_SERVICE, {
+    const { loading: queryLoading } = useQuery(FIND_MANY_SERVICE, {
         errorPolicy: 'ignore',
-        onCompleted: ({findManyService}) => {
+        onCompleted: ({ findManyService }) => {
             setServiceArray(findManyService)
         },
         variables: {
@@ -56,7 +55,7 @@ const UpdateTemplate = ({data}) => {
         }
     })
 
-    const [update, {loading: updateLoading}] = useMutation(UPDATE_ONE_TEMPLATE, {
+    const [update, { loading: updateLoading }] = useMutation(UPDATE_ONE_TEMPLATE, {
         onError: () => {
             message.error('Что то пошло не так!')
         },
@@ -65,16 +64,16 @@ const UpdateTemplate = ({data}) => {
         }
     })
 
-    const [delItem, {loading: delLoading}] = useMutation(DELETE_ONE_TEMPLATE, {
+    const [delItem, { loading: delLoading }] = useMutation(DELETE_ONE_TEMPLATE, {
         onCompleted: () => {
             message.success('Удалено!')
         },
         onError: (err) => {
             message.error(err)
         },
-        update: (cache, {data: _data}) => {
+        update: (cache, { data: _data }) => {
             if (cache && _data.deleteOneTemplate) {
-                const {findManyTemplate: oldTemplates} = cache.readQuery({
+                const { findManyTemplate: oldTemplates } = cache.readQuery({
                     query: FIND_MANY_TEMPLATE
                 })
                 cache.writeQuery({
@@ -97,7 +96,7 @@ const UpdateTemplate = ({data}) => {
     const submit = (args) => {
         const variables = {
             data: {
-                amount: {set: args.amount.toString()},
+                amount: { set: args.amount.toString() },
                 services: {
                     set: args.services.map((item) => {
                         return {
@@ -105,9 +104,9 @@ const UpdateTemplate = ({data}) => {
                         }
                     })
                 },
-                description: {set: args.description},
-                name: {set: args.name},
-                types: {set: args.types}
+                description: { set: args.description },
+                name: { set: args.name },
+                types: { set: args.types }
             },
             where: {
                 id: data.id
@@ -119,41 +118,41 @@ const UpdateTemplate = ({data}) => {
     }
 
     const servicesData = serviceArray.filter((current) =>
-        types.some((item) => current.category.types.includes(item))
+        types.some((item) => (current.category ? current.category.types.includes(item) : false))
     )
 
     return (
         <Container>
-            <Form initialValues={{remember: true}} onFinish={submit} layout={'vertical'}>
+            <Form initialValues={{ remember: true }} onFinish={submit} layout={'vertical'}>
                 <Form.Item
                     label="Название"
                     name="name"
                     initialValue={data.name}
-                    rules={[{required: true, message: 'Введите имя!'}]}
+                    rules={[{ required: true, message: 'Введите имя!' }]}
                 >
-                    <Input/>
+                    <Input />
                 </Form.Item>
                 <Form.Item
                     label="Стоимость"
                     name="amount"
                     initialValue={data.amount}
-                    rules={[{required: true, message: 'Введите стоимость!'}]}
+                    rules={[{ required: true, message: 'Введите стоимость!' }]}
                 >
-                    <InputNumber/>
+                    <InputNumber />
                 </Form.Item>
                 <Form.Item
                     label="Описание"
                     name="description"
                     initialValue={data.description}
-                    rules={[{required: true, message: 'Введите описание!'}]}
+                    rules={[{ required: true, message: 'Введите описание!' }]}
                 >
-                    <Input.TextArea/>
+                    <Input.TextArea />
                 </Form.Item>
                 <Form.Item
                     label="Тип мероприятия"
                     name="types"
                     initialValue={data.types}
-                    rules={[{required: true, message: 'Выберете мероприятие!'}]}
+                    rules={[{ required: true, message: 'Выберете мероприятие!' }]}
                 >
                     <Select value={types} mode={'multiple'} onChange={(value) => setTypes(value)}>
                         {typeEnum.map((item) => {
@@ -171,7 +170,7 @@ const UpdateTemplate = ({data}) => {
                     initialValue={data.services.map((item) => {
                         return item.id
                     })}
-                    rules={[{required: true, message: 'Выберете услугу!'}]}
+                    rules={[{ required: true, message: 'Выберете услугу!' }]}
                 >
                     <Select loading={queryLoading} mode={'multiple'}>
                         {servicesData.map((item) => {
