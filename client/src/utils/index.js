@@ -23,12 +23,12 @@ export const categories = [
         lable: 'Мальчишник/Девишник'
     },
     {
-        value: 'Юбилей',
-        lable: 'JUBILEE'
+        value: 'JUBILEE',
+        lable: 'Юбилей'
     },
     {
-        value: 'Корпоратив',
-        lable: 'CORPORATE'
+        value: 'CORPORATE',
+        lable: 'Корпоратив'
     },
     {
         value: 'BUSINESS',
