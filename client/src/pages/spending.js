@@ -5,6 +5,7 @@ import { useMutation } from '@apollo/client'
 
 import { DELETE_ONE_SPENDING, FIND_MANY_SPENDING } from '../gqls/spending'
 import Loading from '../components/loadingView'
+import { isIphoneX } from '../utils'
 
 const Spending = ({ route, navigation }) => {
     const { spending, event } = route.params
@@ -42,15 +43,13 @@ const Spending = ({ route, navigation }) => {
     })
 
     const handleDelete = () => {
-        if (window.confirm('Удалить?')) {
-            deleteSpending({
-                variables: {
-                    where: {
-                        id: spending.id
-                    }
+        deleteSpending({
+            variables: {
+                where: {
+                    id: spending.id
                 }
-            })
-        }
+            }
+        })
     }
 
     return (
@@ -107,7 +106,7 @@ const styles = StyleSheet.create({
         backgroundColor: '#fafafa',
         paddingHorizontal: 16,
         paddingVertical: 10,
-        height: window.innerHeight - 60
+        height: window.innerHeight - (isIphoneX() ? 100 : 60)
     },
     textInfo: {
         fontSize: 14,

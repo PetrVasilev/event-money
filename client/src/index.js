@@ -20,6 +20,8 @@ import EditSpending from './pages/edit-spending'
 import Template from './pages/template'
 import Service from './pages/service'
 
+import { isIphoneX } from './utils'
+
 const iconFontStyles = `@font-face {
     src: url(${iconFont});
     font-family: Ionicons;
@@ -102,7 +104,7 @@ const App = () => {
             <Stack.Navigator
                 screenOptions={{
                     headerStyle: {
-                        height: 100,
+                        height: isIphoneX() ? 100 : 60,
                     },
                     animationEnabled: true
                 }}
